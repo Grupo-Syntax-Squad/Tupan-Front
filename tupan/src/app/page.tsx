@@ -1,7 +1,6 @@
 export default function Home() {
-  return (
-    <>
-    <h1>Tupã</h1>
-    </>
-  );
-}
+    return (
+      <h1>Página Home</h1>
+    );
+  }
+  
