@@ -13,7 +13,7 @@ export const MenuLateral = ({ menuData }: MenuLateralProps) => {
         href="https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css"
       />
 
-      <div className="h-screen flex flex-row bg-gray-100">
+      <div className="h-screen min-h-screen   flex flex-row bg-gray-100">
         <div className="flex flex-col w-56 p-4 bg-indigo-500/10 overflow-hidden">
           {/* Logo */}
           <div className="flex items-center justify-center h-20">
