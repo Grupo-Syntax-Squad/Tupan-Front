@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-//  
+//
 import "../styles/globals.css";
 
 // const geistSans = localFont({
@@ -25,10 +25,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body // className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
-      </body>
+      <body className="min-h-screen flex flex-row bg-gray-100">{children}</body>
     </html>
   );
 }
