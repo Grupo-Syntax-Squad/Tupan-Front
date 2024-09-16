@@ -17,7 +17,7 @@ export const MenuLateral = ({ menuData }: MenuLateralProps) => {
         <div className="flex flex-col w-56 p-4 bg-indigo-500/10 overflow-hidden">
           {/* Logo */}
           <div className="flex items-center justify-center h-20">
-            <Image src={LOGO} alt="Logo" priority  layout="responsive" width={200} height={100} />
+            <Image src={LOGO} alt="Logo" priority  width={200} height={100} />
           </div>
 
           {/* Menu */}

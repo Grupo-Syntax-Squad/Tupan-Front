@@ -1,4 +1,4 @@
-"use client"; 
+"use client";
 
 import { useEffect, useState } from "react";
 import { MenuLateral } from "@/components/menu-lateral";
@@ -25,18 +25,15 @@ export default function ParametrosID() {
 
   useEffect(() => {
     const searchParams = new URLSearchParams(window.location.search);
-    const nome = searchParams.get('nome');
-    const id = searchParams.get('id');
+    const nome = searchParams.get("nome");
+    const id = searchParams.get("id");
 
-   
     setNomeFormulario(nome || "Formulário de Parâmetros");
 
-    
     if (id) {
-      
       setFormValues({
         nome: nome || "",
-        id: id || ""
+        id: id || "",
       });
     }
   }, [setFormValues]);
@@ -47,29 +44,29 @@ export default function ParametrosID() {
   };
 
   return (
-    <div className="w-screen h-screen flex bg-gray-100">
+    <div className="w-screen flex bg-gray-100">
+      {/* Menu lateral ocupando a lateral esquerda */}
       <div className="w-1/5">
         <MenuLateral menuData={menuData} />
       </div>
 
-      <div className="w-4/5 p-4 flex flex-col gap-4">
+      {/* Conteúdo principal ocupando o restante da tela */}
+      <div className="w-full p-4 flex flex-col gap-4">
         <h1 className="text-2xl font-bold mb-4">{nomeFormulario}</h1>
 
-        <div className="flex gap-4 w-screen bg-black mr-6">
-          <div className="flex-1 w-full">
-            <Formulario
-              onSubmit={() => console.log("Formulário enviado")}
-              dados={formValues}
+        <div className="flex flex-col gap-4 bg-white p-4 rounded-lg flex-1">
+          <Formulario
+            onSubmit={() => console.log("Formulário enviado")}
+            dados={formValues}
+          />
+          <div className="mt-4 flex justify-center">
+            <Botao
+              label="Adicionar Parâmetro"
+              corTexto="text-white"
+              corFundo="bg-blue-500"
+              type="button"
+              onClick={handleAdicionarParametro}
             />
-            <div className="mt-4 flex gap-3">
-              <Botao
-                label="Adicionar Parâmetro"
-                corTexto="text-white"
-                corFundo="bg-blue-500"
-                type="submit"
-                onClick={handleAdicionarParametro}
-              />
-            </div>
           </div>
         </div>
 
