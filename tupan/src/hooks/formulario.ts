@@ -5,6 +5,10 @@ export const useFormularioParametros = (dados?: Record<string, unknown>) => {
     nome: "",
     minimo: "",
     maximo: "",
+    medida: "",
+    escala: "",
+    comparacao: "",
+    condicao: "",
     itemWeight: "",
     description: "",
   });
@@ -31,5 +35,6 @@ export const useFormularioParametros = (dados?: Record<string, unknown>) => {
   return {
     formValues,
     handleChange,
+    setFormValues, 
   };
 };

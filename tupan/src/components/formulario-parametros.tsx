@@ -1,12 +1,13 @@
-"use client"
-import { useState } from "react";
+"use client";
+
 import { Input } from "@/components/input";
 import { useFormularioParametros } from "@/hooks/formulario";
 // import { Botao } from "@/components/botao";
 import { FormularioProps } from "@/types/interfaces";
+import { Select } from "./select";
 
 export const Formulario = ({ onSubmit, dados }: FormularioProps) => {
-  const { formValues, handleChange } = useFormularioParametros(dados)
+  const { formValues, handleChange } = useFormularioParametros(dados);
 
   return (
     <>
@@ -57,103 +58,96 @@ export const Formulario = ({ onSubmit, dados }: FormularioProps) => {
                 />
               </div>
               <div>
-                <label
-                  htmlFor="medida"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                >
-                  Medida <span className="text-red-500">*</span>
-                </label>
-                <select
+                <Select
                   id="medida"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                >
-                  <option>Selecione uma medida para o Parâmetro</option>
-                  <option value="Temperatura">Temperatura</option>
-                  <option value="Pressão">Pressão</option>
-                  <option value="Umidade">Umidade</option>
-                  <option value="Volume">Volume da chuva</option>
-                  <option value="Velocidade do vento">
-                    Velocidade do vento
-                  </option>
-                </select>
+                  label="Medida"
+                  span="*"
+                  required={true}
+                  value={formValues.medida}
+                  onChange={handleChange}
+                  options={[
+                    { label: "Temperatura", value: "Temperatura" },
+                    { label: "Pressão", value: "Pressão" },
+                    { label: "Umidade", value: "Umidade" },
+                    { label: "Volume da chuva", value: "Volume" },
+                    {
+                      label: "Velocidade do vento",
+                      value: "Velocidade do vento",
+                    },
+                  ]}
+                />
               </div>
               <div>
-                <label
-                  htmlFor="medida"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                >
-                  Escala de medição <span className="text-red-500">*</span>
-                </label>
-                <select
-                  id="medida"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                >
-                  <option>Selecione uma escala de medição</option>
-                  <option value="C">° C</option>
-                  <option value="F">° F</option>
-                  <option value="K">° K</option>
-                  <option value="Pa">Pascal</option>
-                  <option value="metroCubico">g/m³</option>
-                  <option value="velocidadeVentoMS">m/s</option>
-                  <option value="velocidadeVentoKH">km/h</option>
-                </select>
+                <Select
+                  id="escala"
+                  label="Escala de medição"
+                  span="*"
+                  required={true}
+                  value={formValues.escala}
+                  onChange={handleChange}
+                  options={[
+                    { label: "° C", value: "C" },
+                    { label: "° F", value: "F" },
+                    { label: "° K", value: "K" },
+                    { label: "Pascal", value: "Pa" },
+                    { label: "g/m³", value: "metroCubico" },
+                    { label: "m/s", value: "velocidadeVentoMS" },
+                    { label: "km/h", value: "velocidadeVentoKH" },
+                  ]}
+                />
               </div>
               <div>
-                <label
-                  htmlFor="medida"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                >
-                  Condição <span className="text-red-500">*</span>
-                </label>
-                <select
-                  id="medida"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                >
-                  <option>Selecione uma condição</option>
-                  <option value="maiorQue">Se maior que</option>
-                  <option value="menorQue">Se menor que</option>
-                  <option value="igualA">Se = a</option>
-                  <option value="diferenteDe">Se =! de</option>
-                  <option value="entre">Se esta</option>
-                </select>
+                <Select
+                  id="condicao"
+                  label="Condição"
+                  span="*"
+                  required={true}
+                  value={formValues.condicao}
+                  onChange={handleChange}
+                  options={[
+                    { label: "Se menor que", value: "minimo" },
+                    { label: "Se maior que", value: "maximo" },
+                    { label: "Se diferente de", value: "diferencaMINMAX" },
+                    { label: "Se igual ao", value: "diferencaMAXMIN" },
+                    { label: "Se está entre", value: "soma" },
+                  ]}
+                />
               </div>
               <div>
-                <label
-                  htmlFor="medida"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                >
-                  Base de comparação <span className="text-red-500">*</span>
-                </label>
-                <select
-                  id="medida"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                >
-                  <option>Selecione um atributo a ser comparado</option>
-                  <option value="minimo">Valor minimo</option>
-                  <option value="maximo">Valor maximo</option>
-                  <option value="diferencaMINMAX">Minimo - Maximo</option>
-                  <option value="diferencaMAXMIN">Maximo - Minimo</option>
-                  <option value="soma">Maximo + Minimo</option>
-                  <option value="soma">entre Minimo e Maximo</option>
-                </select>
+                <Select
+                  id="comparacao"
+                  label="Base de Comparação"
+                  span="*"
+                  required={true}
+                  value={formValues.comparacao}
+                  onChange={handleChange}
+                  options={[
+                    { label: "Valor minimo", value: "minimo" },
+                    { label: "Valor maximo", value: "maximo" },
+                    { label: "Minimo - Maximo", value: "diferencaMINMAX" },
+                    { label: "Maximo - Minimo", value: "diferencaMAXMIN" },
+                    { label: "Maximo + Minimo", value: "soma" },
+                    { label: "entre Minimo e Maximo", value: "entre" },
+                  ]}
+                />
               </div>
             </div>
-              <div className="mt-4 sm:col-span-2">
-                <label
-                  htmlFor="description"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                >
-                  Descrição
-                </label>
-                <textarea
-                  id="description"
-                  rows={8}
-                  className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                  placeholder="Adicione uma descrição para o parâmetro"
-                  value={formValues.description}
-                  onChange={handleChange}
-                ></textarea>
-              </div>
+            <div className="mt-4 sm:col-span-2">
+              <label
+                htmlFor="description"
+                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              >
+                Descrição
+              </label>
+              <textarea
+                id="description"
+                rows={8}
+                className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                placeholder="Adicione uma descrição para o parâmetro"
+                value={formValues.description}
+                onChange={handleChange}
+              ></textarea>
+            </div>
             {/* <Botao
               label="Add product"
               corTexto="text-white"

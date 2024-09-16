@@ -24,8 +24,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className="min-h-screen m-0 flex flex-row bg-gray-100">{children}</body>
+    <html lang="pt-br">
+      <body className={`min-h-screen m-0 flex flex-row bg-gray-100`}>
+        {children}
+      </body>
     </html>
   );
 }
