@@ -1,6 +1,7 @@
 "use client";
 import { useTableSort } from "@/hooks/filtragem";
 import { TableProps } from "@/types/interfaces";
+import Link from "next/link";
 import { ReactNode } from "react";
 
 export const Tabela = ({ colunas, dados }: TableProps) => {
@@ -55,26 +56,29 @@ export const Tabela = ({ colunas, dados }: TableProps) => {
             </tr>
           </thead>
           <tbody>
-            {sortedData.map((row, rowIndex) => (
-              <tr
-                key={rowIndex}
-                className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
-              >
-                {colunas.map((coluna, colIndex) => (
-                  <td key={colIndex} className="px-6 py-4">
-                    {row[coluna.acessor] as ReactNode}
+            {sortedData.map((row, rowIndex) => {
+              return (
+                <tr
+                  key={rowIndex}
+                  className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
+                >
+                  {colunas.map((coluna, colIndex) => (
+                    <td key={colIndex} className="px-6 py-4">
+                      {row[coluna.acessor] as ReactNode}
+                    </td>
+                  ))}
+                  <td className="px-6 py-4 text-right">
+                    <Link
+                      title="Editar"
+                      className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                      href={{pathname: `parametros/${rowIndex+1}`, query: {id: rowIndex+1, nome: `${row.nome}`}}}
+                    >
+                      Editar
+                    </Link>
                   </td>
-                ))}
-                <td className="px-6 py-4 text-right">
-                  <a
-                    href="#"
-                    className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-                  >
-                    Edit
-                  </a>
-                </td>
-              </tr>
-            ))}
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>
