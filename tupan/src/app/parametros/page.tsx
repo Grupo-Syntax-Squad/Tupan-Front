@@ -7,7 +7,7 @@ import { Botao } from "@/components/botao";
 import { usePopConfirmacao } from "@/hooks/visivel";
 import { Formulario } from "@/components/formulario-parametros";
 
-export const menuData = [
+const menuData = [
   { nome: "Estações", path: "/estacoes", icone: "bx bx-home" },
   { nome: "Parâmetros", path: "/parametros", icone: "bx bxs-thermometer" },
   { nome: "Alertas", path: "/alertas", icone: "bx bx-alarm-exclamation" },
@@ -16,13 +16,13 @@ export const menuData = [
   { nome: "Logout", path: "/", icone: "bx bx-log-out" },
 ];
 
-export const colunas = [
+const colunas = [
   { label: "Parâmetro", acessor: "nome" },
   { label: "Data de Criação", acessor: "date" },
   { label: "Status", acessor: "status" },
 ];
 
-export const dados = [
+const dados = [
   { nome: "Temperatura", date: "12 / 11 / 2024", status: "Ativado" },
   { nome: "Umidade", date: "10 / 01 / 2000", status: "Desativado" },
   { nome: "Pressão", date: "13 / 05 / 2015", status: "Ativado" },

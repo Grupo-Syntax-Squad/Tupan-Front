@@ -1,26 +1,12 @@
+"use client"
 import { useState } from "react";
 import { Input } from "@/components/input";
+import { useFormularioParametros } from "@/hooks/formulario";
 // import { Botao } from "@/components/botao";
 import { FormularioProps } from "@/types/interfaces";
 
-export const Formulario = ({ onSubmit }: FormularioProps) => {
-  const [formValues, setFormValues] = useState({
-    nome: "",
-    minimo: "",
-    maximo: "",
-    itemWeight: "",
-    description: "",
-  });
-
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { id, value } = e.target;
-    setFormValues((prevValues) => ({
-      ...prevValues,
-      [id]: value,
-    }));
-  };
+export const Formulario = ({ onSubmit, dados }: FormularioProps) => {
+  const { formValues, handleChange } = useFormularioParametros(dados)
 
   return (
     <>
