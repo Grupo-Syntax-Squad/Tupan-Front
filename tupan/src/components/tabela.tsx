@@ -3,9 +3,11 @@ import { useTableSort } from "@/hooks/filtragem";
 import { TableProps } from "@/types/interfaces";
 import Link from "next/link";
 import { ReactNode } from "react";
+import { useDynamicContext } from "@/app/context";
 
 export const Tabela = ({ colunas, dados }: TableProps) => {
   const { sortState, toggleSort } = useTableSort();
+  const {state, setValue} = useDynamicContext();
 
   const sortedData = [...dados].sort((a, b) => {
     if (sortState.column) {
@@ -71,7 +73,8 @@ export const Tabela = ({ colunas, dados }: TableProps) => {
                     <Link
                       title="Editar"
                       className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-                      href={{pathname: `parametros/${rowIndex+1}`, query: {id: rowIndex+1, nome: `${row.nome}`}}}
+                      href={{ pathname: `parametros/${rowIndex + 1}`, query: { id: rowIndex + 1, nome: `${row.nome}` } }}
+                      onClick={() => setValue("nome", `${row.nome}`)}
                     >
                       Editar
                     </Link>

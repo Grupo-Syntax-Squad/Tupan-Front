@@ -5,3 +5,5 @@ export * from '@/types/PopUpConfirmacao/interface';
 export * from '@/types/Input/interface';
 export * from '@/types/Formulario/interface'
 export * from '@/types/Select/interface';
+export * from '@/types/NavTop/interface';
+export * from '@/types/Toggle/interface';

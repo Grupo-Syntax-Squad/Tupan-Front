@@ -6,6 +6,7 @@ import { Tabela } from "@/components/tabela";
 import { Botao } from "@/components/botao";
 import { usePopConfirmacao } from "@/hooks/visivel";
 import { Formulario } from "@/components/formulario-parametros";
+import { NavTop } from "@/components/nav-top";
 
 const menuData = [
   { nome: "Estações", path: "/estacoes", icone: "bx bx-home" },
@@ -40,13 +41,19 @@ export default function Parametros() {
   return (
     <div className="w-screen flex bg-gray-100">
       {/* Menu lateral ocupando a lateral esquerda */}
-      <div className="w-1/5">
+      <div className="w-fit pr-4 min-h-screen">
         <MenuLateral menuData={menuData} />
       </div>
 
       {/* Conteúdo principal ocupando o resto da tela */}
-      <div className="w-screen p-4 flex flex-col gap-4">
+
+      <div className="w-full flex pr-4 flex-col gap-4">
+
+          {/* Barra superior ocupando a parte superior da tela */}
+        <NavTop nome="Usuário" path="Parâmetros" />
+
         <div className="flex gap-4">
+          
           {/* Tabela ocupando metade da largura */}
           <div className="w-1/2">
             <Tabela colunas={colunas} dados={dados} />
