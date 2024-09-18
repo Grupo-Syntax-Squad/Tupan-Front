@@ -21,11 +21,14 @@ const menuData = [
 ];
 
 export default function ParametrosID() {
-  const { isVisible, mensagem, showPopConfirmacao, hidePopConfirmacao } = usePopConfirmacao();
+  const { isVisible, mensagem, showPopConfirmacao, hidePopConfirmacao } =
+    usePopConfirmacao();
   const { formValues, handleChange, setFormValues } = useFormularioParametros();
   const { state } = useDynamicContext();
 
-  const [nomeFormulario, setNomeFormulario] = useState<string | undefined>(undefined);
+  const [nomeFormulario, setNomeFormulario] = useState<string | undefined>(
+    undefined
+  );
   const [initialStatus, setInitialStatus] = useState<boolean>(false);
 
   useEffect(() => {
@@ -33,6 +36,8 @@ export default function ParametrosID() {
     const nome = searchParams.get("nome") || state.nome;
     const id = searchParams.get("id");
     const status = searchParams.get("status");
+
+    console.log("Status from URL:", status); // Adicione este log
 
     setNomeFormulario(nome || "Formulário de Parâmetros");
     setInitialStatus(status === "Ativado");
@@ -46,7 +51,8 @@ export default function ParametrosID() {
     }
   }, [setFormValues, state]);
 
-  const { isChecked, handleChange: handleToggleChange } = useToggle(initialStatus);
+  const { isChecked, handleChange: handleToggleChange } =
+    useToggle(initialStatus);
 
   const handleAdicionarParametro = () => {
     console.log("Adicionar novo parâmetro");
@@ -70,6 +76,7 @@ export default function ParametrosID() {
             <FormularioAtualizacaoParametros
               onSubmit={() => console.log("Formulário enviado")}
               dados={formValues}
+              initialStatus={initialStatus}
             />
             <div className="mt-4 flex justify-center">
               <Botao

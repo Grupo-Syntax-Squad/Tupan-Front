@@ -2,7 +2,7 @@ import { ToggleProps } from "@/types/interfaces";
 import { Input } from "./input";
 import { useToggle } from "@/hooks/check";
 
-export const Toggle = ({ label, id, initialChecked = false }: ToggleProps) => {
+export const Toggle: React.FC<ToggleProps> = ({ label, id, initialChecked }) => {
   const { isChecked, handleChange } = useToggle(initialChecked);
 
   return (

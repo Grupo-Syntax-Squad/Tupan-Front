@@ -9,10 +9,13 @@ import { Toggle } from "./toggle";
 export const FormularioAtualizacaoParametros = ({
   onSubmit,
   dados,
-}: FormularioProps) => {
+  initialStatus,
+}: FormularioProps & { initialStatus: boolean }) => {
   const { formValues, handleChange } = useFormularioParametros(dados);
   console.log(formValues);
+  console.log('status',initialStatus);
   
+
   return (
     <>
       <link
@@ -26,11 +29,7 @@ export const FormularioAtualizacaoParametros = ({
           </h2>
           <form action="#" onSubmit={onSubmit}>
             <div>
-              <Toggle
-                label="Ativo"
-                id="ativo"
-                initialChecked={formValues.status === "Ativado"}
-              />
+              <Toggle label="Ativo" id="ativo" initialChecked={initialStatus} />
             </div>
             <div className="w-full mb-4">
               <Input
