@@ -9,6 +9,7 @@ import { usePopConfirmacao } from "@/hooks/visivel";
 import { useFormularioParametros } from "@/hooks/formulario";
 import { NavTop } from "@/components/nav-top";
 import { useDynamicContext } from "@/app/context";
+import { useToggle } from "@/hooks/check";
 
 const menuData = [
   { nome: "Estações", path: "/estacoes", icone: "bx bx-home" },
@@ -25,21 +26,27 @@ export default function ParametrosID() {
   const { state } = useDynamicContext();
 
   const [nomeFormulario, setNomeFormulario] = useState<string | undefined>(undefined);
+  const [initialStatus, setInitialStatus] = useState<boolean>(false);
 
   useEffect(() => {
     const searchParams = new URLSearchParams(window.location.search);
     const nome = searchParams.get("nome") || state.nome;
     const id = searchParams.get("id");
+    const status = searchParams.get("status");
 
     setNomeFormulario(nome || "Formulário de Parâmetros");
+    setInitialStatus(status === "Ativado");
 
     if (id) {
       setFormValues({
         nome: nome || "",
         id: id || "",
+        status: status || "",
       });
     }
   }, [setFormValues, state]);
+
+  const { isChecked, handleChange: handleToggleChange } = useToggle(initialStatus);
 
   const handleAdicionarParametro = () => {
     console.log("Adicionar novo parâmetro");

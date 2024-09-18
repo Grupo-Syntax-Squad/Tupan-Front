@@ -73,8 +73,11 @@ export const Tabela = ({ colunas, dados }: TableProps) => {
                     <Link
                       title="Editar"
                       className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-                      href={{ pathname: `parametros/${rowIndex + 1}`, query: { id: rowIndex + 1, nome: `${row.nome}` } }}
-                      onClick={() => setValue("nome", `${row.nome}`)}
+                      href={{ pathname: `parametros/${rowIndex + 1}`, query: { id: rowIndex + 1, nome: `${row.nome}`, status: `${row.status}`} }}
+                      onClick={() => {
+                        setValue("nome", `${row.nome}`);
+                        setValue("status", `${row.status}`);
+                      }}
                     >
                       Editar
                     </Link>

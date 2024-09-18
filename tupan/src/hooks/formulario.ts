@@ -11,6 +11,7 @@ export const useFormularioParametros = (dados?: Record<string, unknown>) => {
     condicao: "",
     itemWeight: "",
     description: "",
+    status: "",
   });
 
   useEffect(() => {

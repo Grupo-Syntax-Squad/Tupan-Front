@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import "../styles/globals.css";
 import ContextoDinamicoProvider from "./context";
+import "flowbite/dist/flowbite.min.css";
+
 
 export const metadata: Metadata = {
   title: "Tupã",
