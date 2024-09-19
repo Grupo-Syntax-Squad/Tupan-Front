@@ -56,7 +56,7 @@ export default function ParametrosID() {
 
   const handleAdicionarParametro = () => {
     console.log("Adicionar novo parâmetro");
-    showPopConfirmacao("Parâmetro adicionado com sucesso!");
+    showPopConfirmacao(`Parâmetro: "${nomeFormulario}" atualizado com sucesso!`);
   };
 
   return (
@@ -80,7 +80,7 @@ export default function ParametrosID() {
             />
             <div className="mt-4 flex justify-center">
               <Botao
-                label="Adicionar Parâmetro"
+                label="Atualizar Parâmetro"
                 corTexto="text-white"
                 corFundo="bg-blue-500"
                 type="button"

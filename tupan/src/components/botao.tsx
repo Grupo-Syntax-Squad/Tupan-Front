@@ -1,6 +1,6 @@
 import { BotaoProps } from "@/types/interfaces";
 
-export const Botao = ({ label, corTexto, corFundo, onClick, icone, type = 'button' }: BotaoProps) => {
+export const Botao = ({ label, corTexto, corFundo, onClick, icone, type}: BotaoProps) => {
   return (
     <button
       onClick={onClick}

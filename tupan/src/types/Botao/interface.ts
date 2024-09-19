@@ -6,4 +6,6 @@ export interface BotaoProps {
     corFundo: string;
     icone?: string;
   }
+
+
   

@@ -11,6 +11,9 @@ export const useFormularioParametros = (dados?: Record<string, unknown>) => {
     condicao: "",
     itemWeight: "",
     description: "",
+    offsetminimo: "",
+    offsetmaximo: "",
+    tolerancia: "",
     status: "",
   });
 
