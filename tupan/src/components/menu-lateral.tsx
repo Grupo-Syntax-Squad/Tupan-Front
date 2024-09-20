@@ -3,7 +3,7 @@
 import { MenuLateralProps } from "@/types/interfaces";
 import Link from "next/link";
 import Image from "next/image";
-import LOGO from "../../public/tupan-logo1.svg";
+import { LogoTupan } from "../../public/export";
 
 export const MenuLateral = ({ menuData }: MenuLateralProps) => {
   return (
@@ -18,7 +18,7 @@ export const MenuLateral = ({ menuData }: MenuLateralProps) => {
         <div className="flex flex-col w-56 h-full overflow-hidden">
           <div className="bg-transparent p-4">
             <div className="flex items-center justify-center h-20">
-              <Image src={LOGO} alt="Logo" priority width={200} height={100} />
+              <Image src={LogoTupan} alt="Logo" priority width={200} height={100} />
             </div>
           </div>
           <div className="bg-gradient-to-t min-h-full from-indigo-500">
