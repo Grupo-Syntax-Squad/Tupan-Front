@@ -1,8 +1,5 @@
 import Image from 'next/image';
-import ImagemTemperatura from '../../assets/temperatura.png';
-import ImagemUmidade from '../../assets/umidade.png';
-import ImagemVento from '../../assets/vento.png';
-import ImagemChuva from '../../assets/chuva.png';
+import { tempICON, UmidadeIcon, VentoICON, chuvaICON } from '../../../public/export';
 
 export default function Estacoes() {
     return (
@@ -12,22 +9,22 @@ export default function Estacoes() {
                 <div className='flex mt-2 gap-10'>
                     <div className='flex flex-col'>
                         <p className='flex justify-center font-bold'>Temperatura</p>
-                        <Image className='size-24 mb-5' src={ImagemTemperatura} alt="Ícone de temperatura" />
+                        <Image className='size-24 mb-5' src={tempICON} alt="Ícone de temperatura" />
                         <p className='flex justify-center'>00C</p>
                     </div>
                     <div className='flex flex-col'>
                     <p className='flex justify-center font-bold'>Umidade</p>
-                        <Image className='size-24 mb-5'  src={ImagemUmidade} alt="Ícone de umidade" />
+                        <Image className='size-24 mb-5'  src={UmidadeIcon} alt="Ícone de umidade" />
                         <p className='flex justify-center'>00%</p>
                     </div>
                     <div className='flex flex-col'>
                     <p className='flex justify-center font-bold'>Vento</p>
-                        <Image className='size-24 mb-5'  src={ImagemVento} alt="Ícone de vento" />
+                        <Image className='size-24 mb-5'  src={VentoICON} alt="Ícone de vento" />
                         <p className='flex justify-center'>00km/h</p>
                     </div>
                     <div className='flex flex-col '>
                     <p className='flex justify-center font-bold'>Chuva</p>
-                        <Image className='size-24 mb-5'  src={ImagemChuva} alt="Ícone de chuva" />
+                        <Image className='size-24 mb-5'  src={chuvaICON} alt="Ícone de chuva" />
                         <p className='flex justify-center'>00mm</p>
                     </div>
                 </div>
