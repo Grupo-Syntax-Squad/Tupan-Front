@@ -1,3 +1,5 @@
+"use client"
+
 import { MenuLateralProps } from "@/types/interfaces";
 import Link from "next/link";
 import Image from "next/image";
