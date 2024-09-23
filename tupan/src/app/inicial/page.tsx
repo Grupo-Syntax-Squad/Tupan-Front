@@ -10,7 +10,7 @@ const menuData = [
   { nome: "Alertas", path: "/alertas", icone: "bx bx-alarm-exclamation" },
   { nome: "Usuários", path: "/usuarios", icone: "bx bx-user" },
   { nome: "Educacional", path: "/educacional", icone: "bx bx-book" },
-  { nome: "Logout", path: "/", icone: "bx bx-log-out" },
+  { nome: "Logout", path: "/logout", icone: "bx bx-log-out" },
 ];
 
 export default function Inicial() {
@@ -50,6 +50,10 @@ export default function Inicial() {
               <span className="mt-2 font-bold text-2xl text-gray-500">Usuários</span>
             </Link>
             <Link href="/educacional" className="flex flex-col items-center cursor-pointer">
+              <i style={{ fontSize: '60px' }} className="bx bx-book text-gray-400"></i> {/* Ícone Educacional */}
+              <span className="mt-2 font-bold text-2xl text-gray-500">Educacional</span>
+            </Link>
+            <Link href="/logout" className="flex flex-col items-center cursor-pointer">
               <i style={{ fontSize: '60px' }} className="bx bx-book text-gray-400"></i> {/* Ícone Educacional */}
               <span className="mt-2 font-bold text-2xl text-gray-500">Educacional</span>
             </Link>
