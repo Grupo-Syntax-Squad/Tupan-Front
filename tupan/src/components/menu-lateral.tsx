@@ -1,5 +1,3 @@
-"use client";
-
 import { MenuLateralProps } from "@/types/interfaces";
 import Link from "next/link";
 import Image from "next/image";
@@ -18,14 +16,16 @@ export const MenuLateral = ({ menuData }: MenuLateralProps) => {
         <div className="flex flex-col w-56 h-full overflow-hidden">
           <div className="bg-transparent p-4">
             <div className="flex items-center justify-center h-20">
-              <Image src={LogoTupan} alt="Logo" priority width={200} height={100} />
+              {/* Envolvendo o logo com Link para redirecionar à página inicial */}
+              <Link href="/" passHref>
+                <Image src={LogoTupan} alt="Logo" priority width={200} height={100} />
+              </Link>
             </div>
           </div>
           <div className="bg-gradient-to-t min-h-full from-indigo-500">
             {/* Menu */}
             <ul className="flex flex-col py-4">
               {/* Mapeia cada item do menu */}
-              
               {menuData.map((item, index) => (
                 <li key={index}>
                   <Link
