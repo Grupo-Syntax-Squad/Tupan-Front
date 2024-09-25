@@ -1,6 +1,8 @@
 "use client";
 
 import { MenuLateral } from "@/components/menu-lateral";
+import { NavTop } from "@/components/nav-top";
+
 import React from 'react';
 
 const Alertas: React.FC = () => {
@@ -26,41 +28,43 @@ const Alertas: React.FC = () => {
         <MenuLateral menuData={menuData} />
       </div>
 
-      <div className="flex flex-col items-center min-h-screen w-full bg-gray-100">
-        <h1 className="text-2xl font-bold mt-10 text-center">Alertas</h1>
+      <div className="flex flex-col min-h-screen w-full bg-gray-100">
+        <NavTop nome="Usuário" path="Alertas" />
 
-        <div className="mt-10 w-3/4">
-          <table className="w-full bg-white shadow-lg rounded-lg overflow-hidden">
-            <thead className=" text-white" style={{ backgroundColor: '#4e00a9' }}>
-              <tr>
-                <th className="p-4 text-center">Título</th>
-                <th className="p-4 text-center">Descrição</th>
-                <th className="p-4 text-center">Tipo</th>
-                <th className="p-4 text-center">Data</th>
-                <th className="p-4 text-center">Ações</th>
-              </tr>
-            </thead>
-            <tbody>
-              {alertas.map((alerta) => (
-                <tr key={alerta.id} className="text-center border-b">
-                  <td className="p-3">{alerta.titulo}</td>
-                  <td className="p-3">{alerta.descricao}</td>
-                  <td className="p-3">{alerta.tipo}</td>
-                  <td className="p-3">{alerta.data}</td>
-                  <td className="p-3">
-                    <button
-                      className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-800"
-                      aria-label={`Ver detalhes do ${alerta.titulo}`}
-                    >
-                      Ver Detalhes
-                    </button>
-                  </td>
+        <div className="flex flex-col items-center">
+          <div className="mt-10 w-3/4 flex flex-col items-center">
+            <table className="w-full bg-white shadow-lg rounded-lg overflow-hidden">
+              <thead className=" text-white" style={{ backgroundColor: '#4e00a9' }}>
+                <tr>
+                  <th className="p-4 text-center">Título</th>
+                  <th className="p-4 text-center">Descrição</th>
+                  <th className="p-4 text-center">Tipo</th>
+                  <th className="p-4 text-center">Data</th>
+                  <th className="p-4 text-center">Ações</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {alertas.map((alerta) => (
+                  <tr key={alerta.id} className="text-center border-b">
+                    <td className="p-3">{alerta.titulo}</td>
+                    <td className="p-3">{alerta.descricao}</td>
+                    <td className="p-3">{alerta.tipo}</td>
+                    <td className="p-3">{alerta.data}</td>
+                    <td className="p-3">
+                      <button
+                        className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-800"
+                        aria-label={`Ver detalhes do ${alerta.titulo}`}
+                      >
+                        Ver Detalhes
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          </div>
         </div>
-      </div>
     </div>
   );
 };
