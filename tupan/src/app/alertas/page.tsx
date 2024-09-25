@@ -63,8 +63,15 @@ const Alertas: React.FC = () => {
               </tbody>
             </table>
           </div>
+
+          <a
+            href="/cadastro-alerta"
+            className="w-64 bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-700 mt-4 inline-block text-center">
+            Cadastrar novo Alerta
+          </a>
           </div>
         </div>
+
     </div>
   );
 };
