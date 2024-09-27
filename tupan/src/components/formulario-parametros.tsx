@@ -1,12 +1,36 @@
-"use client";
+'use client';
 
-import { Input } from "@/components/input";
-import { useFormularioParametros } from "@/hooks/formulario";
-import { FormularioProps } from "@/types/interfaces";
-import { Select } from "./select";
+import { Input } from '@/components/input';
+import { useFormularioParametros } from '@/hooks/formulario';
+import { FormularioProps } from '@/types/interfaces';
+import { Select } from './select';
+import { useCreateParametro } from '@/hooks/adicionarParametro';
 
 export const Formulario = ({ onSubmit, dados }: FormularioProps) => {
   const { formValues, handleChange } = useFormularioParametros(dados);
+  const { submitParametro, loading, error, success } = useCreateParametro();
+
+  const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const parametro = {
+      nome: formValues.nome,
+      fator: 0,
+      offset: 0,
+      unidade: formValues.escala,
+      nome_json: formValues.nome,
+    };
+
+    try {
+      await submitParametro({
+        ...parametro,
+        fator: 0,
+        offset: 0,
+      });
+    } catch (error) {
+      console.error('Erro ao criar o parâmetro:', error);
+    }
+  };
 
   return (
     <section className="bg-white dark:bg-gray-900 shadow-md sm:rounded-lg">
@@ -14,7 +38,7 @@ export const Formulario = ({ onSubmit, dados }: FormularioProps) => {
         <h2 className="mb-4 text-xl font-bold text-gray-900 dark:text-white">
           Crie um novo parâmetro
         </h2>
-        <form action="#" onSubmit={onSubmit}>
+        <form action="#" onSubmit={handleFormSubmit}>
           <div className="w-full mb-4">
             <Input
               id="nome"
@@ -27,30 +51,6 @@ export const Formulario = ({ onSubmit, dados }: FormularioProps) => {
             />
           </div>
           <div className="grid gap-4 sm:grid-cols-2 sm:gap-6">
-            <div className="sm:col-span-2">
-              <Input
-                id="minimo"
-                label="Valor Mínimo"
-                span="*"
-                placeholder="Insira o valor mínimo para o parâmetro"
-                type="number"
-                required
-                value={formValues.minimo}
-                onChange={handleChange}
-              />
-            </div>
-            <div>
-              <Input
-                id="maximo"
-                label="Valor Máximo"
-                span="*"
-                placeholder="Insira o valor máximo para o parâmetro"
-                type="number"
-                required
-                value={formValues.maximo}
-                onChange={handleChange}
-              />
-            </div>
             <div>
               <Select
                 id="medida"
@@ -60,11 +60,14 @@ export const Formulario = ({ onSubmit, dados }: FormularioProps) => {
                 value={formValues.medida}
                 onChange={handleChange}
                 options={[
-                  { label: "Temperatura", value: "Temperatura" },
-                  { label: "Pressão", value: "Pressão" },
-                  { label: "Umidade", value: "Umidade" },
-                  { label: "Volume da chuva", value: "Volume" },
-                  { label: "Velocidade do vento", value: "Velocidade do vento" },
+                  { label: 'Temperatura', value: 'Temperatura' },
+                  { label: 'Pressão', value: 'Pressão' },
+                  { label: 'Umidade', value: 'Umidade' },
+                  { label: 'Volume da chuva', value: 'Volume' },
+                  {
+                    label: 'Velocidade do vento',
+                    value: 'Velocidade do vento',
+                  },
                 ]}
               />
             </div>
@@ -77,49 +80,36 @@ export const Formulario = ({ onSubmit, dados }: FormularioProps) => {
                 value={formValues.escala}
                 onChange={handleChange}
                 options={[
-                  { label: "° C", value: "C" },
-                  { label: "° F", value: "F" },
-                  { label: "° K", value: "K" },
-                  { label: "Pascal", value: "Pa" },
-                  { label: "g/m³", value: "metroCubico" },
-                  { label: "m/s", value: "velocidadeVentoMS" },
-                  { label: "km/h", value: "velocidadeVentoKH" },
+                  { label: '° C', value: 'C' },
+                  { label: '° F', value: 'F' },
+                  { label: '° K', value: 'K' },
+                  { label: 'Pascal', value: 'Pa' },
+                  { label: 'g/m³', value: 'metroCubico' },
+                  { label: 'm/s', value: 'velocidadeVentoMS' },
+                  { label: 'km/h', value: 'velocidadeVentoKH' },
                 ]}
               />
             </div>
             <div>
-              <Select
-                id="condicao"
-                label="Condição"
-                span="*"
+              <Input
+                id="nomejson"
+                label="Nome do Parâmetro JSON"
+                span=" "
+                placeholder="Digite o nome do parâmetro no campo JSON"
                 required
-                value={formValues.condicao}
+                value={formValues.nomejson}
                 onChange={handleChange}
-                options={[
-                  { label: "Se menor que", value: "minimo" },
-                  { label: "Se maior que", value: "maximo" },
-                  { label: "Se diferente de", value: "diferencaMINMAX" },
-                  { label: "Se igual ao", value: "diferencaMAXMIN" },
-                  { label: "Se está entre", value: "soma" },
-                ]}
               />
             </div>
             <div>
-              <Select
-                id="comparacao"
-                label="Base de Comparação"
-                span="*"
+              <Input
+                id="fator"
+                label="Fator de Conversão"
+                span=" "
+                placeholder="Digite o fator de conversao do parametro"
                 required
-                value={formValues.comparacao}
+                value={formValues.fator}
                 onChange={handleChange}
-                options={[
-                  { label: "Valor mínimo", value: "minimo" },
-                  { label: "Valor máximo", value: "maximo" },
-                  { label: "Minimo - Máximo", value: "diferencaMINMAX" },
-                  { label: "Máximo - Mínimo", value: "diferencaMAXMIN" },
-                  { label: "Máximo + Mínimo", value: "soma" },
-                  { label: "Entre Mínimo e Máximo", value: "entre" },
-                ]}
               />
             </div>
           </div>
@@ -139,6 +129,19 @@ export const Formulario = ({ onSubmit, dados }: FormularioProps) => {
               onChange={handleChange}
             ></textarea>
           </div>
+
+          <div className="mt-4">
+            <button
+              type="submit"
+              className={`w-full bg-blue-500 text-white py-2 rounded-md ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+              disabled={loading}
+            >
+              {loading ? 'Criando...' : 'Criar Parâmetro'}
+            </button>
+          </div>
+
+          {error && <p className="text-red-500">{error}</p>}
+          {success && <p className="text-green-500">{success}</p>}
         </form>
       </div>
     </section>
