@@ -2,7 +2,7 @@ import { SelectProps } from "@/types/interfaces";
 
 export const Select = ({
   id, label, span, options,
-  required, value, onChange, disabled,
+  required, value, onChange, disabled =true,
 }: SelectProps & { disabled?: boolean }) => {
   return (
     <div>
