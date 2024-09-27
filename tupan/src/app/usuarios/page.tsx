@@ -2,10 +2,18 @@
 
 import { MenuLateral } from "@/components/menu-lateral";
 import { NavTop } from "@/components/nav-top";
-
-import React from 'react';
+import React, { useState, useEffect } from "react";
 
 const Usuarios: React.FC = () => {
+  
+  // const [usuarios, setUsuarios] = useState({});
+
+  // useEffect(() => {
+  //   axios.get(`usuarios/${id}`).then(response => { 
+  //     setUsuarios(response.data.usuarios);
+
+  //   });
+  // }, []);
   const usuarios = [
     { id: 1, usuario: 'fulano', email: 'exemploEmail@gmail.com', dataCriacao: '2024-09-19', dataUpdate: '2024-09-22' },
     { id: 2, usuario: 'ciclano', email: 'exemploEmail2@gmail.com', dataCriacao: '2024-09-19', dataUpdate: '2024-09-21' },
@@ -51,10 +59,14 @@ const Usuarios: React.FC = () => {
                     <td className="p-3">{usuarios.dataUpdate}</td>
                     <td className="p-3">
                       <button
-                        className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-800"
+                        className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-800 m-2 "
                         aria-label={`Ver detalhes do ${usuarios.id}`}
                       >
                         Ver Detalhes
+                      </button>
+
+                      <button className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-800">
+                        deletar usuario
                       </button>
                     </td>
                   </tr>
@@ -69,9 +81,6 @@ const Usuarios: React.FC = () => {
                 className="w-64 bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-700 mt-4 inline-block text-center">
                 Cadastrar novo Usuario
               </a>
-
-              {/* <button className="w-64 bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-700 mt-4 inline-block text-center">
-              deletar usuario</button> */}
           </div>
           </div>
         </div>
