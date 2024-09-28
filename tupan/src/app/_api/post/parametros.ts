@@ -2,8 +2,8 @@ import { api_route } from "..";
 
 interface Parametro {
     nome: string;
-    fator: 0;
-    offset: 0; 
+    fator: number;
+    offset: number; 
     unidade: string;
     nome_json: string;
   }

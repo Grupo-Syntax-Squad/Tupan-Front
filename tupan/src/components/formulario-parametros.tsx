@@ -3,7 +3,7 @@
 import { Input } from '@/components/input';
 import { useFormularioParametros } from '@/hooks/formulario';
 import { FormularioProps } from '@/types/interfaces';
-import { PopConfirmacao } from "@/components/pop-confirmacao";
+import { PopConfirmacao } from '@/components/pop-confirmacao';
 import { Select } from './select';
 import { useCreateParametro } from '@/hooks/adicionarParametro';
 import { Botao } from './botao';
@@ -21,22 +21,19 @@ export const Formulario = ({ onSubmit, dados }: FormularioProps) => {
 
     const parametro = {
       nome: formValues.nome,
-      fator: 0,
-      offset: 0,
+      fator: formValues.fator || 0, 
+      offset: formValues.offset || 0,
       unidade: formValues.escala,
-      nome_json: formValues.nome,
+      nome_json: formValues.nomejson,
+      description: formValues.description, 
     };
 
     try {
-      await submitParametro({
-        ...parametro,
-        fator: 0,
-        offset: 0,
-      });
-
+      await submitParametro(parametro); 
       showPopConfirmacao(
         `Parametro: ${formValues.nome}, adicionado com sucesso!`
       );
+      onSubmit(e); 
     } catch (error) {
       console.error('Erro ao criar o parâmetro:', error);
     }

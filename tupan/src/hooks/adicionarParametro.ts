@@ -6,7 +6,7 @@ export const useCreateParametro = () => {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
 
-  const submitParametro = async (parametro: { nome: string; fator: 0; offset: 0; unidade: string; nome_json: string; }) => {
+  const submitParametro = async (parametro: { nome: string; fator: number; offset: number; unidade: string; nome_json: string; }) => {
     setLoading(true);
     setError(null);
     setSuccess(null);
