@@ -3,12 +3,18 @@
 import { Input } from '@/components/input';
 import { useFormularioParametros } from '@/hooks/formulario';
 import { FormularioProps } from '@/types/interfaces';
+import { PopConfirmacao } from "@/components/pop-confirmacao";
 import { Select } from './select';
 import { useCreateParametro } from '@/hooks/adicionarParametro';
+import { Botao } from './botao';
+import { usePopConfirmacao } from '@/hooks/visivel';
 
 export const Formulario = ({ onSubmit, dados }: FormularioProps) => {
   const { formValues, handleChange } = useFormularioParametros(dados);
   const { submitParametro, loading, error, success } = useCreateParametro();
+
+  const { isVisible, mensagem, showPopConfirmacao, hidePopConfirmacao } =
+    usePopConfirmacao();
 
   const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -27,6 +33,10 @@ export const Formulario = ({ onSubmit, dados }: FormularioProps) => {
         fator: 0,
         offset: 0,
       });
+
+      showPopConfirmacao(
+        `Parametro: ${formValues.nome}, adicionado com sucesso!`
+      );
     } catch (error) {
       console.error('Erro ao criar o parâmetro:', error);
     }
@@ -48,6 +58,7 @@ export const Formulario = ({ onSubmit, dados }: FormularioProps) => {
               required
               value={formValues.nome}
               onChange={handleChange}
+              estilo="min-w-full"
             />
           </div>
           <div className="grid gap-4 sm:grid-cols-2 sm:gap-6">
@@ -131,18 +142,19 @@ export const Formulario = ({ onSubmit, dados }: FormularioProps) => {
           </div>
 
           <div className="mt-4">
-            <button
+            <Botao
+              label="Adicionar Parâmetro"
+              corTexto="text-white"
+              corFundo="bg-blue-500"
+              onClick={handleFormSubmit}
               type="submit"
-              className={`w-full bg-blue-500 text-white py-2 rounded-md ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
-              disabled={loading}
-            >
-              {loading ? 'Criando...' : 'Criar Parâmetro'}
-            </button>
+            />
           </div>
-
-          {error && <p className="text-red-500">{error}</p>}
-          {success && <p className="text-green-500">{success}</p>}
         </form>
+        {/* Exibe o PopConfirmacao quando isVisible for verdadeiro */}
+        {isVisible && (
+          <PopConfirmacao mensagem={mensagem} onClose={hidePopConfirmacao} />
+        )}
       </div>
     </section>
   );

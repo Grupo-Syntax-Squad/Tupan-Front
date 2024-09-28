@@ -1,10 +1,7 @@
 "use client";
-
-import { PopConfirmacao } from "@/components/pop-confirmacao";
 import { MenuLateral } from "@/components/menu-lateral";
 import { Tabela } from "@/components/tabela";
 import { Botao } from "@/components/botao";
-import { usePopConfirmacao } from "@/hooks/visivel";
 import { Formulario } from "@/components/formulario-parametros";
 import { NavTop } from "@/components/nav-top";
 
@@ -30,14 +27,6 @@ const dados = [
 ];
 
 export default function Parametros() {
-  const { isVisible, mensagem, showPopConfirmacao, hidePopConfirmacao } =
-    usePopConfirmacao();
-
-  const handleAdicionarParametro = () => {
-    console.log("Adicionar novo parâmetro");
-    showPopConfirmacao("Parâmetro adicionado com sucesso!");
-  };
-
   return (
     <div className="w-screen flex bg-gray-100">
       {/* Menu lateral ocupando a lateral esquerda */}
@@ -62,24 +51,9 @@ export default function Parametros() {
           {/* Formulário ocupando metade da largura */}
           <div className="flex-1">
             <Formulario onSubmit={() => console.log("Formulário enviado")} />
-            <div className="mt-4 flex gap-3">
-              <Botao
-                label="Adicionar Parâmetro"
-                corTexto="text-white"
-                corFundo="bg-blue-500"
-                onClick={handleAdicionarParametro}
-                type="submit"
-              />
-            </div>
           </div>
         </div>
       </div>
-
-      {/* Botão de adicionar abaixo do formulário */}
-
-      {isVisible && (
-        <PopConfirmacao mensagem={mensagem} onClose={hidePopConfirmacao} />
-      )}
     </div>
   );
 }
