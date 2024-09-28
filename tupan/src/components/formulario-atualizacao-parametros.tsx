@@ -10,7 +10,9 @@ import { Botao } from './botao';
 import { useEditable } from '@/hooks/editar';
 import { useUpdateParametro } from '@/hooks/atualizarParametro';
 import { useGetParametroById } from '@/hooks/receberParametro';
-import { useFormularioParametros } from '@/hooks/formulario'; // Adicionado
+import { useFormularioParametros } from '@/hooks/formulario';
+import { useDeleteParametro } from '@/hooks/deletarParametro';
+import Router from 'next/router';
 
 export const FormularioAtualizacaoParametros = ({
   onSubmit,
@@ -67,6 +69,9 @@ export const FormularioAtualizacaoParametros = ({
     }
   }, [formValues, isInitialized, setFormValues]);
 
+
+  {/* Utilizando envios com hooks */}
+
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
 
@@ -84,7 +89,7 @@ export const FormularioAtualizacaoParametros = ({
 
     if (isNaN(updatedParams.id)) {
       console.error('ID inválido:', updatedParams.id);
-      return; // Não tenta enviar a requisição se o ID for inválido
+      return; // Não envia se o ID for inválido
     }
 
     try {
@@ -95,12 +100,17 @@ export const FormularioAtualizacaoParametros = ({
     }
   };
 
-  if (loading) return <div>Carregando...</div>;
-  if (error) return <div className="text-red-500">{error}</div>;
-
-  if (!formValues) {
-    return <div>Nenhum dado encontrado.</div>;
-  }
+  const handleDelete = async () => {
+    if (id) {
+      const confirmDelete = confirm('Tem certeza que deseja deletar este parâmetro?');
+      if (confirmDelete) {
+        try {
+          await useDeleteParametro(id);
+        } catch (error) {
+          console.error('Erro ao deletar o parâmetro:', error);
+        }
+      }}
+  };
 
   return (
     <>
@@ -116,24 +126,18 @@ export const FormularioAtualizacaoParametros = ({
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="flex flex-row gap-11">
               <Botao
-                type="button"
-                corTexto="text-black"
-                corFundo="bg-gray-300"
-                icone="bx bx-edit-alt"
-                label="Habilitar Edição"
-                onClick={toggleEdit}
+                type="button" corTexto="text-black"
+                corFundo="bg-gray-300" icone="bx bx-edit-alt"
+                label="Habilitar Edição" onClick={toggleEdit}
               />
               <Toggle label="Ativo" id="ativo" initialChecked={initialStatus} />
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="w-full flex flex-col">
                 <Input
-                  id="nome"
-                  label="Nome do Parâmetro"
-                  span="*"
-                  placeholder="Digite o nome do parâmetro"
-                  required
-                  estilo="min-w-full"
+                  id="nome" label="Nome do Parâmetro"
+                  span="*"  placeholder="Digite o nome do parâmetro"
+                  required  estilo="min-w-full"
                   value={formularioValues.nome || ''}
                   onChange={handleChange}
                   disabled={!isEditable}
@@ -141,25 +145,19 @@ export const FormularioAtualizacaoParametros = ({
               </div>
               <div className="flex flex-row p-auto gap-6">
                 <Input
-                  estilo="w-1/2"
-                  id="offset"
+                  estilo="w-1/2"  id="offset"
                   label="Off-Set do Parâmetro"
-                  span="*"
-                  placeholder="Insira o valor de Off-Set (padrão: 0)"
-                  type="number"
-                  required
+                  span="*"   placeholder="Insira o valor de Off-Set (padrão: 0)"
+                  type="number" required
                   value={formularioValues.offset || ''}
                   onChange={handleChange}
                   disabled={!isEditable}
                 />
                 <Input
-                  estilo="w-1/2"
-                  id="fator"
+                  estilo="w-1/2" id="fator"
                   label="Fator de Conversão"
-                  span="*"
-                  placeholder="Insira o valor de conversão do parametro"
-                  type="number"
-                  required
+                  span="*" placeholder="Insira o valor de conversão do parametro"
+                  type="number" required
                   value={formularioValues.fator || ''}
                   onChange={handleChange}
                   disabled={!isEditable}
@@ -167,24 +165,18 @@ export const FormularioAtualizacaoParametros = ({
               </div>
               <div className="flex flex-row p-auto gap-6">
                 <Input
-                  estilo="min-w-full"
-                  id="nomejson"
-                  label="Nome JSON"
-                  span="*"
-                  required
-                  placeholder="Campo JSON do Parâmetro"
-                  type="text"
-                  value={formularioValues.nomejson || ''}
+                  estilo="min-w-full" id="nomejson"
+                  label="Nome JSON"  span="*"
+                  required placeholder="Campo JSON do Parâmetro"
+                  type="text" value={formularioValues.nomejson || ''}
                   onChange={handleChange}
                   disabled={!isEditable}
                 />
               </div>
               <div className="flex flex-row p-auto gap-6">
                 <Select
-                  id="medida"
-                  label="Medida"
-                  span="*"
-                  required
+                  id="medida" label="Medida"
+                  span="*"    required
                   estilo="min-w-full"
                   value={formularioValues.medida || 'selecione uma opção'}
                   onChange={handleChange}
@@ -194,21 +186,15 @@ export const FormularioAtualizacaoParametros = ({
                     { label: 'Pressão', value: 'Pressão' },
                     { label: 'Umidade', value: 'Umidade' },
                     { label: 'Volume da chuva', value: 'Volume' },
-                    {
-                      label: 'Velocidade do vento',
-                      value: 'Velocidade do vento',
+                    { label: 'Velocidade do vento', value: 'Velocidade do vento',
                     },
                   ]}
                 />
                 <Select
-                  id="escala"
-                  label="Escala de Medição"
-                  span="*"
-                  estilo="min-w-full"
-                  required
-                  value={formularioValues.escala || 'selecione uma opção'}
-                  onChange={handleChange}
-                  disabled={!isEditable}
+                  id="escala" label="Escala de Medição"
+                  span="*" estilo="min-w-full"
+                  required value={formularioValues.escala || 'selecione uma opção'}
+                  onChange={handleChange} disabled={!isEditable}
                   options={[
                     { label: '° C', value: 'C' },
                     { label: '° F', value: 'F' },
@@ -220,14 +206,16 @@ export const FormularioAtualizacaoParametros = ({
                   ]}
                 />
               </div>
-              {/* Continue com os outros campos de maneira similar */}
-              <div className="flex justify-end mt-8">
+             
+              <div className="flex justify-start mt-8 gap-6">
                 <Botao
-                  type="submit"
-                  corTexto="text-white"
-                  corFundo="bg-blue-600"
-                  label="Atualizar Parâmetro"
-                  onClick={() => {}} // Não precisa de onClick aqui pois o handleSubmit já está definido
+                  type="submit" corTexto="text-white"
+                  corFundo="bg-blue-600" label="Atualizar Parâmetro"
+                />
+                <Botao
+                  type="button" corTexto="text-white"
+                  corFundo="bg-red-600" label="Deletar Parâmetro"
+                  onClick={handleDelete} 
                 />
               </div>
             </div>

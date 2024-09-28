@@ -15,7 +15,6 @@ export const useUpdateParametro = () => {
 
     try {
       const result = await obterParametroPorId(id);
-      console.log("Dados obtidos para o parâmetro:", result);
       return result;
     } catch (error) {
       if (error instanceof Error) {
@@ -40,7 +39,6 @@ export const useUpdateParametro = () => {
     modificado: string;
     criado: string;
   }) => {
-    console.log("Iniciando atualização do parâmetro:", parametro);
     const dados = await DadosParametro(parametro.id);
 
     if (!dados) {
@@ -66,7 +64,6 @@ export const useUpdateParametro = () => {
 
     try {
       const result = await atualizarParametro(parametro);
-      console.log("Parâmetro atualizado com sucesso:", result);
       setSuccess("Parâmetro atualizado com sucesso!");
       return result;
     } catch (error) {
