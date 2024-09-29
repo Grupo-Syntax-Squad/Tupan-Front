@@ -1,12 +1,43 @@
-"use client";
+'use client';
 
-import { Input } from "@/components/input";
-import { useFormularioParametros } from "@/hooks/formulario";
-import { FormularioProps } from "@/types/interfaces";
-import { Select } from "./select";
+import { Input } from '@/components/input';
+import { useFormularioParametros } from '@/hooks/formulario';
+import { FormularioProps } from '@/types/interfaces';
+import { PopConfirmacao } from '@/components/pop-confirmacao';
+import { Select } from './select';
+import { useCreateParametro } from '@/hooks/adicionarParametro';
+import { Botao } from './botao';
+import { usePopConfirmacao } from '@/hooks/visivel';
 
 export const Formulario = ({ onSubmit, dados }: FormularioProps) => {
   const { formValues, handleChange } = useFormularioParametros(dados);
+  const { submitParametro, loading, error, success } = useCreateParametro();
+
+  const { isVisible, mensagem, showPopConfirmacao, hidePopConfirmacao } =
+    usePopConfirmacao();
+
+  const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const parametro = {
+      nome: formValues.nome,
+      fator: formValues.fator || 0, 
+      offset: formValues.offset || 0,
+      unidade: formValues.escala,
+      nome_json: formValues.nomejson,
+      description: formValues.description, 
+    };
+
+    try {
+      await submitParametro(parametro); 
+      showPopConfirmacao(
+        `Parametro: ${formValues.nome}, adicionado com sucesso!`
+      );
+      onSubmit(e); 
+    } catch (error) {
+      console.error('Erro ao criar o parâmetro:', error);
+    }
+  };
 
   return (
     <section className="bg-white dark:bg-gray-900 shadow-md sm:rounded-lg">
@@ -14,7 +45,7 @@ export const Formulario = ({ onSubmit, dados }: FormularioProps) => {
         <h2 className="mb-4 text-xl font-bold text-gray-900 dark:text-white">
           Crie um novo parâmetro
         </h2>
-        <form action="#" onSubmit={onSubmit}>
+        <form action="#" onSubmit={handleFormSubmit}>
           <div className="w-full mb-4">
             <Input
               id="nome"
@@ -24,33 +55,10 @@ export const Formulario = ({ onSubmit, dados }: FormularioProps) => {
               required
               value={formValues.nome}
               onChange={handleChange}
+              estilo="min-w-full"
             />
           </div>
           <div className="grid gap-4 sm:grid-cols-2 sm:gap-6">
-            <div className="sm:col-span-2">
-              <Input
-                id="minimo"
-                label="Valor Mínimo"
-                span="*"
-                placeholder="Insira o valor mínimo para o parâmetro"
-                type="number"
-                required
-                value={formValues.minimo}
-                onChange={handleChange}
-              />
-            </div>
-            <div>
-              <Input
-                id="maximo"
-                label="Valor Máximo"
-                span="*"
-                placeholder="Insira o valor máximo para o parâmetro"
-                type="number"
-                required
-                value={formValues.maximo}
-                onChange={handleChange}
-              />
-            </div>
             <div>
               <Select
                 id="medida"
@@ -60,11 +68,14 @@ export const Formulario = ({ onSubmit, dados }: FormularioProps) => {
                 value={formValues.medida}
                 onChange={handleChange}
                 options={[
-                  { label: "Temperatura", value: "Temperatura" },
-                  { label: "Pressão", value: "Pressão" },
-                  { label: "Umidade", value: "Umidade" },
-                  { label: "Volume da chuva", value: "Volume" },
-                  { label: "Velocidade do vento", value: "Velocidade do vento" },
+                  { label: 'Temperatura', value: 'Temperatura' },
+                  { label: 'Pressão', value: 'Pressão' },
+                  { label: 'Umidade', value: 'Umidade' },
+                  { label: 'Volume da chuva', value: 'Volume' },
+                  {
+                    label: 'Velocidade do vento',
+                    value: 'Velocidade do vento',
+                  },
                 ]}
               />
             </div>
@@ -77,49 +88,36 @@ export const Formulario = ({ onSubmit, dados }: FormularioProps) => {
                 value={formValues.escala}
                 onChange={handleChange}
                 options={[
-                  { label: "° C", value: "C" },
-                  { label: "° F", value: "F" },
-                  { label: "° K", value: "K" },
-                  { label: "Pascal", value: "Pa" },
-                  { label: "g/m³", value: "metroCubico" },
-                  { label: "m/s", value: "velocidadeVentoMS" },
-                  { label: "km/h", value: "velocidadeVentoKH" },
+                  { label: '° C', value: 'C' },
+                  { label: '° F', value: 'F' },
+                  { label: '° K', value: 'K' },
+                  { label: 'Pascal', value: 'Pa' },
+                  { label: 'g/m³', value: 'metroCubico' },
+                  { label: 'm/s', value: 'velocidadeVentoMS' },
+                  { label: 'km/h', value: 'velocidadeVentoKH' },
                 ]}
               />
             </div>
             <div>
-              <Select
-                id="condicao"
-                label="Condição"
-                span="*"
+              <Input
+                id="nomejson"
+                label="Nome do Parâmetro JSON"
+                span=" "
+                placeholder="Digite o nome do parâmetro no campo JSON"
                 required
-                value={formValues.condicao}
+                value={formValues.nomejson}
                 onChange={handleChange}
-                options={[
-                  { label: "Se menor que", value: "minimo" },
-                  { label: "Se maior que", value: "maximo" },
-                  { label: "Se diferente de", value: "diferencaMINMAX" },
-                  { label: "Se igual ao", value: "diferencaMAXMIN" },
-                  { label: "Se está entre", value: "soma" },
-                ]}
               />
             </div>
             <div>
-              <Select
-                id="comparacao"
-                label="Base de Comparação"
-                span="*"
+              <Input
+                id="fator"
+                label="Fator de Conversão"
+                span=" "
+                placeholder="Digite o fator de conversao do parametro"
                 required
-                value={formValues.comparacao}
+                value={formValues.fator}
                 onChange={handleChange}
-                options={[
-                  { label: "Valor mínimo", value: "minimo" },
-                  { label: "Valor máximo", value: "maximo" },
-                  { label: "Minimo - Máximo", value: "diferencaMINMAX" },
-                  { label: "Máximo - Mínimo", value: "diferencaMAXMIN" },
-                  { label: "Máximo + Mínimo", value: "soma" },
-                  { label: "Entre Mínimo e Máximo", value: "entre" },
-                ]}
               />
             </div>
           </div>
@@ -139,7 +137,21 @@ export const Formulario = ({ onSubmit, dados }: FormularioProps) => {
               onChange={handleChange}
             ></textarea>
           </div>
+
+          <div className="mt-4">
+            <Botao
+              label="Adicionar Parâmetro"
+              corTexto="text-white"
+              corFundo="bg-blue-500"
+              onClick={handleFormSubmit}
+              type="submit"
+            />
+          </div>
         </form>
+        {/* Exibe o PopConfirmacao quando isVisible for verdadeiro */}
+        {isVisible && (
+          <PopConfirmacao mensagem={mensagem} onClose={hidePopConfirmacao} />
+        )}
       </div>
     </section>
   );

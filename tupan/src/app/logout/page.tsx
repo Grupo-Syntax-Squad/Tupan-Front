@@ -11,17 +11,19 @@ const LoginPage: React.FC = () => {
 
   const handleLogin = async (): Promise<void> => {
     try {
-      const response = await axios.post("http://seu-servidor/api-token-auth/", {
+      const response = await axios.post("http://localhost:8000/api-token-auth/", {
         email: email,
         password: password,
       });
 
       const token = response.data.token;
       localStorage.setItem("token", token); // Armazenando o token no localStorage
-      setError(null); // Limpa o erro
+      setError(null); 
       console.log("Token armazenado com sucesso:", token);
 
-      window.location.href = "/";
+      // Redirecionar ou mostrar sucesso de login
+      // Você pode redirecionar para outra página se necessário, por exemplo:
+      // router.push('/usuarios'); 
       
     } catch (err) {
       console.error("Erro ao fazer login:", err);

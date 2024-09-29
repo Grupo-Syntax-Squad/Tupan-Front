@@ -2,8 +2,8 @@ import { InputProps } from "@/types/interfaces";
 
 export const Input = ({
   label, id, type = "text", value, span,
-  onChange, placeholder, required = false, estilo, disabled = false,
-}: InputProps & { disale?: boolean}) => {
+  onChange, placeholder, required = false, estilo, disabled = true,
+}: InputProps & { disable?: boolean}) => {
   return (
     <div className={`input-container ${estilo}`}>
       {label && span && (

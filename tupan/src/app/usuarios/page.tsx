@@ -6,19 +6,26 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 const Usuarios: React.FC = () => {
-  const [usuarios, setUsuarios] = useState([]);
+
+  const [usuarios, setUsuarios] = useState<any[]>([]); // Iniciar com array vazio
+
   const [error, setError] = useState<string | null>(null);
 
   // Função para buscar os usuários
   const fetchUsuarios = (token: string) => {
     axios
-      .get("http://seu-servidor/api/usuarios/", {
+
+      .get("http://localhost:8000/usuarios/", {
+
         headers: {
           Authorization: `Token ${token}`,
         },
       })
       .then((response) => {
-        setUsuarios(response.data.usuarios); // Ajuste conforme o retorno da API
+
+        console.log(response.data); 
+        setUsuarios(response.data); 
+
         setError(null); // Limpa os erros
       })
       .catch((error) => {
@@ -63,7 +70,9 @@ const Usuarios: React.FC = () => {
               <table className="w-full bg-white shadow-lg rounded-lg overflow-hidden">
                 <thead className="text-white" style={{ backgroundColor: "#4e00a9" }}>
                   <tr>
-                    <th className="p-4 text-center">Nome</th>
+
+                    <th className="p-4 text-center">ID</th>
+
                     <th className="p-4 text-center">Email</th>
                     <th className="p-4 text-center">Data de criação</th>
                     <th className="p-4 text-center">Data de atualização</th>
@@ -73,10 +82,11 @@ const Usuarios: React.FC = () => {
                 <tbody>
                   {usuarios.map((usuario: any) => (
                     <tr key={usuario.id} className="text-center border-b">
-                      <td className="p-3">{usuario.usuario}</td>
+
+                      <td className="p-3">{usuario.id}</td>
                       <td className="p-3">{usuario.email}</td>
-                      <td className="p-3">{usuario.dataCriacao}</td>
-                      <td className="p-3">{usuario.dataUpdate}</td>
+                      <td className="p-3">{usuario.criacao}</td>
+                      <td className="p-3">{usuario.alterado}</td>
                       <td className="p-3">
                         <button
                           className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-800 m-2"
