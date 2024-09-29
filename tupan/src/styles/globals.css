@@ -69,3 +69,17 @@ input {
 h1 > span {
   font-weight: bold;
 }
+
+input[type="checkbox"] {
+  appearance: none; /* Remove o estilo padrão do checkbox */
+  width: 20px; /* Defina o tamanho da bolinha */
+  height: 20px;
+  border-radius: 50%; /* Torna o checkbox redondo */
+  border: 2px solid #000; /* Adiciona uma borda preta */
+  outline: none;
+  cursor: pointer;
+}
+
+input[type="checkbox"]:checked {
+  background-color: #000; /* Cor de preenchimento quando está marcado */
+}

@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
@@ -8,87 +8,77 @@ import ImagemVento from '../../assets/vento.png';
 import ImagemChuva from '../../assets/chuva.png';
 
 export default function Estacoes() {
-    const [estacoes, setEstacoes] = useState([]);
-    const [loading, setLoading] = useState(true);
+  const [estacoes, setEstacoes] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-    interface Estacao {
-        id: number;
-        nome: string;
-        temperatura: number;
-        umidade: number;
-        vento: number;
-        chuva: number;
-    }
+  interface Estacao {
+    id: number;
+    nome: string;
+    temperatura: number;
+    umidade: number;
+    vento: number;
+    chuva: number;
+  }
 
-    useEffect(() => {
-        const fetchEstacoes = async () => {
-            try {
-                const response = await fetch('http://127.0.0.1:8000/estacoes', {
-                    method: 'GET',
-                    headers: {
-                        "Authorization": `Token 3b2dea61e4d969c5b43b82cd9b71a614a2c30d18`,
-                        "Content-Type": "application/json",
-                    },
-                });
+  useEffect(() => {
+    const fetchEstacoes = async () => {
+      try {
+        const response = await fetch('http://127.0.0.1:8000/estacoes', {
+          method: 'GET',
+          headers: {
+            Authorization: `Token 3b2dea61e4d969c5b43b82cd9b71a614a2c30d18`,
+            'Content-Type': 'application/json',
+          },
+        });
 
-                if (!response.ok) {
-                    throw new Error('Erro ao buscar estações');
-                }
+        if (!response.ok) {
+          throw new Error('Erro ao buscar estações');
+        }
 
-                const data = await response.json();
-                console.log('Dados recebidos:', data);
-                if (Array.isArray(data)) {
-                    setEstacoes(data);
-                } else {
-                    console.error('A resposta não é um array:', data);
-                }
-            } catch (error) {
-                console.error(error);
-            } finally {
-                setLoading(false);
-            }
-        };
+        const data = await response.json();
+        console.log('Dados recebidos:', data);
+        if (Array.isArray(data)) {
+          setEstacoes(data);
+        } else {
+          console.error('A resposta não é um array:', data);
+        }
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-        fetchEstacoes();
-    }, []);
+    fetchEstacoes();
+  }, []);
 
-    if (loading) {
-        return <div>Carregando...</div>;
-    }
+  if (loading) {
+    return <div>Carregando...</div>;
+  }
 
-    return (
-        <section className='flex flex-wrap justify-center mt-10'>
-        {estacoes.length === 0 ? (
-            <div>Nenhuma estação cadastrada.</div>
-        ) : (
-            estacoes.map((estacao) => (
-                    <div key={estacao.id} className='  justify-center border border-black p-10 rounded-3xl max-w-2xl mb-4 h-96 m-10'>
-                        <h1 className='text-2xl mb-10 text-center'><span>{estacao.nome}</span></h1>
-                        <div className='flex justify-center gap-10'>
-                            <div className='flex flex-col items-center'>
-                                <p className='font-bold mb-8'>TEMPERATURA</p>
-                                <Image className='size-24 mb-5' src={ImagemTemperatura} alt="Ícone de temperatura" />
-                                <p className='font-bold'>{estacao.temperatura} °C</p>
-                            </div>
-                            <div className='flex flex-col items-center'>
-                                <p className='font-bold mb-8'>UMIDADE</p>
-                                <Image className='size-24 mb-5' src={ImagemUmidade} alt="Ícone de umidade" />
-                                <p className='font-bold'>{estacao.umidade} %</p>
-                            </div>
-                            <div className='flex flex-col items-center'>
-                                <p className='font-bold mb-8'>VENTO</p>
-                                <Image className='size-24 mb-5' src={ImagemVento} alt="Ícone de vento" />
-                                <p className='font-bold'>{estacao.vento} km/h</p>
-                            </div>
-                            <div className='flex flex-col items-center'>
-                                <p className='font-bold mb-8'>CHUVA</p>
-                                <Image className='size-24 mb-5' src={ImagemChuva} alt="Ícone de chuva" />
-                                <p className='font-bold'>{estacao.chuva} mm</p>
-                            </div>
-                        </div>
-                    </div>
-                ))
-            )}
-        </section>
-    );
+  return (
+    <section className="mx-auto w-2/4 p-10 bg-white shadow-lg rounded-lg">
+        <h1 className="flex justify-center text-2xl">
+              <span>Estações</span>
+            </h1>
+      <table className="min-w-full border-collapse border border-gray-300">
+        <thead className="bg-green-500 text-white">
+          <tr>
+            <th className="py-3 px-4 border-b text-left">Nome</th>
+            <th className="py-3 px-4 border-b text-left">Tópico</th>
+            <th className="py-3 px-4 border-b text-left">Ativo</th>
+          </tr>
+        </thead>
+        <tbody>
+          {estacoes.map((estacao, index) => (
+            <tr key={index} className="hover:bg-gray-100">
+              <td className="py-3 px-4 border-b">{estacao.nome}</td>
+              <td className="py-3 px-4 border-b">{estacao.topico}</td>
+              <td className="py-3 px-4 border-b">{estacao.ativo ? 'Sim' : 'Não'}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </section>
+  );
 }
