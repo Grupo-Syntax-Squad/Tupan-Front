@@ -6,8 +6,9 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 const Usuarios: React.FC = () => {
-  const [usuarios, setUsuarios] = useState<any[]>([]); // Iniciar com array vazio
+  const [usuarios, setUsuarios] = useState<any[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const [token, setToken] = useState<string | null>(null);
 
   // Função para buscar os usuários
   const fetchUsuarios = (token: string) => {
@@ -18,8 +19,7 @@ const Usuarios: React.FC = () => {
         },
       })
       .then((response) => {
-        console.log(response.data); 
-        setUsuarios(response.data); 
+        setUsuarios(response.data);
         setError(null); // Limpa os erros
       })
       .catch((error) => {
@@ -28,10 +28,30 @@ const Usuarios: React.FC = () => {
       });
   };
 
+  // Função para deletar usuário
+  const deleteUsuario = async (id: number) => {
+    try {
+      await axios.delete("http://localhost:8000/usuarios/", {
+        headers: {
+          Authorization: `Token ${token}`,
+        },
+        data: {
+          id: id, // Enviando o ID no corpo da requisição
+        },
+      });
+      setUsuarios((prevUsuarios) => prevUsuarios.filter((usuario) => usuario.id !== id));
+      setError(null); // Limpa os erros
+    } catch (error) {
+      console.error(`Erro ao deletar o usuário com ID ${id}:`, error);
+      setError("Erro ao deletar o usuário.");
+    }
+  };
+
   // Verifica se já existe um token no localStorage e faz a requisição
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
     if (storedToken) {
+      setToken(storedToken);
       fetchUsuarios(storedToken);
     } else {
       setError("Token não encontrado, por favor faça login.");
@@ -44,7 +64,7 @@ const Usuarios: React.FC = () => {
     { nome: "Alertas", path: "/alertas", icone: "bx bx-alarm-exclamation" },
     { nome: "Usuários", path: "/usuarios", icone: "bx bx-user" },
     { nome: "Educacional", path: "/educacional", icone: "bx bx-book" },
-    { nome: "Logout", path: "/", icone: "bx bx-log-out" },
+    { nome: "Logout", path: "/logout", icone: "bx bx-log-out" },
   ];
 
   return (
@@ -85,7 +105,10 @@ const Usuarios: React.FC = () => {
                         >
                           Ver Detalhes
                         </button>
-                        <button className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-800">
+                        <button
+                          className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-800"
+                          onClick={() => deleteUsuario(usuario.id)}
+                        >
                           Deletar Usuário
                         </button>
                       </td>
