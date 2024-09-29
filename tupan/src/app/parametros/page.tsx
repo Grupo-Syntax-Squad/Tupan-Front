@@ -6,12 +6,14 @@ import { NavTop } from '@/components/nav-top';
 import { useGetParametros } from '@/hooks/receberParametro';
 
 const menuData = [
+
   { nome: 'Estações', path: '/estacoes', icone: 'bx bx-home' },
   { nome: 'Parâmetros', path: '/parametros', icone: 'bx bxs-thermometer' },
   { nome: 'Alertas', path: '/alertas', icone: 'bx bx-alarm-exclamation' },
   { nome: 'Usuários', path: '/usuarios', icone: 'bx bx-user' },
   { nome: 'Educacional', path: '/educacional', icone: 'bx bx-book' },
   { nome: 'Logout', path: '/', icone: 'bx bx-log-out' },
+
 ];
 
 const colunas = [

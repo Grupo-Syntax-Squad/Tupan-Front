@@ -16,7 +16,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-br">
+
       <body>
+
         <ContextoDinamicoProvider>
           {children} {/* Todos os componentes filhos terão acesso ao contexto */}
         </ContextoDinamicoProvider>
