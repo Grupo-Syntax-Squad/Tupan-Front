@@ -3,18 +3,13 @@ import { useState, useEffect } from "react";
 export const useFormularioParametros = (dados?: Record<string, unknown>) => {
   const [formValues, setFormValues] = useState({
     nome: "",
-    minimo: "",
-    maximo: "",
     medida: "",
     escala: "",
-    comparacao: "",
-    condicao: "",
-    itemWeight: "",
-    description: "",
-    offsetminimo: "",
-    offsetmaximo: "",
-    tolerancia: "",
+    fator: 0 || "",
+    nomejson: "",
+    offset: 0 || "",
     status: "",
+    descricao: "",
   });
 
   useEffect(() => {

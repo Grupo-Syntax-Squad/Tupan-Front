@@ -8,8 +8,9 @@ export interface Option {
     label: string;
     span: string;
     options: Array<Option>;
-    required: boolean;
-    disabled: boolean;
+    required?: boolean;
+    disabled?: boolean;
+    estilo?: string;
     value: string;
     onChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
   }

@@ -1,21 +1,116 @@
-"use client";
+'use client';
 
-import { Input } from "@/components/input";
-import { useFormularioParametros } from "@/hooks/formulario";
-import { FormularioProps } from "@/types/interfaces";
-import { Select } from "./select";
-import { Toggle } from "./toggle";
-import { useEditable } from "@/hooks/editar";
-import Image from "next/image";
-import { Botao } from "./botao";
+import { useEffect, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
+import { Input } from '@/components/input';
+import { Select } from '@/components/select';
+import { FormularioProps } from '@/types/interfaces';
+import { Toggle } from './toggle';
+import { Botao } from './botao';
+import { useEditable } from '@/hooks/editar';
+import { useUpdateParametro } from '@/hooks/atualizarParametro';
+import { useGetParametroById } from '@/hooks/receberParametro';
+import { useFormularioParametros } from '@/hooks/formulario';
+import { useDeleteParametro } from '@/hooks/deletarParametro';
+import Router from 'next/router';
 
 export const FormularioAtualizacaoParametros = ({
   onSubmit,
-  dados,
   initialStatus,
 }: FormularioProps & { initialStatus: boolean }) => {
-  const { formValues, handleChange } = useFormularioParametros(dados);
+  const searchParams = useSearchParams();
+  const idParam = searchParams.get('id');
+  const id = idParam ? Number(idParam) : null;
+
+  const { parametro: formValues, loading, error } = useGetParametroById(id);
+
   const { isEditable, toggleEdit } = useEditable();
+  const {
+    formValues: formularioValues,
+    setFormValues,
+    handleChange,
+  } = useFormularioParametros(
+    (formValues as unknown as Record<string, unknown>) || {}
+  );
+  const {
+    updateParametro,
+    loading: loadingUpdate,
+    error: errorUpdate,
+  } = useUpdateParametro();
+
+  const [isInitialized, setIsInitialized] = useState(false);
+
+  useEffect(() => {
+    if (formValues && !isInitialized && Object.keys(formValues).length > 0) {
+      setFormValues((prevState) => ({
+        ...prevState,
+        nome: formValues.nome || '',
+        escala: formValues.unidade || '',
+        fator: String(formValues.fator || 0),
+        nomejson: formValues.nome_json || '',
+        offset: String(formValues.offset || 0),
+        status: formValues.status || '',
+        medida:
+          formValues.unidade === 'C' ||
+          formValues.unidade === 'F' ||
+          formValues.unidade === 'K'
+            ? 'Temperatura'
+            : formValues.unidade === 'Pa'
+              ? 'Pressão'
+              : formValues.unidade === 'metroCubico'
+                ? 'Umidade'
+                : formValues.unidade === 'velocidadeVentoMS' ||
+                    formValues.unidade === 'velocidadeVentoKH'
+                  ? 'Velocidade do vento'
+                  : 'Volume da chuva',
+        descricao: formValues.descricao || '',
+      }));
+      setIsInitialized(true);
+    }
+  }, [formValues, isInitialized, setFormValues]);
+
+
+  {/* Utilizando envios com hooks */}
+
+  const handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
+
+    const updatedParams = {
+      id: id || 0,
+      nome: formularioValues.nome,
+      fator: formularioValues.fator,
+      offset: formularioValues.offset,
+      unidade: formularioValues.escala,
+      nome_json: formularioValues.nomejson,
+      criado: '',
+      modificado: new Date().toISOString(),
+      ativo: initialStatus,
+    };
+
+    if (isNaN(updatedParams.id)) {
+      console.error('ID inválido:', updatedParams.id);
+      return; // Não envia se o ID for inválido
+    }
+
+    try {
+      await updateParametro(updatedParams);
+      onSubmit(updatedParams as any);
+    } catch (error) {
+      console.error('Erro ao atualizar o parâmetro:'), error;
+    }
+  };
+
+  const handleDelete = async () => {
+    if (id) {
+      const confirmDelete = confirm('Tem certeza que deseja deletar este parâmetro?');
+      if (confirmDelete) {
+        try {
+          await useDeleteParametro(id);
+        } catch (error) {
+          console.error('Erro ao deletar o parâmetro:', error);
+        }
+      }}
+  };
 
   return (
     <>
@@ -26,205 +121,103 @@ export const FormularioAtualizacaoParametros = ({
       <section className="bg-white dark:bg-gray-900 w-full h-full p-6 rounded-lg shadow-md">
         <div className="w-full h-full">
           <h2 className="mb-6 text-2xl font-bold text-gray-900 dark:text-white">
-            Parâmetro - {formValues.nome}
+            Parâmetro - {formularioValues.nome || ''}
           </h2>
-          <form action="#" onSubmit={onSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-6">
             <div className="flex flex-row gap-11">
               <Botao
-                type="button"
-                corTexto="text-black"
-                corFundo="bg-gray-300"
-                icone="bx bx-edit-alt"
-                label="Habilitar Edição"
-                onClick={toggleEdit}
+                type="button" corTexto="text-black"
+                corFundo="bg-gray-300" icone="bx bx-edit-alt"
+                label="Habilitar Edição" onClick={toggleEdit}
               />
               <Toggle label="Ativo" id="ativo" initialChecked={initialStatus} />
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
+              <div className="w-full flex flex-col">
                 <Input
-                  id="nome"
-                  label="Nome do Parâmetro"
-                  span="*"
-                  placeholder="Digite o nome do parâmetro"
-                  required
-                  value={formValues.nome}
+                  id="nome" label="Nome do Parâmetro"
+                  span="*"  placeholder="Digite o nome do parâmetro"
+                  required  estilo="min-w-full"
+                  value={formularioValues.nome || ''}
                   onChange={handleChange}
                   disabled={!isEditable}
-                  toggleEdit={toggleEdit}
                 />
               </div>
               <div className="flex flex-row p-auto gap-6">
                 <Input
-                  estilo="w-1/2"
-                  id="minimo"
-                  label="Valor Mínimo"
-                  span="*"
-                  placeholder="Insira o valor mínimo"
-                  type="number"
-                  required
-                  value={formValues.minimo}
+                  estilo="w-1/2"  id="offset"
+                  label="Off-Set do Parâmetro"
+                  span="*"   placeholder="Insira o valor de Off-Set (padrão: 0)"
+                  type="number" required
+                  value={formularioValues.offset || ''}
                   onChange={handleChange}
                   disabled={!isEditable}
-                  toggleEdit={toggleEdit}
                 />
                 <Input
-                  estilo="w-1/2"
-                  id="minimoOFFSET"
-                  label="Off Set Mínimo (opicional)"
-                  span=" "
-                  placeholder="Off Set mínimo (padrão 0)"
-                  type="number"
-                  required
-                  value={formValues.offsetminimo}
+                  estilo="w-1/2" id="fator"
+                  label="Fator de Conversão"
+                  span="*" placeholder="Insira o valor de conversão do parametro"
+                  type="number" required
+                  value={formularioValues.fator || ''}
                   onChange={handleChange}
                   disabled={!isEditable}
-                  toggleEdit={toggleEdit}
                 />
               </div>
               <div className="flex flex-row p-auto gap-6">
                 <Input
-                  estilo="w-1/2"
-                  id="maximo"
-                  label="Valor Máximo"
-                  span="*"
-                  placeholder="Insira o valor máximo"
-                  type="number"
-                  required
-                  value={formValues.maximo}
+                  estilo="min-w-full" id="nomejson"
+                  label="Nome JSON"  span="*"
+                  required placeholder="Campo JSON do Parâmetro"
+                  type="text" value={formularioValues.nomejson || ''}
                   onChange={handleChange}
                   disabled={!isEditable}
-                  toggleEdit={toggleEdit}
-                />
-                <Input
-                  estilo="w-1/2"
-                  id="maximoOFFSET"
-                  label="Off Set Máximo (opicional)"
-                  span=" "
-                  placeholder="Off Set máximo (padrão 0)"
-                  type="number"
-                  required
-                  value={formValues.offsetmaximo}
-                  onChange={handleChange}
-                  disabled={!isEditable}
-                  toggleEdit={toggleEdit}
                 />
               </div>
-              <div>
+              <div className="flex flex-row p-auto gap-6">
                 <Select
-                  id="medida"
-                  label="Medida"
-                  span="*"
-                  required
-                  value={formValues.medida}
+                  id="medida" label="Medida"
+                  span="*"    required
+                  estilo="min-w-full"
+                  value={formularioValues.medida || 'selecione uma opção'}
                   onChange={handleChange}
                   disabled={!isEditable}
                   options={[
-                    { label: "Temperatura", value: "Temperatura" },
-                    { label: "Pressão", value: "Pressão" },
-                    { label: "Umidade", value: "Umidade" },
-                    { label: "Volume da chuva", value: "Volume" },
-                    {
-                      label: "Velocidade do vento",
-                      value: "Velocidade do vento",
+                    { label: 'Temperatura', value: 'Temperatura' },
+                    { label: 'Pressão', value: 'Pressão' },
+                    { label: 'Umidade', value: 'Umidade' },
+                    { label: 'Volume da chuva', value: 'Volume' },
+                    { label: 'Velocidade do vento', value: 'Velocidade do vento',
                     },
                   ]}
                 />
-              </div>
-              <div>
                 <Select
-                  id="escala"
-                  label="Escala de medição"
-                  span="*"
-                  required
-                  value={formValues.escala}
-                  onChange={handleChange}
-                  disabled={!isEditable}
+                  id="escala" label="Escala de Medição"
+                  span="*" estilo="min-w-full"
+                  required value={formularioValues.escala || 'selecione uma opção'}
+                  onChange={handleChange} disabled={!isEditable}
                   options={[
-                    { label: "° C", value: "C" },
-                    { label: "° F", value: "F" },
-                    { label: "° K", value: "K" },
-                    { label: "Pascal", value: "Pa" },
-                    { label: "g/m³", value: "metroCubico" },
-                    { label: "m/s", value: "velocidadeVentoMS" },
-                    { label: "km/h", value: "velocidadeVentoKH" },
+                    { label: '° C', value: 'C' },
+                    { label: '° F', value: 'F' },
+                    { label: '° K', value: 'K' },
+                    { label: 'Pascal', value: 'Pa' },
+                    { label: 'g/m³', value: 'metroCubico' },
+                    { label: 'm/s', value: 'velocidadeVentoMS' },
+                    { label: 'km/h', value: 'velocidadeVentoKH' },
                   ]}
                 />
               </div>
-              <div className="flex flex-col">
-                <Select
-                  estilo="w-full"
-                  id="condicao"
-                  label="Condição"
-                  span="*"
-                  required
-                  value={formValues.condicao}
-                  onChange={handleChange}
-                  disabled={!isEditable}
-                  options={[
-                    { label: "Se menor que", value: "minimo" },
-                    { label: "Se maior que", value: "maximo" },
-                    { label: "Se diferente de", value: "diferencaMINMAX" },
-                    { label: "Se igual ao", value: "diferencaMAXMIN" },
-                    { label: "Se está entre", value: "soma" },
-                  ]}
+             
+              <div className="flex justify-start mt-8 gap-6">
+                <Botao
+                  type="submit" corTexto="text-white"
+                  corFundo="bg-blue-600" label="Atualizar Parâmetro"
+                />
+                <Botao
+                  type="button" corTexto="text-white"
+                  corFundo="bg-red-600" label="Deletar Parâmetro"
+                  onClick={handleDelete} 
                 />
               </div>
-              <div>
-                <Select
-                  estilo="w-full"
-                  id="comparacao"
-                  label="Base de Comparação"
-                  span="*"
-                  required
-                  value={formValues.comparacao}
-                  onChange={handleChange}
-                  disabled={!isEditable}
-                  options={[
-                    { label: "Valor mínimo", value: "minimo" },
-                    { label: "Valor máximo", value: "maximo" },
-                    { label: "Minimo - Máximo", value: "diferencaMINMAX" },
-                    { label: "Máximo - Mínimo", value: "diferencaMAXMIN" },
-                    { label: "Máximo + Mínimo", value: "soma" },
-                    { label: "Entre Mínimo e Máximo", value: "entre" },
-                  ]}
-                />
-              </div>
-              <div>
-                <Select
-                  id="tolerancia"
-                  label="Tolerância da medição (opicional)"
-                  required
-                  value={formValues.tolerancia}
-                  onChange={handleChange}
-                  disabled={!isEditable}
-                  options={[
-                    { label: "Sem Tolerância", value: "0" },
-                    { label: "Até 5 pontos acima do máximo", value: "maximo5" },
-                    { label: "Até 5 pontos abaixo do minimo", value: "minimo5" },
-                    { label: "Somente valores pares", value: "par" },
-                    { label: "Somente valores impares", value: "impar" },
-                    { label: "Somente multiplos de 2", value: "multiplo2" },
-                  ]}
-                />
-              </div>
-            </div>
-            <div>
-              <label
-                htmlFor="description"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >
-                Descrição
-              </label>
-              <textarea
-                id="description"
-                rows={8}
-                className="block w-full p-2.5 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
-                placeholder="Adicione uma descrição para o parâmetro"
-                value={formValues.description}
-                onChange={handleChange}
-                disabled={isEditable}
-              ></textarea>
             </div>
           </form>
         </div>
