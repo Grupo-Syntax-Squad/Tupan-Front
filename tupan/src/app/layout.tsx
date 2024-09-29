@@ -16,7 +16,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-br">
-      <body className={`min-h-screen m-0 flex flex-row bg-gray-100`}>
+      <body>
         <ContextoDinamicoProvider>
           {children} {/* Todos os componentes filhos terão acesso ao contexto */}
         </ContextoDinamicoProvider>

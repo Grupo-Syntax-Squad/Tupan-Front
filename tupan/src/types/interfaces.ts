@@ -7,3 +7,4 @@ export * from '@/types/Formulario/interface'
 export * from '@/types/Select/interface';
 export * from '@/types/NavTop/interface';
 export * from '@/types/Toggle/interface';
+export * from '@/types/Alerta/interface';
