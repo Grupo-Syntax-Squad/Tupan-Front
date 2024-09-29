@@ -1,16 +1,34 @@
-
 "use client";
 
 import { useState } from 'react';
+import axios from 'axios';
 import Image from 'next/image';
 
 const LoginPage: React.FC = () => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
+  const [error, setError] = useState<string | null>(null);
 
-  const handleLogin = (): void => {
-    // Lógica de login
-    console.log({ email, password });
+  const handleLogin = async (): Promise<void> => {
+    try {
+      const response = await axios.post("http://localhost:8000/api-token-auth/", {
+        email: email,
+        password: password,
+      });
+
+      const token = response.data.token;
+      localStorage.setItem("token", token); // Armazenando o token no localStorage
+      setError(null); 
+      console.log("Token armazenado com sucesso:", token);
+
+      // Redirecionar ou mostrar sucesso de login
+      // Você pode redirecionar para outra página se necessário, por exemplo:
+      // router.push('/usuarios'); 
+      
+    } catch (err) {
+      console.error("Erro ao fazer login:", err);
+      setError("Credenciais inválidas, tente novamente.");
+    }
   };
 
   return (
@@ -18,6 +36,7 @@ const LoginPage: React.FC = () => {
       <div className="flex items-center gap-10">
         <div className="max-w-md">
           <h1 className="text-2xl font-bold mb-6">Bem vindo(a) de volta!</h1>
+          {error && <p className="text-red-500 mb-4">{error}</p>}
           <form
             className="flex flex-col gap-4"
             onSubmit={(e) => {
@@ -60,10 +79,12 @@ const LoginPage: React.FC = () => {
           </form>
         </div>
         <div>
-        <Image src="/assets/image 126.png" 
+          <Image 
+            src="/assets/image 126.png" 
             alt="Image-126" 
             width={250} 
-            height={250} />
+            height={250} 
+          />
         </div>
       </div>
     </section>
