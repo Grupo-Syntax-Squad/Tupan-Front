@@ -8,8 +8,8 @@ export interface FormularioProps {
       maximo?: string;
       medida?: string;
       escala?: string;
-      condicao?: string;
-      comparacao?: string;
+      fator?: string;
+      nomejson?: string;
       description?: string;
     };
     initialStatus: boolean;
