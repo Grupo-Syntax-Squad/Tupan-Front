@@ -1,29 +1,47 @@
 'use client';
 
 import React, { useState } from 'react';
-
+import axios from 'axios'; // Importando axios para fazer requisições
+import { useRouter } from 'next/navigation'; // Importando useRouter para redirecionamento
 
 const CadastroForm: React.FC = () => {
   const [nome, setNome] = useState('');
   const [email, setEmail] = useState('');
-  const [senha, setSenha] = useState('');
+  const [password, setPassword] = useState('');
+  const router = useRouter(); // Hook para redirecionar
 
-  const handleCadastro = () => {
-    // Lógica de cadastro
-    console.log({ nome, email, senha });
+  const handleCadastro = async () => {
+    try {
+      // Fazendo a requisição POST com axios
+      const response = await axios.post('http://localhost:8000/usuarios/', {
+        nome,
+        email,
+        password,
+      });
+
+      // Verificando a resposta da requisição
+      if (response.status === 201 || response.status === 200) {
+        console.log('Usuário cadastrado com sucesso!', response.data);
+        router.push('/');
+      } else {
+        console.error('Erro ao cadastrar usuário');
+      }
+    } catch (error) {
+      console.error('Erro ao realizar a requisição:', error);
+    }
   };
 
   const handleCancel = () => {
-    // Lógica de cancelamento
-    setNome('');
-    setEmail('');
-    setSenha('');
+    // Redireciona para a página inicial ao cancelar
+    router.push('/');
   };
 
   return (
-    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', backgroundColor: '#fff' }}>
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', 
+    minHeight: '100vh', backgroundColor: '#fff' }}>
       <div style={{ width: '100%', maxWidth: '350px' }}>
-        <h2 style={{ textAlign: 'center', fontSize: '24px', fontWeight: 'bold', marginBottom: '24px' }}>Cadastre-se!</h2>
+        <h2 style={{ textAlign: 'center', fontSize: '24px', fontWeight: 'bold', 
+          marginBottom: '24px' }}>Cadastre-se!</h2>
         <form
           style={{
             backgroundColor: '#fff',
@@ -35,7 +53,8 @@ const CadastroForm: React.FC = () => {
           onSubmit={(e) => e.preventDefault()}
         >
           <div style={{ marginBottom: '16px' }}>
-            <label style={{ display: 'block', color: '#4A5568', fontSize: '14px', fontWeight: 'bold', marginBottom: '8px' }} htmlFor="nome">
+            <label style={{ display: 'block', color: '#4A5568', fontSize: '14px', 
+              fontWeight: 'bold', marginBottom: '8px' }} htmlFor="nome">
               Nome
             </label>
             <input
@@ -55,7 +74,8 @@ const CadastroForm: React.FC = () => {
             />
           </div>
           <div style={{ marginBottom: '16px' }}>
-            <label style={{ display: 'block', color: '#4A5568', fontSize: '14px', fontWeight: 'bold', marginBottom: '8px' }} htmlFor="email">
+            <label style={{ display: 'block', color: '#4A5568', fontSize: '14px',
+               fontWeight: 'bold', marginBottom: '8px' }} htmlFor="email">
               E-mail
             </label>
             <input
@@ -75,7 +95,8 @@ const CadastroForm: React.FC = () => {
             />
           </div>
           <div style={{ marginBottom: '24px' }}>
-            <label style={{ display: 'block', color: '#4A5568', fontSize: '14px', fontWeight: 'bold', marginBottom: '8px' }} htmlFor="senha">
+            <label style={{ display: 'block', color: '#4A5568', fontSize: '14px', 
+              fontWeight: 'bold', marginBottom: '8px' }} htmlFor="senha">
               Senha
             </label>
             <input
@@ -84,13 +105,13 @@ const CadastroForm: React.FC = () => {
                 border: '1px solid #000',
                 borderRadius: '10px',
                 width: '90%',
-                padding: '8px 12px'
+                padding: '8px 12px',
               }}
-              id="senha"
+              id="password"
               type="password"
-              placeholder="Senha"
-              value={senha}
-              onChange={(e) => setSenha(e.target.value)}
+              placeholder="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
             />
           </div>
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>

@@ -10,6 +10,7 @@ import { useFormularioParametros } from "@/hooks/formulario";
 import { NavTop } from "@/components/nav-top";
 import { useDynamicContext } from "@/app/context";
 import { useToggle } from "@/hooks/check";
+import axios from "axios"; // Adicionando axios para requisição
 
 const menuData = [
   { nome: "Estações", path: "/estacoes", icone: "bx bx-home" },
@@ -30,6 +31,17 @@ export default function ParametrosID() {
     undefined
   );
   const [initialStatus, setInitialStatus] = useState<boolean>(false);
+  const [token, setToken] = useState<string | null>(null); // Token state
+
+  // Pegando o token no useEffect e guardando no estado
+  useEffect(() => {
+    const storedToken = localStorage.getItem("token");
+    if (storedToken) {
+      setToken(storedToken);
+    } else {
+      console.error("Token não encontrado");
+    }
+  }, []);
 
   useEffect(() => {
     const searchParams = new URLSearchParams(window.location.search);
@@ -37,19 +49,28 @@ export default function ParametrosID() {
     const id = searchParams.get("id");
     const status = searchParams.get("status");
 
-    console.log("Status from URL:", status); // Adicione este log
-
     setNomeFormulario(nome || "Formulário de Parâmetros");
     setInitialStatus(status === "Ativado");
 
-    if (id) {
-      setFormValues({
-        nome: nome || "",
-        id: id || "",
-        status: status || "",
-      });
+    if (id && token) {
+      // Faz a requisição para pegar os dados
+      axios
+        .get(`http://localhost:8000/parametros/${id}`, {
+          headers: {
+            Authorization: `Token ${token}`,
+          },
+        })
+        .then((response) => {
+          const { nome, status } = response.data;
+          setFormValues({
+            nome: nome || "",
+            id: id || "",
+            status: status || "",
+          });
+        })
+        .catch((err) => console.error("Erro ao buscar parâmetros", err));
     }
-  }, [setFormValues, state]);
+  }, [setFormValues, state, token]);
 
   const { isChecked, handleChange: handleToggleChange } =
     useToggle(initialStatus);
@@ -61,14 +82,11 @@ export default function ParametrosID() {
 
   return (
     <div className="w-screen flex bg-gray-100">
-      {/* Menu lateral ocupando a lateral esquerda */}
       <div className="w-fit pr-4 min-h-screen">
         <MenuLateral menuData={menuData} />
       </div>
 
-      {/* Conteúdo principal ocupando o resto da tela */}
       <div className="w-full flex pr-4 flex-col gap-4">
-        {/* Barra superior ocupando a parte superior da tela */}
         <NavTop nome="Usuário" path={nomeFormulario} />
 
         <div className="flex gap-4">
