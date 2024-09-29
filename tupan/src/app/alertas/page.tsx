@@ -34,6 +34,25 @@ const Alertas: React.FC = () => {
     }
   };
 
+  // Função para deletar um alerta
+  const deleteAlerta = async (id: number) => {
+    try {
+      await axios.delete("http://localhost:8000/alertas", {
+        headers: {
+          Authorization: `Token ${token}`,
+        },
+        data: {
+          id: id, // Enviando o ID no corpo da requisição
+        },
+      });
+      setAlertas((prevAlertas) => prevUsuarios.filter((alerta) => alerta.id !== id));
+      setError(null); // Limpa os erros
+    } catch (error) {
+      console.error(`Erro ao deletar o alerta com ID ${id}:`, error);
+      setError("Erro ao deletar o alerta.");
+    }
+  };
+
   // Verifica se já existe um token no localStorage e faz a requisição
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
@@ -90,11 +109,19 @@ const Alertas: React.FC = () => {
                       <td className="p-3">{alerta.criado}</td>
                       <td className="p-3">
                         <button
-                          className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-800"
+                          className="bg-blue-600 text-white px-4 py-2 rounded-md m-2 hover:bg-blue-800"
                           aria-label={`Ver detalhes do ${alerta.nome}`}
                         >
                           Ver Detalhes
                         </button>
+
+                        {/* <button
+                          className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-800"
+                          onClick={() => deleteAlerta(alerta.id)}
+                        >
+                          Deletar alerta
+                        </button> */}
+
                       </td>
                     </tr>
                   ))}
