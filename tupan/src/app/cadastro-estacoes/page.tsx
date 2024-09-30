@@ -102,7 +102,7 @@ export default function CadastroEstacoes() {
       }
   
       const data = await estacaoResponse.json();
-      console.log('Estação cadastrada com sucesso:', data);
+      alert('Estação cadastrada com sucesso!');
   
       setNome('');
       setCep('');
@@ -234,7 +234,7 @@ export default function CadastroEstacoes() {
                     <label>{parametro.nome}</label>{' '}
                     <input
                       type="checkbox"
-                      value={parametro.id} // Aqui pode ser o ID ou outro campo de identificação
+                      value={parametro.id}
                       onChange={() => handleParametroChange(parametro.id)}
                       checked={parametrosSelecionados.includes(parametro.id)}
                       className='mt-3 ml-3 checkbox-bolinha'
