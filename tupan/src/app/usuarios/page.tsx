@@ -72,13 +72,13 @@ const Usuarios: React.FC = () => {
   ];
 
   return (
-    <div className="flex">
+    <div className="w-screen flex bg-gray-100">
       <div className="w-fit pr-4 min-h-screen">
         <MenuLateral menuData={menuData} />
       </div>
 
       <div className="flex flex-col min-h-screen w-full bg-gray-100">
-        <NavTop nome="Usuário" path="Usuário" />
+        <NavTop nome="Usuários" path="Usuários" />
 
         <div className="flex flex-col items-center">
           <div className="mt-10 w-3/4 flex flex-col items-center">

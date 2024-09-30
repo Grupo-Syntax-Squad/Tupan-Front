@@ -3,8 +3,10 @@
 import { useState } from 'react';
 import axios from 'axios';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 const LoginPage: React.FC = () => {
+  const router = useRouter(); // Chamar useRouter dentro do componente
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [error, setError] = useState<string | null>(null);
@@ -21,9 +23,7 @@ const LoginPage: React.FC = () => {
       setError(null); 
       console.log("Token armazenado com sucesso:", token);
 
-      // Redirecionar ou mostrar sucesso de login
-      // Você pode redirecionar para outra página se necessário, por exemplo:
-      // router.push('/usuarios'); 
+      router.push('/'); // Navegação após login bem-sucedido
       
     } catch (err) {
       console.error("Erro ao fazer login:", err);
