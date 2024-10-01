@@ -73,7 +73,7 @@ const Alertas: React.FC = () => {
   ];
 
   return (
-    <div className="flex">
+    <div className="w-screen flex bg-gray-100">
       <div className="w-fit pr-4 min-h-screen">
         <MenuLateral menuData={menuData} />
       </div>
