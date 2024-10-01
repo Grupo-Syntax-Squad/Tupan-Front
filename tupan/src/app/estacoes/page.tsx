@@ -115,14 +115,17 @@ export default function Estacoes() {
     if (!selectedEstacao) return;
 
     try {
-      const response = await fetch(`http://127.0.0.1:8000/estacoes/${selectedEstacao.id}`, {
-        method: 'PUT',
-        headers: {
-          Authorization: `Token 1112a98d58500b7a165191fc56b2a9c1513413e8`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(selectedEstacao),
-      });
+      const response = await fetch(
+        `http://127.0.0.1:8000/estacoes/${selectedEstacao.id}`,
+        {
+          method: 'PUT',
+          headers: {
+            Authorization: `Token 3b2dea61e4d969c5b43b82cd9b71a614a2c30d18`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(selectedEstacao),
+        }
+      );
 
       if (!response.ok) {
         const errorData = await response.json();
