@@ -97,7 +97,6 @@ export default function ParametrosID() {
               initialStatus={initialStatus}
             />
           </div>
-
           {isVisible && (
             <PopConfirmacao mensagem={mensagem} onClose={hidePopConfirmacao} />
           )}

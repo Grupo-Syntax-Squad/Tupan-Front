@@ -1,8 +1,10 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
-import { MenuLateral } from "@/components/menu-lateral";
-import { NavTop } from "@/components/nav-top";
+import { useEffect, useState } from 'react';
+import { MenuLateral } from '@/components/menu-lateral';
+import { NavTop } from '@/components/nav-top';
+import Link from 'next/link';
+import { Botao } from '@/components/botao';
 
 export default function Estacoes() {
   const [estacoes, setEstacoes] = useState([]);
@@ -26,23 +28,23 @@ export default function Estacoes() {
   useEffect(() => {
     const fetchEstacoes = async () => {
       try {
-        const response = await fetch("http://127.0.0.1:8000/estacoes", {
-          method: "GET",
+        const response = await fetch('http://127.0.0.1:8000/estacoes', {
+          method: 'GET',
           headers: {
             Authorization: `Token 3b2dea61e4d969c5b43b82cd9b71a614a2c30d18`,
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
           },
         });
 
         if (!response.ok) {
-          throw new Error("Erro ao buscar estações");
+          throw new Error('Erro ao buscar estações');
         }
 
         const data = await response.json();
         if (Array.isArray(data)) {
           setEstacoes(data);
         } else {
-          console.error("A resposta não é um array:", data);
+          console.error('A resposta não é um array:', data);
         }
       } catch (error) {
         console.error(error);
@@ -66,7 +68,7 @@ export default function Estacoes() {
 
   const toggleAtivo = async (id: number, ativo: boolean) => {
     const confirmed = window.confirm(
-      `Tem certeza que deseja ${ativo ? "desativar" : "ativar"} esta estação?`
+      `Tem certeza que deseja ${ativo ? 'desativar' : 'ativar'} esta estação?`
     );
     if (!confirmed) return;
 
@@ -81,10 +83,10 @@ export default function Estacoes() {
       });
 
       const response = await fetch(`http://127.0.0.1:8000/estacoes/${id}`, {
-        method: "PUT",
+        method: 'PUT',
         headers: {
           Authorization: `Token 3b2dea61e4d969c5b43b82cd9b71a614a2c30d18`,
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body,
       });
@@ -102,10 +104,10 @@ export default function Estacoes() {
         )
       );
 
-      alert(`Estação ${ativo ? "desativada" : "ativada"} com sucesso!`);
+      alert(`Estação ${ativo ? 'desativada' : 'ativada'} com sucesso!`);
     } catch (error) {
-      console.error("Erro ao atualizar a estação:", error);
-      alert("Falha ao atualizar a estação.");
+      console.error('Erro ao atualizar a estação:', error);
+      alert('Falha ao atualizar a estação.');
     }
   };
 
@@ -116,10 +118,10 @@ export default function Estacoes() {
       const response = await fetch(
         `http://127.0.0.1:8000/estacoes/${selectedEstacao.id}`,
         {
-          method: "PUT",
+          method: 'PUT',
           headers: {
             Authorization: `Token 3b2dea61e4d969c5b43b82cd9b71a614a2c30d18`,
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
           },
           body: JSON.stringify(selectedEstacao),
         }
@@ -138,21 +140,21 @@ export default function Estacoes() {
         )
       );
 
-      alert("Estação atualizada com sucesso!");
+      alert('Estação atualizada com sucesso!');
       closeModal();
     } catch (error) {
-      console.error("Erro ao atualizar a estação:", error);
-      alert("Falha ao atualizar a estação.");
+      console.error('Erro ao atualizar a estação:', error);
+      alert('Falha ao atualizar a estação.');
     }
   };
 
   const menuData = [
-    { nome: "Estações", path: "/estacoes", icone: "bx bx-home" },
-    { nome: "Parâmetros", path: "/parametros", icone: "bx bxs-thermometer" },
-    { nome: "Alertas", path: "/alertas", icone: "bx bx-alarm-exclamation" },
-    { nome: "Usuários", path: "/usuarios", icone: "bx bx-user" },
-    { nome: "Educacional", path: "/educacional", icone: "bx bx-book" },
-    { nome: "Logout", path: "/", icone: "bx bx-log-out" },
+    { nome: 'Estações', path: '/estacoes', icone: 'bx bx-home' },
+    { nome: 'Parâmetros', path: '/parametros', icone: 'bx bxs-thermometer' },
+    { nome: 'Alertas', path: '/alertas', icone: 'bx bx-alarm-exclamation' },
+    { nome: 'Usuários', path: '/usuarios', icone: 'bx bx-user' },
+    { nome: 'Educacional', path: '/educacional', icone: 'bx bx-book' },
+    { nome: 'Logout', path: '/', icone: 'bx bx-log-out' },
   ];
 
   if (loading) {
@@ -176,9 +178,21 @@ export default function Estacoes() {
           </h1>
 
           {estacoes.length === 0 ? (
-            <div className="flex justify-center p-5">
-              <p className="text-xl">Nenhuma estação cadastrada</p>
-            </div>
+            <>
+              <div className="flex justify-center p-5">
+                <p className="text-xl">Nenhuma estação cadastrada</p>
+              </div>
+              <div className="flex-col">
+                <Link href="/cadastro-estacoes" className="flex-col">
+                  <Botao
+                    type="button"
+                    corTexto="text-black"
+                    corFundo="bg-gray-300"
+                    label="Cadastrar Estação"
+                  />
+                </Link>
+              </div>
+            </>
           ) : (
             <table className="min-w-full border-collapse border border-gray-300">
               <thead className="bg-green-500 text-white">
@@ -211,15 +225,15 @@ export default function Estacoes() {
                       <td className="py-3 px-4 border-b">{estacao.nome}</td>
                       <td className="py-3 px-4 border-b">{estacao.topico}</td>
                       <td className="py-3 px-4 border-b">
-                        {new Date(estacao.criado).toLocaleDateString("pt-BR")}
+                        {new Date(estacao.criado).toLocaleDateString('pt-BR')}
                       </td>
                       <td className="py-3 px-4 border-b">
                         {new Date(estacao.modificado).toLocaleDateString(
-                          "pt-BR"
+                          'pt-BR'
                         )}
                       </td>
                       <td className="py-3 px-4 border-b">
-                        {estacao.ativo ? "Sim" : "Não"}
+                        {estacao.ativo ? 'Sim' : 'Não'}
                       </td>
                       <td>
                         {estacao.ativo ? (
