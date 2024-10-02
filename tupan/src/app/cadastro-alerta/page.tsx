@@ -79,7 +79,7 @@ const CadastroAlerta: React.FC = () => {
     };
 
     try {
-      await axios.post("http://localhost:8000/alertas/", novoAlerta, {
+      await axios.post("http://localhost:8000/alertas", novoAlerta, {
         headers: {
           Authorization: `Token ${storedToken}`,
         },
