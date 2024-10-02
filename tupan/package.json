@@ -18,6 +18,7 @@
   },
   "dependencies": {
     "@material-tailwind/react": "^2.1.10",
+    "axios": "^1.7.7",
     "flowbite": "^2.5.1",
     "next": "14.2.9",
     "react": "^18",
