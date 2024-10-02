@@ -96,15 +96,6 @@ export default function ParametrosID() {
               dados={formValues}
               initialStatus={initialStatus}
             />
-            <div className="mt-4 flex justify-center">
-              <Botao
-                label="Atualizar Parâmetro"
-                corTexto="text-white"
-                corFundo="bg-blue-500"
-                type="button"
-                onClick={handleAdicionarParametro}
-              />
-            </div>
           </div>
 
           {isVisible && (
