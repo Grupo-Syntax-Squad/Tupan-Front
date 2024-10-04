@@ -23,33 +23,6 @@ const Imagens = {
   piranometro: 'https://energes.com.br/wp-content/uploads/2020/07/Piran%C3%B4metro.jpg',
 };
 
-const Equipamentos = [
-  {
-    nome: 'Termômetro',
-    link: Imagens.termometro
-  },
-  {
-    nome: 'Barômetro',
-    link: Imagens.barometro
-  },
-  {
-    nome: 'Higrômetro',
-    link: Imagens.higometro
-  },
-  {
-    nome: 'Anemômetro',
-    link: Imagens.anemometro
-  },
-  {
-    nome: 'Pluviômetro',
-    link: Imagens.pluviometro
-  },
-  {
-    nome: 'Piranômetro',
-    link: Imagens.piranometro
-  }
-]
-
 const Conteúdo = [
   {
     titulo: 'Como funciona uma estação meteorológica',
