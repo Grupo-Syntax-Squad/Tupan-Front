@@ -3,6 +3,7 @@
 import { MenuLateral } from '@/components/menu-lateral';
 import { NavTop } from '@/components/nav-top';
 import Playground from '@/components/playground';
+import Link from 'next/link';
 
 const menuData = [
   { nome: 'Estações', path: '/estacoes', icone: 'bx bx-home' },
@@ -136,54 +137,57 @@ const Conteúdo = [
 ];
 
 const Educacional = () => {
+  const scrollToSection = (id: any) => {
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
   return (
     <div className="w-screen flex bg-gray-100 flex">
-      
-      {/* Menu lateral ocupando a lateral esquerda */}
-      <div className="w-fit pr-4 min-h-screen">
-        <MenuLateral menuData={menuData} />
-      </div>
-
-      {/* Conteúdo principal ocupando o resto da tela */}
-      <div className="w-full h-screen	overflow-auto flex pr-4 flex-col gap-4">
-
-        {/* Barra superior ocupando a parte superior da tela */}
-        <NavTop nome="" path="Educacional" />
-
-        {/* Barra de conteúdo */}
-        <section>
-          <div className="flex flex-col gap-4 sm:flex-row sm:gap-6 justify-center">
-            {Conteúdo.map((conteudo) => (
-              <a
-                key={conteudo.id}
-                href={`#${conteudo.id}`}
-                className="text-blue-500 hover:text-blue-700 transition-colors duration-300 text-lg sm:text-xl font-semibold cursor-pointer"
-              >
-                {conteudo.titulo}
-              </a>
-            ))}
-          </div>
-        </section>
-
-        {/*Conteúdo */}
-        {Conteúdo.map((conteudo) => (
-          <section key={conteudo.id} id={conteudo.id.toString()} className="w-full max-h-90 flex-row p-6">
-            <h3 className="text-blue-400">{conteudo.titulo}</h3>
-            <br></br>
-            <p
-              className="indent-20"
-              dangerouslySetInnerHTML={{ __html: conteudo.texto }}
-            />
-            {conteudo.id == 6 ? (
-              <div className="flex flex-col gap-4 p-4">
-                <Playground />
-              </div>
-            ) : null}
-          </section>
-        ))}
-      </div>
+    {/* Menu lateral ocupando a lateral esquerda */}
+    <div className="w-fit pr-4 min-h-screen">
+      <MenuLateral menuData={menuData} />
     </div>
-  );
+
+    {/* Conteúdo principal ocupando o resto da tela */}
+    <div className="w-full h-screen overflow-auto flex pr-4 flex-col gap-4">
+      {/* Barra superior ocupando a parte superior da tela */}
+      <NavTop nome="" path="Educacional" />
+
+      {/* Barra de conteúdo */}
+      <section className="">
+        <div className="flex flex-col rounded gap-4 sm:flex-row sm:gap-6 justify-center">
+          {Conteúdo.map((conteudo) => (
+            <Link
+              key={conteudo.id}
+              onClick={() => scrollToSection(conteudo.id)}
+              className="text-indigo-400 hover:text-indigo-700 transition-colors p-2 rounded duration-300 text-md sm:text-md font-semibold cursor-pointer" href={''}            >
+              {conteudo.titulo}
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      {/* Conteúdo */}
+      {Conteúdo.map((conteudo) => (
+        <section key={conteudo.id} id={conteudo.id.toString()} className="w-full max-h-90 flex-row p-6">
+          <h3 className="text-green-600">{conteudo.titulo}</h3>
+          <br />
+          <p
+            className="indent-20"
+            dangerouslySetInnerHTML={{ __html: conteudo.texto }}
+          />
+          {conteudo.id === 6 ? (
+            <div className="flex flex-col gap-4 p-4">
+              <Playground />
+            </div>
+          ) : null}
+        </section>
+      ))}
+    </div>
+  </div>
+);
 };
 
 export default Educacional;

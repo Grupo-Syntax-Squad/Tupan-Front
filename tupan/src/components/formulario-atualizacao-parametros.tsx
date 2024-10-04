@@ -12,32 +12,19 @@ import { useUpdateParametro } from '@/hooks/atualizarParametro';
 import { useGetParametroById } from '@/hooks/receberParametro';
 import { useFormularioParametros } from '@/hooks/formulario';
 import { useDeleteParametro } from '@/hooks/deletarParametro';
-import Router from 'next/router';
 
 export const FormularioAtualizacaoParametros = ({
-  onSubmit,
-  initialStatus,
-}: FormularioProps & { initialStatus: boolean }) => {
+  onSubmit,  initialStatus, nomeFormulario, showPopConfirmacao }:
+  FormularioProps & { initialStatus: boolean, showPopConfirmacao: (message: string) => void, nomeFormulario: string }) => {
   const searchParams = useSearchParams();
   const idParam = searchParams.get('id');
   const id = idParam ? Number(idParam) : null;
-
   const { parametro: formValues, loading, error } = useGetParametroById(id);
-
   const { isEditable, toggleEdit } = useEditable();
-  const {
-    formValues: formularioValues,
-    setFormValues,
-    handleChange,
-  } = useFormularioParametros(
+  const { formValues: formularioValues, setFormValues, handleChange } = useFormularioParametros(
     (formValues as unknown as Record<string, unknown>) || {}
   );
-  const {
-    updateParametro,
-    loading: loadingUpdate,
-    error: errorUpdate,
-  } = useUpdateParametro();
-
+  const { updateParametro, loading: loadingUpdate,  error: errorUpdate } = useUpdateParametro();
   const [isInitialized, setIsInitialized] = useState(false);
 
   useEffect(() => {
@@ -50,27 +37,23 @@ export const FormularioAtualizacaoParametros = ({
         nomejson: formValues.nome_json || '',
         offset: String(formValues.offset || 0),
         status: formValues.status || '',
-        medida:
-          formValues.unidade === 'C' ||
-          formValues.unidade === 'F' ||
-          formValues.unidade === 'K'
-            ? 'Temperatura'
-            : formValues.unidade === 'Pa'
-              ? 'Pressão'
-              : formValues.unidade === 'metroCubico'
-                ? 'Umidade'
-                : formValues.unidade === 'velocidadeVentoMS' ||
-                    formValues.unidade === 'velocidadeVentoKH'
-                  ? 'Velocidade do vento'
-                  : 'Volume da chuva',
+        medida: formValues.unidade === 'C' ||
+                formValues.unidade === 'F' ||
+                formValues.unidade === 'K'
+                  ? 'Temperatura'
+                  : formValues.unidade === 'Pa'
+                    ? 'Pressão'
+                    : formValues.unidade === 'metroCubico'
+                      ? 'Umidade'
+                      : formValues.unidade === 'velocidadeVentoMS' ||
+                          formValues.unidade === 'velocidadeVentoKH'
+                        ? 'Velocidade do vento'
+                        : 'Volume da chuva',
         descricao: formValues.descricao || '',
       }));
       setIsInitialized(true);
     }
   }, [formValues, isInitialized, setFormValues]);
-
-
-  {/* Utilizando envios com hooks */}
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -95,6 +78,7 @@ export const FormularioAtualizacaoParametros = ({
     try {
       await updateParametro(updatedParams);
       onSubmit(updatedParams as any);
+      showPopConfirmacao(`Parâmetro: "${nomeFormulario}" atualizado com sucesso!`);
     } catch (error) {
       console.error('Erro ao atualizar o parâmetro:'), error;
     }

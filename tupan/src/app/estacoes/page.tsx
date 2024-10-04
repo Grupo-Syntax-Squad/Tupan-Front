@@ -115,19 +115,6 @@ export default function Estacoes() {
     if (!selectedEstacao) return;
 
     try {
-<<<<<<< HEAD
-      const response = await fetch(
-        `http://127.0.0.1:8000/estacoes/${selectedEstacao.id}`,
-        {
-          method: 'PUT',
-          headers: {
-            Authorization: `Token 3b2dea61e4d969c5b43b82cd9b71a614a2c30d18`,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(selectedEstacao),
-        }
-      );
-=======
       const response = await fetch(`http://127.0.0.1:8000/estacoes/${selectedEstacao.id}`, {
         method: 'PUT',
         headers: {
@@ -136,7 +123,6 @@ export default function Estacoes() {
         },
         body: JSON.stringify(selectedEstacao),
       });
->>>>>>> 089611f (func: criar pagina de educacional)
 
       if (!response.ok) {
         const errorData = await response.json();
