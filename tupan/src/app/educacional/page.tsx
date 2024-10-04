@@ -14,6 +14,42 @@ const menuData = [
   { nome: 'Logout', path: '/logout', icone: 'bx bx-log-out' },
 ];
 
+const Imagens = {
+  termometro: 'https://img.lojadomecanico.com.br/IMAGENS/46/448/146231/1594142659510.JPG',
+  barometro: 'https://m.media-amazon.com/images/I/619Ta6u2k-L._AC_SX679_.jpg',
+  higometro: 'https://media.raig.com/c/product/termohigrografo-lambrecht-520x520.jpg',
+  anemometro: 'https://www.meteorologiaenred.com/wp-content/uploads/2021/07/que-es-un-anemometro-1024x648.jpg.webp',
+  pluviometro: 'https://www.splabor.com.br/blog/wp-content/uploads/2022/09/Pluviometro-4.jpg',
+  piranometro: 'https://energes.com.br/wp-content/uploads/2020/07/Piran%C3%B4metro.jpg',
+};
+
+const Equipamentos = [
+  {
+    nome: 'Termômetro',
+    link: Imagens.termometro
+  },
+  {
+    nome: 'Barômetro',
+    link: Imagens.barometro
+  },
+  {
+    nome: 'Higrômetro',
+    link: Imagens.higometro
+  },
+  {
+    nome: 'Anemômetro',
+    link: Imagens.anemometro
+  },
+  {
+    nome: 'Pluviômetro',
+    link: Imagens.pluviometro
+  },
+  {
+    nome: 'Piranômetro',
+    link: Imagens.piranometro
+  }
+]
+
 const Conteúdo = [
   {
     titulo: 'Como funciona uma estação meteorológica',
@@ -22,7 +58,6 @@ const Conteúdo = [
             dados são capturados pelos sensores e transmitidos para um sistema de processamento, onde são armazenados, analisados e exibidos. Com o avanço da tecnologia, muitas estações
             meteorológicas modernas utilizam sistemas automáticos que enviam dados em tempo real para redes de monitoramento e predição, permitindo que meteorologistas e cientistas usem 
             essas informações para prever condições climáticas, identificar padrões de tempo e monitorar o clima de forma precisa.`,
-    imagem: '',
     video: '',
     id: 1,
   },
@@ -33,7 +68,6 @@ const Conteúdo = [
             furacões, e ondas de calor, ajudando a mitigar os impactos e proteger vidas. Para a agricultura, por exemplo, o controle das condições climáticas permite otimizar o plantio, a
             irrigação e a colheita. Estações meteorológicas também são importantes no estudo das mudanças climáticas, pois seus registros históricos ajudam a entender as variações de longo
             prazo no clima e seus impactos globais. Assim, seu uso vai além da previsão do tempo, contribuindo para a segurança pública, pesquisa científica e tomada de decisões estratégicas.`,
-    imagem: '',
     video: '',
     id: 2,
   },
@@ -41,14 +75,18 @@ const Conteúdo = [
     titulo: 'Equipamentos e instrumentos de medição',
     texto: `Uma estação meteorológica típica conta com uma variedade de equipamentos para medir diferentes variáveis atmosféricas. Entre os mais comuns estão:<br></br>\n\n
     <b>Termômetro</b>: Mede a temperatura do ar. Pode ser de mercúrio, álcool ou digital.<br></br>\n\n
+    <img src=${Imagens.termometro} alt="Termômetro" width="300" height="200"></img><br></br>\n\n
     <b>Barômetro</b>: Instrumento utilizado para medir a pressão atmosférica. A variação na pressão indica mudanças climáticas.<br></br>\n\n
+    <img src=${Imagens.barometro} alt="Barômetro" width="300" height="200"></img><br></br>\n\n
     <b>Higrômetro</b>: Mede a umidade relativa do ar, indicando a quantidade de vapor d’água presente na atmosfera.<br></br>\n\n
+    <img src=${Imagens.higometro} alt="Higrômetro" width="300" height="200"></img><br></br>\n\n
     <b>Anemômetro</b>: Utilizado para medir a velocidade do vento. Muitas vezes, é acompanhado de uma biruta para indicar a direção.<br></br>\n\n
+    <img src=${Imagens.anemometro} alt="Anemômetro" width="300" height="200"></img><br></br>\n\n
     <b>Pluviômetro</b>: Mede a quantidade de precipitação em um determinado período, essencial para monitorar chuvas.<br></br>\n\n
+    <img src=${Imagens.pluviometro} alt="Pluviômetro" width="300" height="200"></img><br></br>\n\n
     <b>Piranômetro</b>: Equipamento usado para medir a radiação solar, ou seja, a quantidade de energia solar que atinge a superfície.<br></br>\n\n
+    <img src=${Imagens.piranometro} alt="Piranômetro" width="300" height="200"></img><br></br>\n\n
     Esses equipamentos trabalham de forma integrada, fornecendo uma visão completa do ambiente atmosférico em um local específico.<br></br>`,
-    imagem: '',
-    video: '',
     id: 3,
   },
   {
@@ -106,8 +144,6 @@ const Conteúdo = [
     <br></br>
     Onde: E é a energia solar por unidade de área (W/m²), Q é a quantidade de energia (em Joules), A é a área. 
     <br></br>Com essa medição, podemos saber quanta energia o Sol está nos dando, o que é útil, por exemplo, para quem usa painéis solares`,
-    imagem: '',
-    video: '',
     id: 4,
   },
   {
@@ -123,15 +159,11 @@ const Conteúdo = [
             permitindo que as autoridades tomem as decisões necessárias com mais tempo e precisão.<br></br>
             Além disso, Tupã gera um histórico completo das condições climáticas locais, fornecendo informações valiosas sobre o impacto do clima e ajudando a entender possíveis mudanças no ambiente ao longo do tempo.
             <br></br>Desenvolvemos o projeto Tupã com muito cuidado e dedicação, aqui na Fatec de São José dos Campos, no curso de Desenvolvimento de Software, em 2024. Quer conhecer mais? <a href='https://github.com/Grupo-Syntax-Squad/Tupan' target="_blank">Clique aqui e veja tudo o que estamos fazendo!</a>`,
-    imagem: '',
-    video: '',
     id: 5,
   },
   {
     titulo: 'Playgroung',
     texto: '',
-    imagem: '',
-    video: '',
     id: 6,
   },
 ];
