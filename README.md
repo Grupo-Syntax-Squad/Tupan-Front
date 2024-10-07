@@ -20,6 +20,12 @@ As seguintes tecnologias e ferramentas foram utilizadas no Front-End:
  <a href="https://jestjs.io/pt-BR/" target="_blank"><img src="https://img.shields.io/badge/-jest-%23C21325?style=for-the-badge&logo=jest&logoColor=white" target="_blank"></a>
 </h4>
 
+<div align="center">
+
+ colocar o motivo das tecnologias aqui.
+
+</div>
+
 ### :gear: Como rodar
 
 É possível rodar localmente o projeto, seguindo o passo a passo abaixo:
@@ -53,15 +59,23 @@ A aplicação inciará localmente na porta 3000. Use o navegador para acessar o 
 
 <div align="center">
 
-| Pasta                                    | Definição                                                                                   |
+| Diretório                                | Descrição                                                                                   |
 | ---------------------------------------- | ------------------------------------------------------------------------------------------- |
-| :open_file_folder: src/public/           | Arquivos públicos do projeto acessível ao público geral por meio de um servidor web         |
-| :open_file_folder: src/assets            | Arquivos visuais (imagens, ícones, fontes...)                                               |
-| :open_file_folder: src/components        | Código fonte dos componentes do projeto (botões, rodapés, cabeçalhos, barra de navegação..) |
-| :open_file_folder: src/global            | Arquivos com configurações que impactam todo o projeto (tema, estilos...)                   |
-| :open_file_folder: src/interfaces        | Arquivos com as interfaces utilizadas e compartilhada entre componentes e páginas           |
-| :open_file_folder: src/pages             | Código fonte das páginas do projeto                                                         |
-| :open_file_folder: src/                  | Código fonte do projeto                                                                     |
-| :page_facing_up: package.json            | Arquivo usado para gerenciar as dependências do projeto, scripts e versões                  |
+| :open_file_folder: .husky/               | Arquivos de configuração para validação das mensagens de commit elaboradas como padrão      |
+| :open_file_folder: tupan/                | Diretório principal do projeto, abrangendo as dependências, código fonte e arquivos de mídia|
+| :open_file_folder: tupan/public/assets   | Arquivos visuais (imagens, ícones, fontes...)                                               |
+| :open_file_folder: tupan/src             | Código fonte do projeto.                                                                    |
+| :open_file_folder: tupan/src/app         | Todas as páginas do projeto e comunicação com serviços externos.                            |
+| :open_file_folder: tupan/src/app/_api    | Requests de serviços (servidor-backend e API) via métodos: get, post, delete e update.      |
+| :open_file_folder: tupan/src/components  | Componentes do projeto (botões, rodapés, formulários, barra de navegação..)                 |
+| :open_file_folder: tupan/src/hooks       | Diretório para armazenar hooks do projeto.                                                  |
+| :open_file_folder: tupan/src/styles      | Arquivos de estilização adicionais.                                                         |
+| :open_file_folder: tupan/src/test        | Arquivos de testes TDD.                                                                     |
+| :open_file_folder: tupan/src/types       | Arquivos de interface e ou tipagem de componentes e atributos.                              |
+| :page_facing_up: package.json            | Arquivo usado para gerenciar as dependências do husky, scripts e versões.                   |
+| :page_facing_up: tupan/jest.config.ts    | Arquivo para configuração do framework de testes: jest.                                     |
+| :page_facing_up: tupan/package.json      | Arquivo usado para gerenciar as dependências do projeto, scripts e versões.                 |
+| :page_facing_up: tupan/next.config.mjs   | Arquivo para configuração do framework de React: NextJS.                                    |
+| :page_facing_up: tupan/tailwind.config.ts| Arquivo para configuração do framework de CSS: tailwind.                                    |
 
 </div>
