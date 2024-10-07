@@ -8,6 +8,7 @@ export interface Option {
     label: string;
     span: string;
     options: Array<Option>;
+    children?: React.ReactNode;
     required?: boolean;
     disabled?: boolean;
     estilo?: string;

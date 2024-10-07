@@ -16,8 +16,7 @@ export default function CadastroEstacoes() {
   const [parametrosSelecionados, setParametrosSelecionados] = useState([]);
   const [parametrosDisponiveis, setParametrosDisponiveis] = useState([]);
 
-  const token = '3b2dea61e4d969c5b43b82cd9b71a614a2c30d18';
-
+  const token = '1112a98d58500b7a165191fc56b2a9c1513413e8';
 
   useEffect(() => {
     const fetchParametros = async () => {
@@ -25,7 +24,7 @@ export default function CadastroEstacoes() {
         const response = await fetch('http://localhost:8000/parametros', {
           method: 'GET',
           headers: {
-            Authorization: `Token 3b2dea61e4d969c5b43b82cd9b71a614a2c30d18`,
+            Authorization: `Token 1112a98d58500b7a165191fc56b2a9c1513413e8`,
             'Content-Type': 'application/json',
           },
         });
@@ -65,7 +64,7 @@ export default function CadastroEstacoes() {
       const enderecoResponse = await fetch('http://localhost:8000/enderecos', {
         method: 'POST',
         headers: {
-          Authorization: `Token 3b2dea61e4d969c5b43b82cd9b71a614a2c30d18`,
+          Authorization: `Token 1112a98d58500b7a165191fc56b2a9c1513413e8`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(novoEndereco),
@@ -89,7 +88,7 @@ export default function CadastroEstacoes() {
       const estacaoResponse = await fetch('http://localhost:8000/estacoes', {
           method: 'POST',
           headers: {
-            Authorization: `Token 3b2dea61e4d969c5b43b82cd9b71a614a2c30d18`,
+            Authorization: `Token 1112a98d58500b7a165191fc56b2a9c1513413e8`,
             'Content-Type': 'application/json',
           },
           body: JSON.stringify(novaEstacao),

@@ -53,10 +53,6 @@ export default function Inicial() {
               <i style={{ fontSize: '60px' }} className="bx bx-book text-gray-400"></i> {/* Ícone Educacional */}
               <span className="mt-2 font-bold text-2xl text-gray-500">Educacional</span>
             </Link>
-            <Link href="/logout" className="flex flex-col items-center cursor-pointer">
-              <i style={{ fontSize: '60px' }} className="bx bx-book text-gray-400"></i> {/* Ícone Educacional */}
-              <span className="mt-2 font-bold text-2xl text-gray-500">Educacional</span>
-            </Link>
           </div>
         </div>
       </div>

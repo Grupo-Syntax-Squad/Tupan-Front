@@ -79,7 +79,7 @@ const CadastroAlerta: React.FC = () => {
     };
 
     try {
-      await axios.post("http://localhost:8000/alertas/", novoAlerta, {
+      await axios.post("http://localhost:8000/alertas", novoAlerta, {
         headers: {
           Authorization: `Token ${storedToken}`,
         },
@@ -172,8 +172,8 @@ const CadastroAlerta: React.FC = () => {
                     className="w-full px-3 py-2 border rounded"
                   >
                     <option value="">Selecione uma opção</option>
-                    <option value="maior">Maior que</option>
-                    <option value="menor">Menor que</option>
+                    <option value=">">Maior que</option>
+                    <option value="<">Menor que</option>
                   </select>
                 </div>
 

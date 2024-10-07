@@ -18,7 +18,7 @@ export const atualizarParametro = async (
     const response = await fetch(`${api_route}/parametros/${parametro.id}`, {
       method: 'PUT',
       headers: {
-        'Authorization': `Token 336a2fafc45127faa82798d1e9b9e6583a062373`,
+        'Authorization': `Token 1112a98d58500b7a165191fc56b2a9c1513413e8`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(parametro),
