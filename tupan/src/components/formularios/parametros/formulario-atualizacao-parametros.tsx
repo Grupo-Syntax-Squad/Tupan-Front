@@ -11,7 +11,7 @@ import { useEditable } from '@/hooks/editar';
 import { useUpdateParametro } from '@/hooks/parametros/atualizarParametro';
 import { useGetParametroById } from '@/hooks/parametros/receberParametro';
 import { useFormularioParametros } from '@/hooks/formulario';
-import { useDeleteParametro } from '@/hooks/parametros/deletarParametro';
+import { useDeleteParametro } from '@/hooks/deletarParametro';
 
 export const FormularioAtualizacaoParametros = ({
   onSubmit,  initialStatus, nomeFormulario, showPopConfirmacao }:

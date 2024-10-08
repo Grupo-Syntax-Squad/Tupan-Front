@@ -20,7 +20,7 @@ export default function CadastroEstacoes() {
   const [longitude, setLongitude] = useState('');
   const [complemento, setComplemento] = useState('');
   const [parametrosSelecionados, setParametrosSelecionados] = useState([]);
-  const [parametrosDisponiveis, setParametrosDisponiveis] = useState([]);
+  const [parametrosDisponiveis, setParametrosDisponiveis] = useState<{ id: number; nome: string }[]>([]);
   const [isPopupOpen, setIsPopupOpen] = useState(false); // Estado para controlar a visibilidade do pop-up
 
   useEffect(() => {
@@ -181,93 +181,141 @@ export default function CadastroEstacoes() {
                   required
                 />
               </div>
-            </div>
-            <div className="flex flex-col">
-              <label htmlFor="logradouro">Logradouro</label>
+              <div className="flex flex-col">
+                <label htmlFor="complemento">Complemento</label>
+                <input
+                  type="text"
+                  value={complemento}
+                  onChange={(e) => setComplemento(e.target.value)}
+                />
+              </div>
+              <div className="flex flex-col">
+                <label htmlFor="latitude">Latitude</label>
+                <input
+                  type="text"
+                  value={latitude}
+                  onChange={(e) => setLatitude(e.target.value)}
+                />
+              </div>
+              <div className="flex flex-col">
+                <label htmlFor="longitude">Longitude</label>
+                <input
+                  type="text"
+                  value={longitude}
+                  onChange={(e) => setLongitude(e.target.value)}
+                />
+              </div>
+              <div className="flex flex-col">
+                <p>Selecione os Parâmetros:</p>
+                {parametrosDisponiveis.map((parametro, index) => (
+                  <div key={index} className='flex'>
+                    <label>{parametro.nome}</label>{' '}
+                    <input
+                      type="checkbox"
+                      value={parametro.id}
+                      onChange={() => handleParametroChange(parametro.id)}
+                      checked={parametrosSelecionados.includes(parametro.id)}
+                      className='mt-3 ml-3 checkbox-bolinha'
+                    />
+                  </div>
+                ))}
+              </div>
+              <div className="flex gap-5">
+                <button
+                  type="submit"
+                  className="bg-transparent hover:bg-lime-600 text-lime-600 font-semibold hover:text-white py-2 px-4 border border-lime-600 hover:border-transparent rounded m-auto"
+                >
+                  Cadastrar
+                </button>
+              </div>
+            </form>
+          </section>
+        <div className="flex flex-col">
+          <label htmlFor="logradouro">Logradouro</label>
+          <input
+            type="text"
+            value={logradouro}
+            onChange={(e) => setLogradouro(e.target.value)}
+            required
+          />
+        </div>
+        <div className="flex flex-col">
+          <label htmlFor="cidade">Cidade</label>
+          <input
+            type="text"
+            value={cidade}
+            onChange={(e) => setCidade(e.target.value)}
+            required
+          />
+        </div>
+        <div className="flex flex-col">
+          <label htmlFor="bairro">Bairro</label>
+          <input
+            type="text"
+            value={bairro}
+            onChange={(e) => setBairro(e.target.value)}
+            required
+          />
+        </div>
+        <div className="flex flex-col">
+          <label htmlFor="estado">Estado</label>
+          <input
+            type="text"
+            value={estado}
+            onChange={(e) => setEstado(e.target.value)}
+            required
+          />
+        </div>
+        <div className="flex flex-col">
+          <label htmlFor="complemento">Complemento</label>
+          <input
+            type="text"
+            value={complemento}
+            onChange={(e) => setComplemento(e.target.value)}
+          />
+        </div>
+        <div className="flex flex-col">
+          <label htmlFor="latitude">Latitude</label>
+          <input
+            type="text"
+            value={latitude}
+            onChange={(e) => setLatitude(e.target.value)}
+          />
+        </div>
+        <div className="flex flex-col">
+          <label htmlFor="longitude">Longitude</label>
+          <input
+            type="text"
+            value={longitude}
+            onChange={(e) => setLongitude(e.target.value)}
+          />
+        </div>
+        <div className="flex flex-col">
+          <p>Selecione os Parâmetros:</p>
+          {parametrosDisponiveis.map((parametro, index) => (
+            <div key={index} className='flex'>
+              <label>{parametro.nome}</label>{' '}
               <input
-                type="text"
-                value={logradouro}
-                onChange={(e) => setLogradouro(e.target.value)}
-                required
+                type="checkbox"
+                value={parametro.id}
+                onChange={() => handleParametroChange(parametro.id)}
+                checked={parametrosSelecionados.includes(parametro.id)}
+                className='mt-3 ml-3 checkbox-bolinha'
               />
             </div>
-            <div className="flex flex-col">
-              <label htmlFor="cidade">Cidade</label>
-              <input
-                type="text"
-                value={cidade}
-                onChange={(e) => setCidade(e.target.value)}
-                required
-              />
-            </div>
-            <div className="flex flex-col">
-              <label htmlFor="bairro">Bairro</label>
-              <input
-                type="text"
-                value={bairro}
-                onChange={(e) => setBairro(e.target.value)}
-                required
-              />
-            </div>
-            <div className="flex flex-col">
-              <label htmlFor="estado">Estado</label>
-              <input
-                type="text"
-                value={estado}
-                onChange={(e) => setEstado(e.target.value)}
-                required
-              />
-            </div>
-            <div className="flex flex-col">
-              <label htmlFor="complemento">Complemento</label>
-              <input
-                type="text"
-                value={complemento}
-                onChange={(e) => setComplemento(e.target.value)}
-              />
-            </div>
-            <div className="flex flex-col">
-              <label htmlFor="latitude">Latitude</label>
-              <input
-                type="text"
-                value={latitude}
-                onChange={(e) => setLatitude(e.target.value)}
-              />
-            </div>
-            <div className="flex flex-col">
-              <label htmlFor="longitude">Longitude</label>
-              <input
-                type="text"
-                value={longitude}
-                onChange={(e) => setLongitude(e.target.value)}
-              />
-            </div>
-            <div className="flex flex-col">
-              <p>Selecione os Parâmetros:</p>
-              {parametrosDisponiveis.map((parametro, index) => (
-                <div key={index} className='flex'>
-                  <label>{parametro.nome}</label>{' '}
-                  <input
-                    type="checkbox"
-                    value={parametro.id}
-                    onChange={() => handleParametroChange(parametro.id)}
-                    checked={parametrosSelecionados.includes(parametro.id)}
-                    className='mt-3 ml-3 checkbox-bolinha'
-                  />
-                </div>
-              ))}
-            </div>
-            <div className="flex gap-5">
-              <button
-                type="submit"
-                className="bg-transparent hover:bg-lime-600 text-lime-600 font-semibold hover:text-white py-2 px-4 border border-lime-600 hover:border-transparent rounded m-auto"
-              >
-                Cadastrar
-              </button>
-            </div>
-          </form>
-        </section>
-      </Popup>
-    </Fragment>
-  );
+          ))}
+        </div>
+        <div className="flex gap-5">
+          <button
+            type="submit"
+            className="bg-transparent hover:bg-lime-600 text-lime-600 font-semibold hover:text-white py-2 px-4 border border-lime-600 hover:border-transparent rounded m-auto"
+          >
+            Cadastrar
+          </button>
+        </div>
+      </form>
+    </section>
+  </Popup>
+</Fragment>
+);
 }

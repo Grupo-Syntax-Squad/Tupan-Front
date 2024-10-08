@@ -22,6 +22,12 @@ const menuData = [
   { nome: 'Logout', path: '/', icone: 'bx bx-log-out' },
 ];
 
+import dynamic from 'next/dynamic';
+
+const Mapa = dynamic(() => import('../../components/mapa/index'), {
+  ssr: false,
+});
+
 export default function Estacoes() {
   const { estacoes, loading, error } = useGetEstacoes();
   
@@ -65,6 +71,49 @@ export default function Estacoes() {
         borderWidth: 1,
       },
     ],
+  };  backgroundColor: ['#4CAF50', '#F44336'],
+        borderColor: ['#4CAF50', '#F44336'],
+        borderWidth: 1,
+      },
+    ],
+
+  const Mapa = dynamic(() => import('../../components/mapa/index'), {
+    ssr: false,
+  });
+
+  const updateEstacao = async () => {
+    if (!selectedEstacao) return;
+
+    try {
+      const response = await fetch(`http://127.0.0.1:8000/estacoes/${selectedEstacao.id}`, {
+        method: 'PUT',
+        headers: {
+          Authorization: `Token 1112a98d58500b7a165191fc56b2a9c1513413e8`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(selectedEstacao),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(
+          `Erro ao atualizar a estação: ${errorData.detail || response.statusText}`
+        );
+      }
+
+      setEstacoes((prevEstacoes) =>
+        prevEstacoes.map((estacao) =>
+          estacao.id === selectedEstacao.id ? selectedEstacao : estacao
+        )
+      );
+
+      alert('Estação atualizada com sucesso!');
+      closeModal();
+    } catch (error) {
+      console.error('Erro ao atualizar a estação:', error);
+      alert('Falha ao atualizar a estação.');
+    }
+
   };
 
   return (
