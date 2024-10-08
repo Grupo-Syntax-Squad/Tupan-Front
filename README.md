@@ -7,6 +7,7 @@ Em especial, este repositório em questão, é destinado à toda a parte Front-E
 > [!NOTE]
 > Aplicação desenvolvida pela equipe: SyntaxSquad, composta por alunos do 4º semestre, do tecnólogo em Desenvolvimento de Software Multiplataforma, na FATEC Profº Jessen Vidal - São José dos Campos, SP, 2024 :rocket:
 
+<hr>
 
 ### :hammer_and_wrench: Tecnologias
 
@@ -20,19 +21,18 @@ As seguintes tecnologias e ferramentas foram utilizadas no Front-End:
  <a href="https://jestjs.io/pt-BR/" target="_blank"><img src="https://img.shields.io/badge/-jest-%23C21325?style=for-the-badge&logo=jest&logoColor=white" target="_blank"></a>
 </h4>
 
-<div align="center">
+<hr>
 
- colocar o motivo das tecnologias aqui.
+### ❓ Como rodar ❓
 
-</div>
+>[!WARNING]
+>É preciso ter o [Node](https://nodejs.org/en/) instalado em sua máquina!
+<br>
 
-### :gear: Como rodar
-
-É possível rodar localmente o projeto, seguindo o passo a passo abaixo:
-
-- Tutorial para rodar o projeto
-
-Com o [Node](https://nodejs.org/en/) instalado em sua máquina, utilize estes comandos em um terminal:
+> O projeto foi desenvolvido no Node v22.7.0, portanto recomendamos utilizar entre a versão 18 e 22, pois garantimos que haverá suporte.
+ 
+É possível rodar localmente o projeto, seguindo o passo a passo abaixo,
+utilize estes comandos em um terminal:
 
 >[!NOTE]
 >Este exemplo é para utilização com Npm
@@ -55,7 +55,9 @@ $ npm run dev
 
 A aplicação inciará localmente na porta 3000. Use o navegador para acessar o link [http://localhost:3000](http://localhost:3000) e executar as funcionalidades da aplicação.
 
-### Explicação da estrutura das pastas
+<hr>
+
+### 🗃️ Estrutura de Diretórios
 
 <div align="center">
 
@@ -77,5 +79,17 @@ A aplicação inciará localmente na porta 3000. Use o navegador para acessar o 
 | :page_facing_up: tupan/package.json      | Arquivo usado para gerenciar as dependências do projeto, scripts e versões.                 |
 | :page_facing_up: tupan/next.config.mjs   | Arquivo para configuração do framework de React: NextJS.                                    |
 | :page_facing_up: tupan/tailwind.config.ts| Arquivo para configuração do framework de CSS: tailwind.                                    |
+
+</div>
+
+<hr>
+
+### 🌟 Releases
+
+<div align="center">
+
+| TAG       |  Descrição                                                                                                    | Sprint |
+| --------- | ------------------------------------------------------------------------------------------------------------- | ------ |
+| 1.0.0     | Criação das páginas e integração dos CRUD's de todos os elementos (parâmetros, usuários, estaçõoes e alertas) | 1      |
 
 </div>
