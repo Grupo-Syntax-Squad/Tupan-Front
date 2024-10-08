@@ -2,7 +2,9 @@
 
 import { MenuLateral } from "@/components/menu-lateral";
 import { NavTop } from "@/components/nav-top";
-import React, { useEffect, useState } from "react";
+import { Botao } from "@/components/botao";
+import React, { useEffect, useState,  } from "react";
+import Link from 'next/link';
 import axios from "axios";
 
 interface Alerta {
@@ -108,19 +110,25 @@ const Alertas: React.FC = () => {
                       <td className="p-3">{alerta.id}</td>
                       <td className="p-3">{alerta.criado}</td>
                       <td className="p-3">
-                        <button
-                          className="bg-blue-600 text-white px-4 py-2 rounded-md m-2 hover:bg-blue-800"
-                          aria-label={`Ver detalhes do ${alerta.nome}`}
-                        >
-                          Ver Detalhes
-                        </button>
+                        
+                        <div className="flex space-x-5">
+                        <Link href={`/alertas/${alerta.id}`}>
+                          <Botao
+                            type="button"
+                            label={`Ver detalhes do ${alerta.nome}`}
+                            corFundo="bg-blue-600"
+                            corTexto="text-white"
+                          />
+                        </Link>
 
-                        {/* <button
-                          className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-800"
-                          onClick={() => deleteAlerta(alerta.id)}
-                        >
-                          Deletar alerta
-                        </button> */}
+                          <Botao
+                            type="button"
+                            corTexto="text-white"
+                            corFundo="bg-red-600"
+                            label="Deletar"
+                            onClick={() => deleteAlerta(alerta.id)}
+                          />
+                        </div>
 
                       </td>
                     </tr>

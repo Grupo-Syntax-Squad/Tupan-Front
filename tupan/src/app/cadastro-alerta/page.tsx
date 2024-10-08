@@ -3,6 +3,8 @@
 import React, { useState, useEffect } from "react";
 import { MenuLateral } from "@/components/menu-lateral";
 import { NavTop } from "@/components/nav-top";
+import { Botao } from "@/components/botao";
+import Link from 'next/link';
 import axios from "axios";
 
 interface Estacao {
@@ -190,12 +192,32 @@ const CadastroAlerta: React.FC = () => {
               </div>
 
               <div className="flex justify-between">
-                <button type="button" className="px-4 py-2 border rounded text-gray-700">
+                {/* <button type="button" className="px-4 py-2 border rounded text-gray-700">
                   Cancelar
-                </button>
-                <button type="submit" className="px-4 py-2 bg-green-500 text-white rounded">
+                </button> */}
+                <div className="flex-col">
+                <Link href="/alertas">
+                  <Botao
+                    type="button"
+                    corTexto="text-black"
+                    corFundo="bg-red-500"
+                    label="Cancelar"
+                  />
+                </Link>
+                  <Botao
+                    type="submit"
+                    corTexto="text-black"
+                    corFundo="bg-green-500"
+                    label="salvar"
+                    onClick={handleSubmit}
+                  />
+
+              </div>
+
+
+                {/* <button type="submit" className="px-4 py-2 bg-green-500 text-white rounded">
                   Salvar
-                </button>
+                </button> */}
               </div>
             </form>
           </div>
