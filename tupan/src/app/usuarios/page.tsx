@@ -1,9 +1,11 @@
 "use client";
 
 import { MenuLateral } from "@/components/menu-lateral";
+import { Botao } from "@/components/botao";
 import { NavTop } from "@/components/nav-top";
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import Link from 'next/link';
+import axios from 'axios';
 
 const Usuarios: React.FC = () => {
 
@@ -106,18 +108,25 @@ const Usuarios: React.FC = () => {
                       <td className="p-3">{usuario.criacao}</td>
                       <td className="p-3">{usuario.alterado}</td>
                       <td className="p-3">
-                        <button
-                          className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-800 m-2"
-                          aria-label={`Ver detalhes do ${usuario.id}`}
-                        >
-                          Ver Detalhes
-                        </button>
-                        <button
-                          className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-800"
-                          onClick={() => deleteUsuario(usuario.id)}
-                        >
-                          Deletar Usuário
-                        </button>
+                        <div className="flex items-end space-x-5 justify-items-end">
+                          <Link href={`/usuarios/${usuario.id}`} className="flex-col">
+                            <Botao
+                              type="button"
+                              corTexto="text-white"
+                              corFundo="bg-blue-500"
+                              label={`ver Detalhes`}
+                            />
+                          </Link>
+    
+                      
+                          <Botao
+                            type="button"
+                            corTexto="text-white"
+                            corFundo="bg-red-600"
+                            label="Deletar Usuario"
+                            onClick={() => deleteUsuario(usuario.id)}
+                          />
+                        </div>
                       </td>
                     </tr>
                   ))}
@@ -127,13 +136,15 @@ const Usuarios: React.FC = () => {
               <p>Nenhum usuário encontrado.</p>
             )}
           </div>
-          <div className="space-x-20">
-            <a
-              href="/cadastro-usuario"
-              className="w-64 bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-700 mt-4 inline-block text-center"
-            >
-              Cadastrar novo Usuário
-            </a>
+          <div className="space-x-20"> 
+                <Link href="/cadastro-usuario" className="flex-col m-5">
+                  <Botao
+                    type="button"
+                    corTexto="text-black"
+                    corFundo="bg-green-300"
+                    label="Cadastrar Usuario"
+                  />
+                </Link>
           </div>
         </div>
       </div>
