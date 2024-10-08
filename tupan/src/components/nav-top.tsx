@@ -7,7 +7,7 @@ export const NavTop = ({ nome, path }: NavTopProps) => {
       <React.Fragment>
         <span className="text-start pr-2">{path}</span>
       </React.Fragment>
-      <h1 className="text-right pr-2">Welcome {nome}</h1>
+      <h1 className="text-right pr-2">{nome}</h1>
     </div>
   );
 };

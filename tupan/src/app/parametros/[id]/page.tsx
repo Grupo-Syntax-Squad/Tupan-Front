@@ -10,7 +10,6 @@ import { useFormularioParametros } from "@/hooks/formulario";
 import { NavTop } from "@/components/nav-top";
 import { useDynamicContext } from "@/app/context";
 import { useToggle } from "@/hooks/check";
-import axios from "axios"; // Adicionando axios para requisição
 
 const menuData = [
   { nome: "Estações", path: "/estacoes", icone: "bx bx-home" },
@@ -18,7 +17,7 @@ const menuData = [
   { nome: "Alertas", path: "/alertas", icone: "bx bx-alarm-exclamation" },
   { nome: "Usuários", path: "/usuarios", icone: "bx bx-user" },
   { nome: "Educacional", path: "/educacional", icone: "bx bx-book" },
-  { nome: "Logout", path: "/logout", icone: "bx bx-log-out" },
+  { nome: "Logout", path: "/", icone: "bx bx-log-out" },
 ];
 
 export default function ParametrosID() {
@@ -31,17 +30,6 @@ export default function ParametrosID() {
     undefined
   );
   const [initialStatus, setInitialStatus] = useState<boolean>(false);
-  const [token, setToken] = useState<string | null>(null); // Token state
-
-  // Pegando o token no useEffect e guardando no estado
-  useEffect(() => {
-    const storedToken = localStorage.getItem("token");
-    if (storedToken) {
-      setToken(storedToken);
-    } else {
-      console.error("Token não encontrado");
-    }
-  }, []);
 
   useEffect(() => {
     const searchParams = new URLSearchParams(window.location.search);
@@ -52,41 +40,28 @@ export default function ParametrosID() {
     setNomeFormulario(nome || "Formulário de Parâmetros");
     setInitialStatus(status === "Ativado");
 
-    if (id && token) {
-      // Faz a requisição para pegar os dados
-      axios
-        .get(`http://localhost:8000/parametros/${id}`, {
-          headers: {
-            Authorization: `Token ${token}`,
-          },
-        })
-        .then((response) => {
-          const { nome, status } = response.data;
-          setFormValues({
-            nome: nome || "",
-            id: id || "",
-            status: status || "",
-          });
-        })
-        .catch((err) => console.error("Erro ao buscar parâmetros", err));
+    if (id) {
+      setFormValues({
+        nome: nome || "",
+        id: id || "",
+        status: status || "",
+      });
     }
-  }, [setFormValues, state, token]);
+  }, [setFormValues, state]);
 
   const { isChecked, handleChange: handleToggleChange } =
     useToggle(initialStatus);
 
-  const handleAdicionarParametro = () => {
-    console.log("Adicionar novo parâmetro");
-    showPopConfirmacao(`Parâmetro: "${nomeFormulario}" atualizado com sucesso!`);
-  };
-
   return (
     <div className="w-screen flex bg-gray-100">
+      {/* Menu lateral ocupando a lateral esquerda */}
       <div className="w-fit pr-4 min-h-screen">
         <MenuLateral menuData={menuData} />
       </div>
 
+      {/* Conteúdo principal ocupando o resto da tela */}
       <div className="w-full flex pr-4 flex-col gap-4">
+        {/* Barra superior ocupando a parte superior da tela */}
         <NavTop nome="Usuário" path={nomeFormulario} />
 
         <div className="flex gap-4">
@@ -94,9 +69,12 @@ export default function ParametrosID() {
             <FormularioAtualizacaoParametros
               onSubmit={() => console.log("Formulário enviado")}
               dados={formValues}
+              showPopConfirmacao={showPopConfirmacao}
+              nomeFormulario={nomeFormulario || "Formulário de Parâmetros"}
               initialStatus={initialStatus}
             />
           </div>
+
           {isVisible && (
             <PopConfirmacao mensagem={mensagem} onClose={hidePopConfirmacao} />
           )}
