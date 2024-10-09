@@ -1,5 +1,3 @@
-name: Auto Generate PR Title and Description
-
 on:
   pull_request:
     types: [opened, edited]
