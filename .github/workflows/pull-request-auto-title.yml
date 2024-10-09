@@ -1,3 +1,5 @@
+name: Auto Generate PR Title and Description
+
 on:
   pull_request:
     types: [opened, edited]
@@ -10,18 +12,18 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
         with:
-          fetch-depth: 0  # Fetch all history for all branches
+          fetch-depth: 0  # Garante que o histórico completo seja baixado
 
       - name: Fetch all remote branches
-        run: git fetch --all
+        run: git fetch origin +refs/heads/main:refs/remotes/origin/main
 
       - name: Verify that 'main' branch exists
         run: |
-          # Ensure the 'main' branch exists and is fetched
-          if git show-ref --quiet refs/remotes/origin/main; then
-            echo "Main branch is available."
+          # Confirma se a branch 'main' foi baixada corretamente
+          if git show-ref --verify --quiet refs/remotes/origin/main; then
+            echo "Branch 'main' verificada e disponível."
           else
-            echo "Main branch is not available. Exiting..."
+            echo "Erro: A branch 'main' não está disponível. Saindo..."
             exit 1
           fi
 
@@ -32,7 +34,7 @@ jobs:
       - name: Get all commit messages
         id: get_commits
         run: |
-          # Get all commit messages from 'main' to the current branch
+          # Garante que o histórico de commits entre 'main' e a branch atual seja recuperado
           COMMITS=$(git log --pretty=format:"%s" origin/main..HEAD)
           echo "::set-output name=commits::$COMMITS"
 
@@ -42,12 +44,12 @@ jobs:
           COMMITS="${{ steps.get_commits.outputs.commits }}"
           BRANCH_NAME="${{ steps.get_branch.outputs.branch_name }}"
 
-          # Extract branch details
+          # Extrai detalhes da branch
           TASK_ID=$(echo "$BRANCH_NAME" | cut -d'-' -f1)
           TAG_TIPO=$(echo "$BRANCH_NAME" | cut -d'-' -f2 | cut -d'/' -f1)
           DESCRICAO_BRANCH=$(echo "$BRANCH_NAME" | cut -d'/' -f2)
 
-          # Analyze commits for tags
+          # Analisa commits para criar um título de PR baseado nos commits
           if echo "$COMMITS" | grep -q '^func'; then
               TITLE="Funcionalidade: $DESCRICAO_BRANCH - Task #$TASK_ID"
           elif echo "$COMMITS" | grep -q '^corr'; then
@@ -62,7 +64,7 @@ jobs:
               TITLE="Atualização: $DESCRICAO_BRANCH - Task #$TASK_ID"
           fi
 
-          # Create PR body with commits list
+          # Cria o corpo da PR com a lista de commits
           DESCRIPTION="## Commits\n$COMMITS"
 
           echo "::set-output name=pr_title::$TITLE"
