@@ -12,18 +12,18 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
         with:
-          fetch-depth: 0  # Garante que o histórico completo seja baixado
+          fetch-depth: 0  # Garante o histórico completo
 
       - name: Fetch all remote branches
-        run: git fetch origin +refs/heads/main:refs/remotes/origin/main
+        run: git fetch origin +refs/heads/main:refs/remotes/origin/main  # Força o fetch da branch 'main'
 
       - name: Verify that 'main' branch exists
         run: |
-          # Confirma se a branch 'main' foi baixada corretamente
+          # Verifica se a branch 'main' está disponível no repositório local
           if git show-ref --verify --quiet refs/remotes/origin/main; then
-            echo "Branch 'main' verificada e disponível."
+            echo "Branch 'main' disponível."
           else
-            echo "Erro: A branch 'main' não está disponível. Saindo..."
+            echo "Erro: A branch 'main' não foi encontrada."
             exit 1
           fi
 
@@ -34,8 +34,8 @@ jobs:
       - name: Get all commit messages
         id: get_commits
         run: |
-          # Garante que o histórico de commits entre 'main' e a branch atual seja recuperado
-          COMMITS=$(git log --pretty=format:"%s" origin/main..HEAD)
+          # Garante que estamos comparando corretamente as revisões entre 'main' e a branch atual
+          COMMITS=$(git log --pretty=format:"%s" origin/main..HEAD --)  # Usa '--' para separar revisões de caminhos
           echo "::set-output name=commits::$COMMITS"
 
       - name: Analyze commits and generate PR title/description
@@ -49,7 +49,7 @@ jobs:
           TAG_TIPO=$(echo "$BRANCH_NAME" | cut -d'-' -f2 | cut -d'/' -f1)
           DESCRICAO_BRANCH=$(echo "$BRANCH_NAME" | cut -d'/' -f2)
 
-          # Analisa commits para criar um título de PR baseado nos commits
+          # Analisa os commits e gera o título com base nos commits
           if echo "$COMMITS" | grep -q '^func'; then
               TITLE="Funcionalidade: $DESCRICAO_BRANCH - Task #$TASK_ID"
           elif echo "$COMMITS" | grep -q '^corr'; then
