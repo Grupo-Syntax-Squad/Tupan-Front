@@ -2,13 +2,13 @@
 
 import { MenuLateral } from "@/components/menu-lateral";
 import { NavTop } from "@/components/nav-top";
-
-import React from 'react';
+import {deletarUsuario} from '@/app/_api/delete/usuarios'; 
+import { Botao } from "@/components/botao";
+import Link from "next/link";
+import React from "react";
 
 const VisualizarUsuarios: React.FC = () => {
-  const usuarios = [
-    { id: 1, usuario: 'fulano', email: 'exemploEmail@gmail.com', dataCriacao: '2024-09-19', dataUpdate: '2024-09-22' },
-  ];
+  
 
   const menuData = [
     { nome: "Estações", path: "/estacoes", icone: "bx bx-home" },
@@ -46,13 +46,13 @@ const VisualizarUsuarios: React.FC = () => {
               />
             </div>
             <div>
-              <label htmlFor="nome" className="block text-sm font-medium text-gray-700">
-                Nome              
+              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+                Senha              
               </label>
               <input
-                id="nome"
-                name="nome"
-                type="string"
+                id="password"
+                name="password"
+                type="password"
                 className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
               />
             </div>
@@ -69,17 +69,7 @@ const VisualizarUsuarios: React.FC = () => {
               />
             </div>
 
-            <div>
-              <label htmlFor="ativos" className="block text-sm font-medium text-gray-700">
-                Ativos              
-              </label>
-              <input
-                id="ativos"
-                name="ativos"
-                type="bolean"
-                className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-              />
-            </div>
+            
 
             <div>
               <label htmlFor="ID" className="block text-sm font-medium text-gray-700">
@@ -112,12 +102,19 @@ const VisualizarUsuarios: React.FC = () => {
               Atualizar
             </button>
 
-            <button
+            {/* <button
               type="submit"
-              className="bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-700"
+              className="bg-red-600 text-white m-2 py-2 px-4 rounded-lg hover:bg-red-700"
             >
               Deletar usuario
-            </button>
+            </button> */}
+            <Botao
+              type="button"
+              corTexto="text-white"
+              corFundo="bg-red-600"
+              label="Deletar Usuario"
+              onClick={() => deletarUsuario(usuario.id)}
+            />
         </div>
         <div>
 
