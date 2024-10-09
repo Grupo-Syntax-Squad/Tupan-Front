@@ -11,6 +11,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+        with:
+          fetch-depth: 0 
 
       - name: Get current branch name
         id: get_branch
@@ -19,10 +21,11 @@ jobs:
       - name: Get all commit messages
         id: get_commits
         run: |
+          # Certifique-se de que a branch correta está sendo referenciada
           COMMITS=$(git log --pretty=format:"%s" origin/main..HEAD)
           echo "::set-output name=commits::$COMMITS"
 
-      - name: Analise commits e gere título/descrição de PR
+      - name: Analyze commits and generate PR title/description
         id: generate_pr_title
         run: |
           COMMITS="${{ steps.get_commits.outputs.commits }}"
