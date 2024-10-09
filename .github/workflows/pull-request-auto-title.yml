@@ -15,11 +15,13 @@ jobs:
           fetch-depth: 0  # Garante o histórico completo
 
       - name: Fetch all remote branches
-        run: git fetch origin +refs/heads/main:refs/remotes/origin/main  # Força o fetch da branch 'main'
+        run: git fetch --all  # Isso deve baixar todas as branches, mas pode ser ajustado
+
+      - name: Fetch the main branch
+        run: git fetch origin main  # Garante que a branch main esteja disponível
 
       - name: Verify that 'main' branch exists
         run: |
-          # Verifica se a branch 'main' está disponível no repositório local
           if git show-ref --verify --quiet refs/remotes/origin/main; then
             echo "Branch 'main' disponível."
           else
@@ -29,20 +31,20 @@ jobs:
 
       - name: Get current branch name
         id: get_branch
-        run: echo "::set-output name=branch_name::$(git rev-parse --abbrev-ref HEAD)"
+        run: echo "branch_name=$(git rev-parse --abbrev-ref HEAD)" >> $GITHUB_ENV  # Uso do novo método
 
       - name: Get all commit messages
         id: get_commits
         run: |
           # Garante que estamos comparando corretamente as revisões entre 'main' e a branch atual
-          COMMITS=$(git log --pretty=format:"%s" origin/main..HEAD --)  # Usa '--' para separar revisões de caminhos
-          echo "::set-output name=commits::$COMMITS"
+          COMMITS=$(git log --pretty=format:"%s" origin/main..HEAD)  # Verifica a comparação
+          echo "commits=$COMMITS" >> $GITHUB_ENV  # Uso do novo método
 
       - name: Analyze commits and generate PR title/description
         id: generate_pr_title
         run: |
-          COMMITS="${{ steps.get_commits.outputs.commits }}"
-          BRANCH_NAME="${{ steps.get_branch.outputs.branch_name }}"
+          COMMITS="${{ env.commits }}"
+          BRANCH_NAME="${{ env.branch_name }}"
 
           # Extrai detalhes da branch
           TASK_ID=$(echo "$BRANCH_NAME" | cut -d'-' -f1)
@@ -67,14 +69,14 @@ jobs:
           # Cria o corpo da PR com a lista de commits
           DESCRIPTION="## Commits\n$COMMITS"
 
-          echo "::set-output name=pr_title::$TITLE"
-          echo "::set-output name=pr_body::$DESCRIPTION"
+          echo "pr_title=$TITLE" >> $GITHUB_ENV
+          echo "pr_body=$DESCRIPTION" >> $GITHUB_ENV
 
       - name: Update PR with title and description
         uses: peter-evans/create-pull-request@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           commit-message: "Auto-generated PR title and description"
-          title: ${{ steps.generate_pr_title.outputs.pr_title }}
-          body: ${{ steps.generate_pr_title.outputs.pr_body }}
-          branch: ${{ steps.get_branch.outputs.branch_name }}
+          title: ${{ env.pr_title }}
+          body: ${{ env.pr_body }}
+          branch: ${{ env.branch_name }}
