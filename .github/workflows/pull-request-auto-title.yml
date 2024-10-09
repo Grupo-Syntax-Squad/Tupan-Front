@@ -12,7 +12,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
         with:
-          fetch-depth: 0 
+          fetch-depth: 0
+
+      - name: Fetch all remote branches
+        run: git fetch --all
 
       - name: Get current branch name
         id: get_branch
@@ -21,7 +24,7 @@ jobs:
       - name: Get all commit messages
         id: get_commits
         run: |
-          # Certifique-se de que a branch correta está sendo referenciada
+          # Certifique-se de que a branch 'main' esteja disponível
           COMMITS=$(git log --pretty=format:"%s" origin/main..HEAD)
           echo "::set-output name=commits::$COMMITS"
 
