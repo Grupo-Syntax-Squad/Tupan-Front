@@ -1,0 +1,88 @@
+name: Auto Generate PR Title and Description
+
+on:
+  pull_request:
+    types: [opened, edited]
+
+jobs:
+  generate-pr:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0  # Garante o histórico completo
+
+      - name: Fetch all remote branches
+        run: git fetch --all  # Isso deve baixar todas as branches
+
+      - name: Fetch the main branch
+        run: git fetch origin main  # Garante que a branch main esteja disponível
+
+      - name: Verify that 'main' branch exists
+        run: |
+          if git show-ref --verify --quiet refs/remotes/origin/main; then
+            echo "Branch 'main' disponível."
+          else
+            echo "Erro: A branch 'main' não foi encontrada."
+            exit 1
+          fi
+
+      - name: Get current branch name
+        id: get_branch
+        run: echo "branch_name=$(git rev-parse --abbrev-ref HEAD)" >> $GITHUB_ENV
+
+      - name: Get all commit messages
+        id: get_commits
+        run: |
+          # Garante que estamos comparando corretamente as revisões entre 'main' e a branch atual
+          COMMITS=$(git log --pretty=format:"%s" origin/main..HEAD)
+          
+          # Substitui caracteres problemáticos (por exemplo, ':' e novos caracteres de linha)
+          SAFE_COMMITS=$(echo "$COMMITS" | tr -d '\n' | sed 's/:/ -/g' | sed 's/[^[:print:]]//g')
+          
+          # Limita o número de commits a um tamanho razoável (opcional)
+          SAFE_COMMITS=$(echo "$SAFE_COMMITS" | head -c 2000)
+
+          echo "commits=${SAFE_COMMITS}" >> $GITHUB_ENV
+
+      - name: Analyze commits and generate PR title/description
+        id: generate_pr_title
+        run: |
+          COMMITS="${{ env.commits }}"
+          BRANCH_NAME="${{ env.branch_name }}"
+
+          # Extrai detalhes da branch
+          TASK_ID=$(echo "$BRANCH_NAME" | cut -d'-' -f1)
+          TAG_TIPO=$(echo "$BRANCH_NAME" | cut -d'-' -f2 | cut -d'/' -f1)
+          DESCRICAO_BRANCH=$(echo "$BRANCH_NAME" | cut -d'/' -f2)
+
+          # Analisa os commits e gera o título com base nos commits
+          if echo "$COMMITS" | grep -q '^func'; then
+              TITLE="Funcionalidade: $DESCRICAO_BRANCH - Task #$TASK_ID"
+          elif echo "$COMMITS" | grep -q '^corr'; then
+              TITLE="Correção: $DESCRICAO_BRANCH - Task #$TASK_ID"
+          elif echo "$COMMITS" | grep -q '^docs'; then
+              TITLE="Documentação: $DESCRICAO_BRANCH - Task #$TASK_ID"
+          elif echo "$COMMITS" | grep -q '^mant'; then
+              TITLE="Manutenção: $DESCRICAO_BRANCH - Task #$TASK_ID"
+          elif echo "$COMMITS" | grep -q '^oper'; then
+              TITLE="Operacional: $DESCRICAO_BRANCH - Task #$TASK_ID"
+          else
+              TITLE="Atualização: $DESCRICAO_BRANCH - Task #$TASK_ID"
+          fi
+
+          # Cria o corpo da PR com a lista de commits
+          DESCRIPTION="## Commits\n$COMMITS"
+          echo "pr_title=${TITLE}" >> $GITHUB_ENV
+          echo "pr_body=${DESCRIPTION}" >> $GITHUB_ENV
+
+      - name: Update PR with title and description
+        uses: peter-evans/create-pull-request@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "Auto-generated PR title and description"
+          title: ${{ env.pr_title }}
+          body: ${{ env.pr_body }}
+          branch: ${{ env.branch_name }}
