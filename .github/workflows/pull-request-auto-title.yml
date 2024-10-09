@@ -25,6 +25,7 @@ jobs:
           COMMITS=$(git log --pretty=format:"%s" "${CURRENT_BRANCH}^..${CURRENT_BRANCH}")
           echo "commits=$COMMITS" >> $GITHUB_ENV
 
+
       - name: Analyze commits and generate PR title/description
         id: generate_pr_title
         run: |
