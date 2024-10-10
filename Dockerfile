@@ -1,10 +1,10 @@
 FROM alpine:latest
 
-# Instalar Python3, pip, git, bash e as dependências necessárias
+# Instalar Python3, pip, git, bash e dependências
 RUN apk --no-cache add python3 py3-pip git bash
 
-# Instalar o pacote requests utilizando --break-system-packages
-RUN pip3 install requests --break-system-packages
+# Instalar o pacote requests
+RUN pip3 install requests
 
 # Copiar o script para o contêiner
 COPY pull-request.py /pull-request.py
