@@ -1,12 +1,13 @@
-# Dockerfile
 FROM alpine:latest
 
-# Update and install dependencies
-RUN apk update && apk --no-cache add python3 py3-pip git bash && \
+# Instalar Python3, pip, git, bash e as dependências necessárias
+RUN apk --no-cache add python3 py3-pip git bash build-base && \
+    python3 -m ensurepip && \
+    pip3 install --upgrade pip && \
     pip3 install requests
 
-# Copy script to the container
+# Copiar o script para o contêiner
 COPY pull-request.py /pull-request.py
 
-# Set default command
+# Definir o ponto de entrada (comando que será executado ao iniciar o contêiner)
 CMD ["python3", "/pull-request.py"]
