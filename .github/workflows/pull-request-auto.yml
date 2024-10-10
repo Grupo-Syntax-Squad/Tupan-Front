@@ -17,6 +17,10 @@ jobs:
         run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
         id: extract_branch
 
+      - name: Build Docker Container
+        run: |
+          docker build -t feature-pull-request .
+        
       - name: pull-request-action
         uses: vsoch/pull-request-action@1.0.18
         env:
@@ -25,51 +29,48 @@ jobs:
           PULL_REQUEST_TITLE: ${{ steps.extract_branch.outputs.branch }}
           PULL_REQUEST_DRAFT: true
           PULL_REQUEST_BODY: |
+            # ISSUE INFORMATION
+
             <!--- Update the GitHub issue below --->
-            ## Que tipo de PR é esse? (marque todos os aplicáveis)
+            Please check the following GitHub issues to find out more about this PR:
+            - https://github.com/andresionek91/LIVE001-Criando-Lambda-Functions-para-Ingerir-Dados-de-APIs/issues/<issue number>
 
-            - [ ] Refatorar
-            - [ ] Funcionalidade
-            - [ ] Correção de bug
-            - [ ] Otimização
-            - [ ] Manutenção de Código
-            - [ ] Documentação
+            # Checklist
+            - [ ] Does the commit messages reference the GitHub issue? (i.e. ISSUE-1/commit message)
+            - [ ] Does the commit message explain the change made?
+            - [ ] Did you deploy to staging/UAT?
+            - [ ] Were the changes approved by the stakeholders?
 
-            ## Descrição
-            
-            ## Tickets e documentos relacionados
-            
-            <!--
-            Para solicitações de pull que se relacionam ou fecham um problema, inclua-as
-            abaixo. Gostamos de seguir [as orientações do Github sobre vincular problemas a solicitações de pull](https://docs.github.com/en/issues/tracking-your-work-with-issues/linking-a-pull-request-to-an-issue).
-            
-            Por exemplo, ter o texto: "Fixes #1234" conectaria a solicitação de pull atual
-            ao problema 1234. E quando mesclarmos a solicitação de pull, o Github fechará
-            automaticamente o problema.
-            -->
-            
-            - Related Issue #
-            - Fixes #
-            
-            ## Instruções de controle de qualidade, capturas de tela, gravações
-            
-            _Substitua esta linha por instruções sobre como testar suas alterações, uma nota
-            sobre os dispositivos e navegadores em que isso foi testado, bem como quaisquer imagens
-            relevantes para alterações de IU._
-            
-            ## Testes adicionados/atualizados?
-            _Nós o encorajamos a manter a porcentagem de cobertura de código em 80% ou mais._
-            
-            - [ ] Sim
-            - [ ] Não, e este é o motivo: _substitua esta linha com detalhes sobre o motivo pelo qual os testes
-            não foram incluídos_
-            - [ ] Preciso de ajuda para escrever testes
+            ## What?
+            <!--- Please describe in detail what this PR does. -->
+            <!--- Add a list of changes if needed -->
 
+            ## Why?
+            <!--- One sentence describing why this is necessary. -->
 
+            ## How?
+            <!--- High level description of implementation. -->
 
+            ## Testing?
+            <!--- Did you write tests? Describe how you tested it. -->
 
+            ## Documentation?
+            <!--- Does this change requires updates to documentation? Please add links to docs if needed. -->
 
+            ## Anything Else?
+            <!--- Add any extra information that might be useful for a reviewer. -->
 
+# Dockerfile used in the action
 
+# Dockerfile
+FROM alpine:latest
 
+# Update and install dependencies
+RUN apk update && apk --no-cache add python3 py3-pip git bash && \
+    pip3 install requests
 
+# Copy script to the container
+COPY pull-request.py /pull-request.py
+
+# Set default command
+CMD ["python3", "/pull-request.py"]
