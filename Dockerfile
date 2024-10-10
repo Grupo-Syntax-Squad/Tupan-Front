@@ -1,10 +1,15 @@
 FROM alpine:latest
 
 # Instalar Python3, pip, git, bash e as dependências necessárias
-RUN apk --no-cache add python3 py3-pip git bash build-base && \
-    python3 -m ensurepip && \
-    pip3 install --upgrade pip && \
-    pip3 install requests
+RUN apk --no-cache add python3 py3-pip git bash
+
+# Criar e ativar um ambiente virtual
+RUN python3 -m venv /env
+ENV PATH="/env/bin:$PATH"
+
+# Instalar o pacote requests no ambiente virtual
+RUN pip install --upgrade pip && \
+    pip install requests
 
 # Copiar o script para o contêiner
 COPY pull-request.py /pull-request.py
