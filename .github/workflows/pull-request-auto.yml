@@ -1,0 +1,75 @@
+name: Create Feature Pull Request
+
+on:
+  push:
+    branches-ignore:
+      - main
+      - develop
+
+jobs:
+  auto-pull-request:
+    name: CreatePullRequest
+    runs-on: ubuntu-latest
+    steps:
+#      - uses: actions/checkout@v2
+      - name: Extract Branch Name
+        shell: bash
+        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+        id: extract_branch
+
+      - name: pull-request-action
+        uses: vsoch/pull-request-action@1.0.18
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PULL_REQUEST_BRANCH: "develop"
+          PULL_REQUEST_TITLE: ${{ steps.extract_branch.outputs.branch }}
+          PULL_REQUEST_DRAFT: true
+          PULL_REQUEST_BODY: |
+            <!--- Update the GitHub issue below --->
+            ## Que tipo de PR é esse? (marque todos os aplicáveis)
+
+            - [ ] Refatorar
+            - [ ] Funcionalidade
+            - [ ] Correção de bug
+            - [ ] Otimização
+            - [ ] Manutenção de Código
+            - [ ] Documentação
+
+            ## Descrição
+            
+            ## Tickets e documentos relacionados
+            
+            <!--
+            Para solicitações de pull que se relacionam ou fecham um problema, inclua-as
+            abaixo. Gostamos de seguir [as orientações do Github sobre vincular problemas a solicitações de pull](https://docs.github.com/en/issues/tracking-your-work-with-issues/linking-a-pull-request-to-an-issue).
+            
+            Por exemplo, ter o texto: "Fixes #1234" conectaria a solicitação de pull atual
+            ao problema 1234. E quando mesclarmos a solicitação de pull, o Github fechará
+            automaticamente o problema.
+            -->
+            
+            - Related Issue #
+            - Fixes #
+            
+            ## Instruções de controle de qualidade, capturas de tela, gravações
+            
+            _Substitua esta linha por instruções sobre como testar suas alterações, uma nota
+            sobre os dispositivos e navegadores em que isso foi testado, bem como quaisquer imagens
+            relevantes para alterações de IU._
+            
+            ## Testes adicionados/atualizados?
+            _Nós o encorajamos a manter a porcentagem de cobertura de código em 80% ou mais._
+            
+            - [ ] Sim
+            - [ ] Não, e este é o motivo: _substitua esta linha com detalhes sobre o motivo pelo qual os testes
+            não foram incluídos_
+            - [ ] Preciso de ajuda para escrever testes
+
+
+
+
+
+
+
+
+
