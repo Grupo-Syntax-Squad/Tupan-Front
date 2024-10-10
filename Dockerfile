@@ -4,9 +4,10 @@ FROM alpine:latest
 RUN apk --no-cache add python3 py3-pip git bash
 
 # Criar e ativar um ambiente virtual, e instalar o pacote requests
-RUN python3 -m venv /venv && \
-    . /venv/bin/activate && \
-    pip install requests
+RUN python3 -m venv /venv
+
+# Instalar requests no ambiente virtual
+RUN /venv/bin/pip install requests
 
 # Copiar o script para o contêiner
 COPY pull-request.py /pull-request.py
