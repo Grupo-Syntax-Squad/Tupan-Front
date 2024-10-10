@@ -1,0 +1,32 @@
+# Extrair o nome da branch atual
+BRANCH_NAME=$(git rev-parse --abbrev-ref HEAD)
+
+# Separar o id da task e a tag do tipo da branch
+TASK_ID=$(echo "$BRANCH_NAME" | cut -d'-' -f1)
+TAG_TIPO=$(echo "$BRANCH_NAME" | cut -d'-' -f2 | cut -d'/' -f1)
+DESCRICAO_BRANCH=$(echo "$BRANCH_NAME" | cut -d'/' -f2)
+
+# Pegar todos os commits da branch
+COMMITS=$(git log --pretty=%B origin/main..HEAD)
+
+# Analisar os commits e definir o título baseado nas tags
+TITLE_PREFIX=""
+if echo "$COMMITS" | grep -q '^func'; then
+    TITLE_PREFIX="Funcionalidade"
+elif echo "$COMMITS" | grep -q '^corr'; then
+    TITLE_PREFIX="Correção"
+elif echo "$COMMITS" | grep -q '^docs'; then
+    TITLE_PREFIX="Documentação"
+elif echo "$COMMITS" | grep -q '^mant'; then
+    TITLE_PREFIX="Manutenção"
+elif echo "$COMMITS" | grep -q '^oper'; then
+    TITLE_PREFIX="Operacional"
+else
+    TITLE_PREFIX="Atualização"
+fi
+
+# Montar o título do Pull Request
+TITLE="$TITLE_PREFIX: $DESCRICAO_BRANCH - Task #$TASK_ID"
+
+# Inserir o título gerado no template de Pull Request
+echo -e "## Título sugerido\n$TITLE\n\n## Commits\n$COMMITS\n" > .github/PULL_REQUEST_TEMPLATE.md
