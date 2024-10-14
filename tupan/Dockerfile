@@ -26,3 +26,5 @@ COPY . .
 EXPOSE 3000
 ENV PORT 3000
 CMD npm run dev
+
+#alterar para prod quando não estiver dando mais erros no build
