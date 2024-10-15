@@ -9,7 +9,7 @@ on:
 env:
   DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
   DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
-  AWS_PRIVATE_KEY: ${{ secrets.AWS_PRIVATE_KEY }}
+  AWS_PRIVATE_KEY: ${{ secrets.KEYAWS }}
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -43,7 +43,7 @@ jobs:
         password: ${{ env.DOCKERHUB_TOKEN }}
     - name: Set permissions for private key
       run: |
-        echo "${{ env.AWS_PRIVATE_KEY }}" > key.pem
+        echo "${{ env.KEYAWS }}" > key.pem
         chmod 600 key.pem
     - name: Pull Docker image
       run: |
