@@ -3,7 +3,7 @@
 import { Input } from '@/components/input';
 import { useFormularioParametros } from '@/hooks/formulario';
 import { FormularioProps } from '@/types/interfaces';
-import { PopConfirmacao } from '@/components/pop-confirmacao';
+import { PopConfirmacao } from '@/components/alert-confirmacao';
 import { Select } from './select';
 import { useCreateParametro } from '@/hooks/adicionarParametro';
 import { Botao } from './botao';
