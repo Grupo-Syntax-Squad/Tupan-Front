@@ -1,12 +1,12 @@
 'use client';
 
-import { Input } from '@/components/input';
+import { Input } from '@/components/input/input';
 import { useFormularioParametros } from '@/hooks/formulario';
 import { FormularioProps } from '@/types/interfaces';
-import { PopConfirmacao } from '@/components/alert-confirmacao';
-import { Select } from './select';
-import { useCreateParametro } from '@/hooks/adicionarParametro';
-import { Botao } from './botao';
+import { PopConfirmacao } from '@/components/alertas/confirmacao';
+import { Select } from '../../select/select';
+import { useCreateParametro } from '@/hooks/parametros/adicionarParametro';
+import { Botao } from '../../botao/botao';
 import { usePopConfirmacao } from '@/hooks/visivel';
 
 export const Formulario = ({ onSubmit, dados }: FormularioProps) => {

@@ -2,16 +2,16 @@
 
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { Input } from '@/components/input';
-import { Select } from '@/components/select';
+import { Input } from '@/components/input/input';
+import { Select } from '@/components/select/select';
 import { FormularioProps } from '@/types/interfaces';
-import { Toggle } from './toggle';
-import { Botao } from './botao';
+import { Toggle } from '../../input/toggle';
+import { Botao } from '../../botao/botao';
 import { useEditable } from '@/hooks/editar';
-import { useUpdateParametro } from '@/hooks/atualizarParametro';
-import { useGetParametroById } from '@/hooks/receberParametro';
+import { useUpdateParametro } from '@/hooks/parametros/atualizarParametro';
+import { useGetParametroById } from '@/hooks/parametros/receberParametro';
 import { useFormularioParametros } from '@/hooks/formulario';
-import { useDeleteParametro } from '@/hooks/deletarParametro';
+import { useDeleteParametro } from '@/hooks/parametros/deletarParametro';
 
 export const FormularioAtualizacaoParametros = ({
   onSubmit,  initialStatus, nomeFormulario, showPopConfirmacao }:

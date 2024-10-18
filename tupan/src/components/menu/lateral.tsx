@@ -3,7 +3,7 @@
 import { MenuLateralProps } from "@/types/interfaces";
 import Link from "next/link";
 import Image from "next/image";
-import { LogoTupan } from "../../public/export";
+import { LogoTupan } from "../../../public/export";
 
 export const MenuLateral = ({ menuData }: MenuLateralProps) => {
   return (

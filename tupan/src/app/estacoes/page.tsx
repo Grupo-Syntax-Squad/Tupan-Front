@@ -1,10 +1,10 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { MenuLateral } from '@/components/menu-lateral';
+import { MenuLateral } from '@/components/menu/lateral';
 import { NavTop } from '@/components/nav-top';
 import Link from 'next/link';
-import { Botao } from '@/components/botao';
+import { Botao } from '@/components/botao/botao';
 import dynamic from 'next/dynamic';
 
 export default function Estacoes() {

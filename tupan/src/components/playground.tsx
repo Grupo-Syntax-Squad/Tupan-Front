@@ -2,9 +2,9 @@
 
 import Image from 'next/image';
 import { useState, useEffect } from 'react';
-import { Select } from './select';
-import { Input } from './input';
-import { Botao } from './botao';
+import { Select } from './select/select';
+import { Input } from './input/input';
+import { Botao } from './botao/botao';
 import {
   useEquipamento,
   useCalculoEquipamento,
