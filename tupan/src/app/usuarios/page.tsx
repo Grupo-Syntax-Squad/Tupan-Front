@@ -8,7 +8,6 @@ import Link from 'next/link';
 import axios from 'axios';
 
 const Usuarios: React.FC = () => {
-
   const [usuarios, setUsuarios] = useState<any[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [token, setToken] = useState<string | null>(null);
@@ -16,15 +15,12 @@ const Usuarios: React.FC = () => {
   // Função para buscar os usuários
   const fetchUsuarios = (token: string) => {
     axios
-
       .get("http://localhost:8000/usuarios/", {
-
         headers: {
           Authorization: `Token ${token}`,
         },
       })
       .then((response) => {
-
         setUsuarios(response.data);
         setError(null); // Limpa os erros
       })
@@ -73,6 +69,11 @@ const Usuarios: React.FC = () => {
     { nome: "Logout", path: "/logout", icone: "bx bx-log-out" },
   ];
 
+  const handleViewDetails = (id: number) => {
+    localStorage.setItem("id", String(id)); // Armazena o ID no localStorage
+    console.log("ID armazenado com sucesso:", id);
+  };
+
   return (
     <div className="w-screen flex bg-gray-100">
       <div className="w-fit pr-4 min-h-screen">
@@ -90,9 +91,7 @@ const Usuarios: React.FC = () => {
               <table className="w-full bg-white shadow-lg rounded-lg overflow-hidden">
                 <thead className="text-white" style={{ backgroundColor: "#4e00a9" }}>
                   <tr>
-
                     <th className="p-4 text-center">ID</th>
-
                     <th className="p-4 text-center">Email</th>
                     <th className="p-4 text-center">Data de criação</th>
                     <th className="p-4 text-center">Data de atualização</th>
@@ -102,14 +101,13 @@ const Usuarios: React.FC = () => {
                 <tbody>
                   {usuarios.map((usuario: any) => (
                     <tr key={usuario.id} className="text-center border-b">
-
                       <td className="p-3">{usuario.id}</td>
                       <td className="p-3">{usuario.email}</td>
                       <td className="p-3">{usuario.criacao}</td>
                       <td className="p-3">{usuario.alterado}</td>
                       <td className="p-3">
                         <div className="flex items-end space-x-5 justify-items-end">
-                          <Link href={`/usuarios/${usuario.id}`} className="flex-col">
+                          <Link href={`/visualizar-usuario/`} onClick={() => handleViewDetails(usuario.id)} className="flex-col">
                             <Botao
                               type="button"
                               corTexto="text-white"
@@ -117,8 +115,7 @@ const Usuarios: React.FC = () => {
                               label={`ver Detalhes`}
                             />
                           </Link>
-    
-                      
+
                           <Botao
                             type="button"
                             corTexto="text-white"
@@ -137,14 +134,14 @@ const Usuarios: React.FC = () => {
             )}
           </div>
           <div className="space-x-20"> 
-                <Link href="/cadastro-usuario" className="flex-col m-5">
-                  <Botao
-                    type="button"
-                    corTexto="text-black"
-                    corFundo="bg-green-300"
-                    label="Cadastrar Usuario"
-                  />
-                </Link>
+            <Link href="/cadastro-usuario" className="flex-col m-5">
+              <Botao
+                type="button"
+                corTexto="text-black"
+                corFundo="bg-green-300"
+                label="Cadastrar Usuario"
+              />
+            </Link>
           </div>
         </div>
       </div>
