@@ -12,7 +12,7 @@ env:
   AWS_PRIVATE_KEY: ${{ secrets.KEYAWS }}
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -32,7 +32,7 @@ jobs:
           tags: iagocpv/tupan-front:latest
   deploy:
     needs: build
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
@@ -43,15 +43,15 @@ jobs:
         password: ${{ env.DOCKERHUB_TOKEN }}
     - name: Set permissions for private key
       run: |
-        echo "${{ env.KEYAWS }}" > ryan-key-teste-prod1.pem
-        chmod 600 ryan-key-teste-prod1.pem
+        echo "${{ env.KEYAWS }}" > key.pem
+        chmod 600 key.pem
     - name: Pull Docker image
       run: |
-        ssh -o StrictHostKeyChecking=no -i ryan-key-teste-prod1.pem ubuntu@98.80.44.121 -vvv 'sudo docker pull iagocpv/tupan-front:latest'
+        ssh -o StrictHostKeyChecking=no -i key.pem ubuntu@98.80.44.121 -vvv 'sudo docker pull iagocpv/tupan-front:latest'
     - name: Stop running container
       run: |
-        ssh -o StrictHostKeyChecking=no -i ryan-key-teste-prod1.pem ubuntu@98.80.44.121 -vvv 'sudo docker stop tupan-front || true'
-        ssh -o StrictHostKeyChecking=no -i ryan-key-teste-prod1.pem ubuntu@98.80.44.121 -vvv 'sudo docker rm tupan-front || true'
+        ssh -o StrictHostKeyChecking=no -i key.pem ubuntu@98.80.44.121 -vvv 'sudo docker stop tupan-front || true'
+        ssh -o StrictHostKeyChecking=no -i key.pem ubuntu@98.80.44.121 -vvv 'sudo docker rm tupan-front || true'
     - name: Run new container
       run: |
-        ssh -o StrictHostKeyChecking=no -i ryan-key-teste-prod1.pem ubuntu@98.80.44.121 -vvv 'sudo docker run -d --name tupan-front -p 80:3000 iagocpv/tupan-front:latest'
+        ssh -o StrictHostKeyChecking=no -i key.pem ubuntu@98.80.44.121 -vvv 'sudo docker run -d --name tupan-front -p 80:3000 iagocpv/tupan-front:latest'
