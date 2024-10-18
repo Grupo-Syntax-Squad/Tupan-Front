@@ -1,13 +1,8 @@
 'use client';
 
-import { MenuLateral } from '@/components/menu-lateral';
+import { MenuLateral } from '@/components/menu/lateral';
 import { NavTop } from '@/components/nav-top';
-import GraficoPrincipal from '@/components/graficos/barra';
-import dynamic from 'next/dynamic';
-
-const Mapa = dynamic(() => import('../../components/mapa/index'), {
-  ssr: false,
-});
+import {LineChart, BarChart, ColumnChart} from '@/components/graficos/export';
 
 const menuData = [
   { nome: 'Estações', path: '/estacoes', icone: 'bx bx-home' },
@@ -21,29 +16,31 @@ const menuData = [
 export default function Inicial () {
   return (
     <div className="w-screen flex bg-gray-100">
-      {/* Menu lateral ocupando a lateral esquerda */}
+
       <div className="w-fit pr-4 min-h-screen">
+
         <MenuLateral menuData={menuData} />
+
       </div>
 
-      {/* Conteúdo principal ocupando o resto da tela */}
       <div className="w-full flex flex-col gap-4">
-        {/* Barra superior ocupando a parte superior da tela */}
+
         <NavTop nome="Página Inicial" path="Inicial" />
 
-        <section className="flex p-4 m-4 rounded">
-
-          <Mapa lat={51.505} lng={-0.09} zoom={13} />
-
-        </section>
         <section className="flex p-3 m-4 rounded">
 
-        <GraficoPrincipal
-            titulo="Exemplo gráfico temperatura"
-            legenda="Fatec Prof. Jessen Vidal"
-          />
+          <LineChart titulo="Exemplo gráfico temperatura" id='line' legenda="Fatec Prof. Jessen Vidal" />
 
         </section>
+
+        <section className="grid grid-cols-3 p-3 m-4 rounded">
+
+          <BarChart titulo="Exemplo gráfico temperatura" id='bar' legenda="Fatec Prof. Jessen Vidal" />
+
+          <ColumnChart titulo="Exemplo gráfico temperatura" id='col' legenda="Fatec Prof. Jessen Vidal" />
+
+        </section>
+
       </div>
     </div>
   );

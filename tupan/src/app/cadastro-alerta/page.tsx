@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { MenuLateral } from "@/components/menu-lateral";
+import { MenuLateral } from "@/components/menu/lateral";
 import { NavTop } from "@/components/nav-top";
 import axios from "axios";
 
