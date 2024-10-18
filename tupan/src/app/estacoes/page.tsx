@@ -5,163 +5,33 @@ import { MenuLateral } from '@/components/menu/lateral';
 import { NavTop } from '@/components/nav-top';
 import Link from 'next/link';
 import { Botao } from '@/components/botao/botao';
-import dynamic from 'next/dynamic';
+import { useGetEstacoes } from '@/hooks/receberEstacao';
+
+const menuData = [
+  { nome: 'Estações', path: '/estacoes', icone: 'bx bx-home' },
+  { nome: 'Parâmetros', path: '/parametros', icone: 'bx bxs-thermometer' },
+  { nome: 'Alertas', path: '/alertas', icone: 'bx bx-alarm-exclamation' },
+  { nome: 'Usuários', path: '/usuarios', icone: 'bx bx-user' },
+  { nome: 'Educacional', path: '/educacional', icone: 'bx bx-book' },
+  { nome: 'Logout', path: '/', icone: 'bx bx-log-out' },
+];
+
+const colunas = [
+  { label: 'estacao', acessor: 'nome' },
+  { label: 'Data de Criação', acessor: 'date' },
+  { label: 'Status', acessor: 'status' },
+];
+
 
 export default function Estacoes() {
-  const [estacoes, setEstacoes] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [showModal, setShowModal] = useState(false);
-  const [selectedEstacao, setSelectedEstacao] = useState(null);
+  const { estacoes, loading, error, refetch } = useGetEstacoes();
 
-  interface Estacao {
-    id: number;
-    nome: string;
-    temperatura: number;
-    umidade: number;
-    vento: number;
-    chuva: number;
-    topico: string;
-    criado: string;
-    modificado: string;
-    ativo: boolean;
-  }
 
-  useEffect(() => {
-    const fetchEstacoes = async () => {
-      try {
-        const response = await fetch('http://127.0.0.1:8000/estacoes', {
-          method: 'GET',
-          headers: {
-            Authorization: `Token 1112a98d58500b7a165191fc56b2a9c1513413e8`,
-            'Content-Type': 'application/json',
-          },
-        });
-
-        if (!response.ok) {
-          throw new Error('Erro ao buscar estações');
-        }
-
-        const data = await response.json();
-        if (Array.isArray(data)) {
-          setEstacoes(data);
-        } else {
-          console.error('A resposta não é um array:', data);
-        }
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchEstacoes();
-  }, []);
-
-  const openModal = (estacao: Estacao) => {
-    setSelectedEstacao(estacao);
-    setShowModal(true);
-  };
-
-  const closeModal = () => {
-    setShowModal(false);
-    setSelectedEstacao(null);
-  };
-
-  const toggleAtivo = async (id: number, ativo: boolean) => {
-    const confirmed = window.confirm(
-      `Tem certeza que deseja ${ativo ? 'desativar' : 'ativar'} esta estação?`
-    );
-    if (!confirmed) return;
-
-    try {
-      const estacaoAtual = estacoes.find((estacao) => estacao.id === id);
-
-      const body = JSON.stringify({
-        ativo: !ativo,
-        nome: estacaoAtual.nome,
-        endereco: estacaoAtual.endereco,
-        topico: estacaoAtual.topico,
-      });
-
-      const response = await fetch(`http://127.0.0.1:8000/estacoes/${id}`, {
-        method: 'PUT',
-        headers: {
-          Authorization: `Token 1112a98d58500b7a165191fc56b2a9c1513413e8`,
-          'Content-Type': 'application/json',
-        },
-        body,
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(
-          `Erro ao atualizar a estação: ${errorData.detail || response.statusText}`
-        );
-      }
-
-      setEstacoes((prevEstacoes) =>
-        prevEstacoes.map((estacao) =>
-          estacao.id === id ? { ...estacao, ativo: !ativo } : estacao
-        )
-      );
-
-      alert(`Estação ${ativo ? 'desativada' : 'ativada'} com sucesso!`);
-    } catch (error) {
-      console.error('Erro ao atualizar a estação:', error);
-      alert('Falha ao atualizar a estação.');
-    }
-  };
-
-  const Mapa = dynamic(() => import('../../components/mapa/index'), {
-    ssr: false,
-  });
-
-  const updateEstacao = async () => {
-    if (!selectedEstacao) return;
-
-    try {
-      const response = await fetch(`http://127.0.0.1:8000/estacoes/${selectedEstacao.id}`, {
-        method: 'PUT',
-        headers: {
-          Authorization: `Token 1112a98d58500b7a165191fc56b2a9c1513413e8`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(selectedEstacao),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(
-          `Erro ao atualizar a estação: ${errorData.detail || response.statusText}`
-        );
-      }
-
-      setEstacoes((prevEstacoes) =>
-        prevEstacoes.map((estacao) =>
-          estacao.id === selectedEstacao.id ? selectedEstacao : estacao
-        )
-      );
-
-      alert('Estação atualizada com sucesso!');
-      closeModal();
-    } catch (error) {
-      console.error('Erro ao atualizar a estação:', error);
-      alert('Falha ao atualizar a estação.');
-    }
-  };
-
-  const menuData = [
-    { nome: 'Estações', path: '/estacoes', icone: 'bx bx-home' },
-    { nome: 'Parâmetros', path: '/parametros', icone: 'bx bxs-thermometer' },
-    { nome: 'Alertas', path: '/alertas', icone: 'bx bx-alarm-exclamation' },
-    { nome: 'Usuários', path: '/usuarios', icone: 'bx bx-user' },
-    { nome: 'Educacional', path: '/educacional', icone: 'bx bx-book' },
-    { nome: 'Logout', path: '/', icone: 'bx bx-log-out' },
-  ];
-
-  if (loading) {
-    return <div>Carregando...</div>;
-  }
+  const dados = estacoes.map((estacao) => ({
+    nome: estacao.nome,
+    date: new Date(estacao.criado).toLocaleDateString(),
+    status: 'Ativado', 
+  }));
 
   return (
     <div className="flex">
@@ -180,10 +50,7 @@ export default function Estacoes() {
             <span>Estações</span>
           </h1>
 
-          <Mapa lat={51.505} lng={-0.09} zoom={13} />
-
-
-          {estacoes.length === 0 ? (
+          {estacoes.length === 0 && !loading && !error ? (
             <>
               <div className="flex justify-center p-5">
                 <p className="text-xl">Nenhuma estação cadastrada</p>
