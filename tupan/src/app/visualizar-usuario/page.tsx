@@ -4,7 +4,7 @@ import axios from 'axios';
 import { MenuLateral } from "@/components/menu-lateral";
 import { NavTop } from "@/components/nav-top";
 import { Botao } from "@/components/botao";
-import { formatadorData }
+import FormatadorData from "@/components/formatadorData";
 import React, { useState, useEffect } from "react";
 
 const VisualizarUsuarios: React.FC = () => {
@@ -110,11 +110,13 @@ const VisualizarUsuarios: React.FC = () => {
                         id="data-atualizacao"
                         name="data-atualizacao"
                         type="text"
-                        value={<FormatadorData dateString={usuario.alterado} />}
+                        value={usuario.alterado ? new Date(usuario.alterado).toLocaleDateString() : ""}
                         className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
                         readOnly
                       />
                     </div>
+
+
                     <div>
                       <label htmlFor="ID" className="block text-sm font-medium text-gray-700">
                         ID
@@ -129,18 +131,20 @@ const VisualizarUsuarios: React.FC = () => {
                       />
                     </div>
                     <div>
-                      <label htmlFor="data-criacao" className="block text-sm font-medium text-gray-700">
-                        Data criação
+                      <label htmlFor="data-atualizacao" className="block text-sm font-medium text-gray-700">
+                        Data de criação
                       </label>
                       <input
                         id="data-criacao"
                         name="data-criacao"
                         type="text"
-                        value={<FormatadorData dateString={usuario.criacao} />}
-                        className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+                        value={usuario.criacao ? new Date(usuario.criacao).toLocaleDateString() : ""} 
+                        className="mt-1 mb-5 w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
                         readOnly
                       />
+
                     </div>
+
 
                     <Botao
                       type="button"
