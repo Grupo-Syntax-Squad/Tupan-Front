@@ -1,18 +1,21 @@
 import { api_route } from "..";
 
-interface Estacao {
+interface Endereco {
   id: number;
-  nome: string;
-  topico:string,
-  ativo:boolean,
-  criado: string;
-  modificado: string;
-  endereco_id: number;
+  logradouro: string;
+  bairro: string;
+  cidade: string;
+  estado: string;
+  numero: number;
+  complemento: string;
+  cep: string;
+  latitude: number;
+  longitude: number;
 }
 
-export const obterEstacoes = async (): Promise<Estacao[]> => {
+export const obterEnderecos = async (): Promise<Endereco[]> => {
   try {
-    const response = await fetch(`${api_route}estacoes`, {
+    const response = await fetch(`${api_route}enderecos`, {
       method: "GET",
       headers: {
         "Authorization": `Token 2948c11eaf985f44737d8fa84db99846e8197fae`,
@@ -21,20 +24,20 @@ export const obterEstacoes = async (): Promise<Estacao[]> => {
     });
 
     if (!response.ok) {
-      throw new Error(`Erro ao obter estacções: ${response.statusText}`);
+      throw new Error(`Erro ao obter endereços: ${response.statusText}`);
     }
 
     const data = await response.json();
-    return data as Estacao[];
+    return data as Endereco[];
   } catch (error) {
     console.error("Erro na requisição:", error);
     throw error;
   }
 };
 
-export const obterEstacaoPorId = async (id: number): Promise<Estacao> => {
+export const obterEnderecoPorId = async (id: number): Promise<Endereco> => {
   try {
-    const response = await fetch(`${api_route}estacoes/${id}`, {
+    const response = await fetch(`${api_route}enderecos/${id}`, {
       method: "GET",
       headers: {
         "Authorization": `Token 2948c11eaf985f44737d8fa84db99846e8197fae`,
@@ -43,11 +46,11 @@ export const obterEstacaoPorId = async (id: number): Promise<Estacao> => {
     });
     
     if (!response.ok) {
-      throw new Error(`Erro ao obter estação: ${response.statusText}`);
+      throw new Error(`Erro ao obter endereço: ${response.statusText}`);
     }
 
     const data = await response.json();
-    return data as Estacao;
+    return data as Endereco;
   } catch (error) {
     console.error("Erro na requisição:", error);
     throw error;

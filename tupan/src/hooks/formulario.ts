@@ -37,3 +37,46 @@ export const useFormularioParametros = (dados?: Record<string, unknown>) => {
     setFormValues, 
   };
 };
+
+export const useFormularioEstacoes = (dados?: Record<string, unknown>) => {
+  const [formValues, setFormValues] = useState({
+    nome: "",
+    topico: "",
+    ativo: "",
+    logradouro: "",
+    bairro: "",
+    cidade: "",
+    estado: "",
+    numero: "",
+    complemento: "",
+    cep: "",
+    latitude: "",
+    longitude: ""
+  });
+
+  useEffect(() => {
+    if (dados) {
+      setFormValues((prevValues) => ({
+        ...prevValues,
+        ...dados, 
+      }));
+    }
+  }, [dados]);
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { id, value } = e.target;
+    setFormValues((prevValues) => ({
+      ...prevValues,
+      [id]: value,
+    }));
+  };
+
+  return {
+    formValues,
+    handleChange,
+    setFormValues, 
+  };
+};
+

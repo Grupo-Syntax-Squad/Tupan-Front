@@ -1,8 +1,8 @@
 import { api_route } from '..';
 
-export const deletarParametro = async (id: number): Promise<void> => {
+export const deletarEstacao = async (id: number): Promise<void> => {
   try {
-    const response = await fetch(`${api_route}/parametros/${id}`, {
+    const response = await fetch(`${api_route}/estacoes/${id}`, {
       method: 'DELETE',
       headers: {
         'Authorization': `Token 2948c11eaf985f44737d8fa84db99846e8197fae`,
@@ -11,10 +11,10 @@ export const deletarParametro = async (id: number): Promise<void> => {
     });
 
     if (!response.ok) {
-      throw new Error(`Erro ao deletar o parâmetro: ${response.statusText}`);
+      throw new Error(`Erro ao deletar a estação: ${response.statusText}`);
     }
 
-    console.log('Parâmetro deletado com sucesso');
+    console.log('Estação deletada com sucesso');
   } catch (error) {
     console.error('Erro na requisição:', error);
     throw error;

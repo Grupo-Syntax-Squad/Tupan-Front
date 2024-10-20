@@ -16,7 +16,7 @@ export const obterParametros = async (): Promise<Parametro[]> => {
     const response = await fetch(`${api_route}parametros`, {
       method: "GET",
       headers: {
-        "Authorization": `Token 1112a98d58500b7a165191fc56b2a9c1513413e8`,
+        "Authorization": `Token 2948c11eaf985f44737d8fa84db99846e8197fae`,
         "Content-Type": "application/json",
       },
     });
