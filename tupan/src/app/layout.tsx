@@ -10,17 +10,14 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+  children,}: Readonly<{children: React.ReactNode;}>) {
   return (
     <html lang="pt-br">
 
       <body>
 
         <ContextoDinamicoProvider>
-          {children} {/* Todos os componentes filhos terão acesso ao contexto */}
+          {children} 
         </ContextoDinamicoProvider>
       </body>
     </html>

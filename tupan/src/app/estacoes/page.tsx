@@ -1,10 +1,11 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { MenuLateral } from '@/components/menu-lateral';
+import { MenuLateral } from '@/components/menu/lateral';
 import { NavTop } from '@/components/nav-top';
 import Link from 'next/link';
-import { Botao } from '@/components/botao';
+import { Botao } from '@/components/botao/botao';
+import dynamic from 'next/dynamic';
 
 export default function Estacoes() {
   const [estacoes, setEstacoes] = useState([]);
@@ -111,6 +112,10 @@ export default function Estacoes() {
     }
   };
 
+  const Mapa = dynamic(() => import('../../components/mapa/index'), {
+    ssr: false,
+  });
+
   const updateEstacao = async () => {
     if (!selectedEstacao) return;
 
@@ -170,9 +175,13 @@ export default function Estacoes() {
         <NavTop nome="Usuário" path="Estações" />
 
         <section className="mx-auto w-full p-10 bg-white shadow-lg rounded-lg">
-          <h1 className="flex justify-center text-2xl">
+
+          <h1 className="flex justify-start text-2xl">
             <span>Estações</span>
           </h1>
+
+          <Mapa lat={51.505} lng={-0.09} zoom={13} />
+
 
           {estacoes.length === 0 ? (
             <>

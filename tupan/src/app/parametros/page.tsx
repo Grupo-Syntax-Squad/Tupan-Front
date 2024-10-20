@@ -1,9 +1,9 @@
 'use client';
-import { MenuLateral } from '@/components/menu-lateral';
-import { Tabela } from '@/components/tabela';
-import { Formulario } from '@/components/formulario-parametros';
+import { MenuLateral } from '@/components/menu/lateral';
+import { Tabela } from '@/components/tabela/tabela-parametros';
+import { Formulario } from '@/components/formularios/parametros/formulario-parametros';
 import { NavTop } from '@/components/nav-top';
-import { useGetParametros } from '@/hooks/receberParametro';
+import { useGetParametros } from '@/hooks/parametros/receberParametro';
 
 const menuData = [
 

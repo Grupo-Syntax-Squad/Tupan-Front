@@ -1,6 +1,6 @@
 "use client";
 
-import { MenuLateral } from "@/components/menu-lateral";
+import { MenuLateral } from "@/components/menu/lateral";
 import { NavTop } from "@/components/nav-top";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
