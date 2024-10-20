@@ -8,6 +8,10 @@ import { Formulario } from '@/components/formulario-estacoes';
 import Link from 'next/link';
 import { Botao } from '@/components/botao/botao';
 import { useGetEstacoes } from '@/hooks/receberEstacao';
+import { Pie } from 'react-chartjs-2';
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
+
+ChartJS.register(ArcElement, Tooltip, Legend);
 
 const menuData = [
   { nome: 'Estações', path: '/estacoes', icone: 'bx bx-home' },
@@ -22,12 +26,26 @@ const colunas = [
   { label: 'estacao', acessor: 'nome' },
   { label: 'Data de Criação', acessor: 'date' },
   { label: 'Status', acessor: 'status' },
-  { label: 'Topico', acessor: 'topico' },
 ];
 
 export default function Estacoes() {
+  const { estacoes, loading, error, refetch } = useGetEstacoes();
+  
+  // Estado para gerenciar o modal e a estação selecionada
   const [showModal, setShowModal] = useState(false);
   const [selectedEstacao, setSelectedEstacao] = useState(null);
+  const [contagemAtivas, setContagemAtivas] = useState(0);
+  const [contagemInativas, setContagemInativas] = useState(0);
+
+  useEffect(() => {
+    if (estacoes.length) {
+      const ativas = estacoes.filter((estacao) => estacao.ativo).length;
+      const inativas = estacoes.length - ativas;
+
+      setContagemAtivas(ativas);
+      setContagemInativas(inativas);
+    }
+  }, [estacoes]);
 
   const openModal = (estacao) => {
     setSelectedEstacao(estacao);
@@ -39,29 +57,16 @@ export default function Estacoes() {
     setShowModal(false);
   };
 
-  const updateEstacao = () => {
-    // Adicione a lógica de atualização da estação aqui
-    // Por exemplo, uma chamada API para atualizar a estação no backend
-    console.log("Estação atualizada:", selectedEstacao);
-    closeModal();
-  };
-
-  const toggleAtivo = (id, status) => {
-    // Adicione a lógica de ativar/desativar estação aqui
-    console.log(`Toggling ativo para estação com ID ${id}, status: ${status}`);
+  const toggleAtivo = (id, currentStatus) => {
+    // Lógica para ativar/desativar a estação
+    console.log(`Toggling status of station with ID ${id} to ${!currentStatus}`);
   };
 
   const dados = estacoes.map((estacao) => ({
     nome: estacao.nome,
-    topico: estacao.topico,
     date: new Date(estacao.criado).toLocaleDateString(),
-    status: 'Ativado', 
-    endereco_id: estacao.endereco_id
+    status: 'Ativado',
   }));
-
-  const handleSubmit = () => {
-    refetch();
-  };
 
   return (
     <div className="flex">
@@ -74,31 +79,95 @@ export default function Estacoes() {
 
         <div className="flex gap-4">
 
-          {loading && <p>Loading...</p>}
-          {error && <p>Error: {error}</p>}
           {estacoes.length === 0 && !loading && !error ? (
             <>
-              <div className="w-full">
-                <p className="text-center">Nenhuma estação cadastrada</p>
-                <Formulario onSubmit={handleSubmit} dados={{}} initialStatus={true} />
+              <div className="flex justify-center p-5">
+                <p className="text-xl">Nenhuma estação cadastrada</p>
               </div>
-              
+              <div className="flex-col">
+                <Link href="/cadastro-estacoes" className="flex-col">
+                  <Botao
+                    type="button"
+                    corTexto="text-black"
+                    corFundo="bg-gray-300"
+                    label="Cadastrar Estação"
+                  />
+                </Link>
+              </div>
             </>
           ) : (
-            <>
-            <div className="w-1/2">
-                <Tabela colunas={colunas} dados={dados} />
-            </div>
-
-            <div className="flex-1">
-                <Formulario onSubmit={handleSubmit} dados={{}} initialStatus={true} />
-              </div>
-            
-      
-            </>)}
+            <table className="min-w-full border-collapse border border-gray-300">
+              <thead className="bg-green-500 text-white">
+                <tr>
+                  <th className="py-3 px-4 border-b text-left">Id</th>
+                  <th className="py-3 px-4 border-b text-left">Nome</th>
+                  <th className="py-3 px-4 border-b text-left">Tópico</th>
+                  <th className="py-3 px-4 border-b text-left">
+                    Data de criação
+                  </th>
+                  <th className="py-3 px-4 border-b text-left">
+                    Data de atualização
+                  </th>
+                  <th className="py-3 px-4 border-b text-left">Ativo</th>
+                  <th className="py-3 px-4 border-b text-left"></th>
+                </tr>
+              </thead>
+              <tbody>
+                {estacoes
+                  .sort((a, b) => a.id - b.id)
+                  .map((estacao) => (
+                    <tr
+                      key={estacao.id}
+                      className="hover:bg-gray-100"
+                      onClick={() => openModal(estacao)}
+                    >
+                      <td className="py-3 px-4 border-b font-bold">
+                        {estacao.id}
+                      </td>
+                      <td className="py-3 px-4 border-b">{estacao.nome}</td>
+                      <td className="py-3 px-4 border-b">{estacao.topico}</td>
+                      <td className="py-3 px-4 border-b">
+                        {new Date(estacao.criado).toLocaleDateString('pt-BR')}
+                      </td>
+                      <td className="py-3 px-4 border-b">
+                        {new Date(estacao.modificado).toLocaleDateString(
+                          'pt-BR'
+                        )}
+                      </td>
+                      <td className="py-3 px-4 border-b">
+                        {estacao.ativo ? 'Sim' : 'Não'}
+                      </td>
+                      <td>
+                        {estacao.ativo ? (
+                          <button
+                            className="bg-red-500 text-white px-3 py-1 rounded"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              toggleAtivo(estacao.id, true);
+                            }}
+                          >
+                            Desativar
+                          </button>
+                        ) : (
+                          <button
+                            className="bg-green-500 text-white px-3 py-1 rounded"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              toggleAtivo(estacao.id, false);
+                            }}
+                          >
+                            Ativar
+                          </button>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+              </tbody>
+            </table>
+          )}
 
           {/* Modal */}
-          {/* {showModal && (
+          {showModal && (
             <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
               <div className="bg-white p-5 rounded-lg shadow-lg w-96">
                 <h2 className="text-xl mb-4">Editar Estação</h2>
@@ -146,8 +215,8 @@ export default function Estacoes() {
                 </div>
               </div>
             </div>
-          )} */}
-        </div>
+          )}
+        </section>
       </div>
     </div>
   );
