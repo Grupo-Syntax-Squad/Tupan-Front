@@ -1,27 +1,34 @@
 import { api_route } from "..";
+import { useToken } from "@/hooks/token";
 
 interface Estacao {
   id: number;
   nome: string;
-  topico:string,
-  ativo:boolean,
+  topico: string;
+  ativo: boolean;
   criado: string;
   modificado: string;
   endereco_id: number;
 }
 
+
 export const obterEstacoes = async (): Promise<Estacao[]> => {
+  const token = useToken(); 
+  if (!token) {
+    throw new Error("Token não encontrado. Por favor, faça login.");
+  }
+
   try {
     const response = await fetch(`${api_route}estacoes`, {
       method: "GET",
       headers: {
-        "Authorization": `Token 2948c11eaf985f44737d8fa84db99846e8197fae`,
+        "Authorization": `Token ${token}`, 
         "Content-Type": "application/json",
       },
     });
 
     if (!response.ok) {
-      throw new Error(`Erro ao obter estacções: ${response.statusText}`);
+      throw new Error(`Erro ao obter estações: ${response.statusText}`);
     }
 
     const data = await response.json();
@@ -33,13 +40,19 @@ export const obterEstacoes = async (): Promise<Estacao[]> => {
 };
 
 export const obterEstacaoPorId = async (id: number): Promise<Estacao> => {
+  const token = useToken(); 
+
+  if (!token) {
+    throw new Error("Token não encontrado. Por favor, faça login.");
+  }
+
   try {
     const response = await fetch(`${api_route}estacoes/${id}`, {
       method: "GET",
       headers: {
-        "Authorization": `Token 2948c11eaf985f44737d8fa84db99846e8197fae`,
+        "Authorization": `Token ${token}`, 
         "Content-Type": "application/json",
-      }, 
+      },
     });
     
     if (!response.ok) {
@@ -52,4 +65,4 @@ export const obterEstacaoPorId = async (id: number): Promise<Estacao> => {
     console.error("Erro na requisição:", error);
     throw error;
   }
-}
+};

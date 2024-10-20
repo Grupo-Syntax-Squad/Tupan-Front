@@ -1,11 +1,18 @@
 import { api_route } from '..';
+import { useToken } from '@/hooks/token';
 
 export const deletarParametro = async (id: number): Promise<void> => {
+  const token = useToken(); 
+
+  if (!token) {
+    throw new Error('Token não encontrado. Por favor, faça login.');
+  }
+
   try {
     const response = await fetch(`${api_route}/parametros/${id}`, {
       method: 'DELETE',
       headers: {
-        'Authorization': `Token 2948c11eaf985f44737d8fa84db99846e8197fae`,
+        'Authorization': `Token ${token}`, 
         'Content-Type': 'application/json',
       },
     });

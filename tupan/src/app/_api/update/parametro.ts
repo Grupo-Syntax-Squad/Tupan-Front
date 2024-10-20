@@ -1,4 +1,5 @@
 import { api_route } from '..';
+import { useToken } from '@/hooks/token';
 
 interface Parametro {
   id: number;
@@ -11,14 +12,17 @@ interface Parametro {
   modificado: string;
 }
 
-export const atualizarParametro = async (
-  parametro: Parametro
-): Promise<any> => {
+export const atualizarParametro = async (parametro: Parametro): Promise<any> => {
   try {
+    const token = useToken(); 
+    if (!token) {
+      throw new Error('Token não encontrado. Por favor, faça login.');
+    }
+
     const response = await fetch(`${api_route}/parametros/${parametro.id}`, {
       method: 'PUT',
       headers: {
-        'Authorization': `Token 2948c11eaf985f44737d8fa84db99846e8197fae`,
+        'Authorization': `Token ${token}`, 
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(parametro),

@@ -1,7 +1,6 @@
 import { useToken } from "@/hooks/token";
 import { api_route } from "..";
 
-
 interface Parametro {
   id: number;
   nome: string;
@@ -36,6 +35,12 @@ export const obterParametros = async (token: string): Promise<Parametro[]> => {
 };
 
 export const obterParametroPorId = async (id: number): Promise<Parametro> => {
+  const token = useToken(); 
+
+  if (!token) {
+    throw new Error("Token não encontrado. Por favor, faça login.");
+  }
+
   try {
     const token =  useToken()
     const response = await fetch(`${api_route}parametros/${id}`, {
@@ -43,7 +48,7 @@ export const obterParametroPorId = async (id: number): Promise<Parametro> => {
       headers: {
         "Authorization": `Token ${token}`,
         "Content-Type": "application/json",
-      }, 
+      },
     });
     
     if (!response.ok) {
@@ -56,4 +61,4 @@ export const obterParametroPorId = async (id: number): Promise<Parametro> => {
     console.error("Erro na requisição:", error);
     throw error;
   }
-}
+};
