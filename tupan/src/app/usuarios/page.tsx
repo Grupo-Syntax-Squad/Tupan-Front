@@ -4,11 +4,9 @@ import { MenuLateral } from "@/components/menu-lateral";
 import { Botao } from "@/components/botao";
 import { NavTop } from "@/components/nav-top";
 import React, { useState, useEffect } from "react";
-import Link from 'next/link';
-import axios from 'axios';
+import axios from "axios";
 
 const Usuarios: React.FC = () => {
-
   const [usuarios, setUsuarios] = useState<any[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [token, setToken] = useState<string | null>(null);
@@ -16,15 +14,12 @@ const Usuarios: React.FC = () => {
   // Função para buscar os usuários
   const fetchUsuarios = (token: string) => {
     axios
-
       .get("http://localhost:8000/usuarios/", {
-
         headers: {
           Authorization: `Token ${token}`,
         },
       })
       .then((response) => {
-
         setUsuarios(response.data);
         setError(null); // Limpa os erros
       })
@@ -34,35 +29,16 @@ const Usuarios: React.FC = () => {
       });
   };
 
-  // Função para deletar usuário
-  const deleteUsuario = async (id: number) => {
-    try {
-      await axios.delete("http://localhost:8000/usuarios/", {
-        headers: {
-          Authorization: `Token ${token}`,
-        },
-        data: {
-          id: id, // Enviando o ID no corpo da requisição
-        },
-      });
-      setUsuarios((prevUsuarios) => prevUsuarios.filter((usuario) => usuario.id !== id));
-      setError(null); // Limpa os erros
-    } catch (error) {
-      console.error(`Erro ao deletar o usuário com ID ${id}:`, error);
-      setError("Erro ao deletar o usuário.");
-    }
+  // Callback quando o token é válido
+  const handleTokenValid = (token: string) => {
+    setToken(token);
+    fetchUsuarios(token);
   };
 
-  // Verifica se já existe um token no localStorage e faz a requisição
-  useEffect(() => {
-    const storedToken = localStorage.getItem("token");
-    if (storedToken) {
-      setToken(storedToken);
-      fetchUsuarios(storedToken);
-    } else {
-      setError("Token não encontrado, por favor faça login.");
-    }
-  }, []);
+  // Callback quando o token é inválido
+  const handleTokenInvalid = () => {
+    setError("Token não encontrado, por favor faça login.");
+  };
 
   const menuData = [
     { nome: "Estações", path: "/estacoes", icone: "bx bx-home" },
@@ -75,24 +51,20 @@ const Usuarios: React.FC = () => {
 
   return (
     <div className="w-screen flex bg-gray-100">
+      <TokenVerificacao onTokenValid={handleTokenValid} onTokenInvalid={handleTokenInvalid} />
       <div className="w-fit pr-4 min-h-screen">
         <MenuLateral menuData={menuData} />
       </div>
-
       <div className="flex flex-col min-h-screen w-full bg-gray-100">
         <NavTop nome="Usuários" path="Usuários" />
-
         <div className="flex flex-col items-center">
           <div className="mt-10 w-3/4 flex flex-col items-center">
             {error && <p className="text-red-500">{error}</p>}
-
             {usuarios.length > 0 ? (
               <table className="w-full bg-white shadow-lg rounded-lg overflow-hidden">
                 <thead className="text-white" style={{ backgroundColor: "#4e00a9" }}>
                   <tr>
-
                     <th className="p-4 text-center">ID</th>
-
                     <th className="p-4 text-center">Email</th>
                     <th className="p-4 text-center">Data de criação</th>
                     <th className="p-4 text-center">Data de atualização</th>
@@ -102,7 +74,6 @@ const Usuarios: React.FC = () => {
                 <tbody>
                   {usuarios.map((usuario: any) => (
                     <tr key={usuario.id} className="text-center border-b">
-
                       <td className="p-3">{usuario.id}</td>
                       <td className="p-3">{usuario.email}</td>
                       <td className="p-3">{usuario.criacao}</td>

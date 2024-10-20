@@ -25,11 +25,35 @@ const colunas = [
   { label: 'Topico', acessor: 'topico' },
 ];
 
-
 export default function Estacoes() {
   const [showModal, setShowModal] = useState(false);
   const { estacoes, loading, error, refetch } = useGetEstacoes();
+  
+  // Estado para gerenciar o modal e a estação selecionada
+  const [showModal, setShowModal] = useState(false);
+  const [selectedEstacao, setSelectedEstacao] = useState(null);
 
+  const openModal = (estacao) => {
+    setSelectedEstacao(estacao);
+    setShowModal(true);
+  };
+
+  const closeModal = () => {
+    setSelectedEstacao(null);
+    setShowModal(false);
+  };
+
+  const updateEstacao = () => {
+    // Adicione a lógica de atualização da estação aqui
+    // Por exemplo, uma chamada API para atualizar a estação no backend
+    console.log("Estação atualizada:", selectedEstacao);
+    closeModal();
+  };
+
+  const toggleAtivo = (id, status) => {
+    // Adicione a lógica de ativar/desativar estação aqui
+    console.log(`Toggling ativo para estação com ID ${id}, status: ${status}`);
+  };
 
   const dados = estacoes.map((estacao) => ({
     nome: estacao.nome,
@@ -45,13 +69,11 @@ export default function Estacoes() {
 
   return (
     <div className="flex">
-      {/* Menu lateral */}
       <div className="w-fit pr-4 min-h-screen">
         <MenuLateral menuData={menuData} />
       </div>
 
-      <div className="w-full flex pr-4 flex-col gap-4">
-        {/* NavTop */}
+      <div className="flex flex-col min-h-screen w-full bg-gray-100">
         <NavTop nome="Usuário" path="Estações" />
 
         <div className="flex gap-4">

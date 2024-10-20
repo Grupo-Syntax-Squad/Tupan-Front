@@ -15,10 +15,18 @@ export const atualizarParametro = async (
   parametro: Parametro
 ): Promise<any> => {
   try {
+    // Recupera o token do localStorage
+    const token = localStorage.getItem('token');
+
+    // Verifica se o token está disponível
+    if (!token) {
+      throw new Error('Token não encontrado. Por favor, faça login.');
+    }
+
     const response = await fetch(`${api_route}/parametros/${parametro.id}`, {
       method: 'PUT',
       headers: {
-        'Authorization': `Token 2948c11eaf985f44737d8fa84db99846e8197fae`,
+        'Authorization': `Token ${token}`, // Utiliza o token recuperado do localStorage
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(parametro),
