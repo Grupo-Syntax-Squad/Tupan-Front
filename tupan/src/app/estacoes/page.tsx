@@ -8,6 +8,10 @@ import { Formulario } from '@/components/formulario-estacoes';
 import Link from 'next/link';
 import { Botao } from '@/components/botao';
 import { useGetEstacoes } from '@/hooks/receberEstacao';
+import { Pie } from 'react-chartjs-2';
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
+
+ChartJS.register(ArcElement, Tooltip, Legend);
 
 const menuData = [
   { nome: 'Estações', path: '/estacoes', icone: 'bx bx-home' },
@@ -18,118 +22,171 @@ const menuData = [
   { nome: 'Logout', path: '/', icone: 'bx bx-log-out' },
 ];
 
-const colunas = [
-  { label: 'estacao', acessor: 'nome' },
-  { label: 'Data de Criação', acessor: 'date' },
-  { label: 'Status', acessor: 'status' },
-  { label: 'Topico', acessor: 'topico' },
-];
-
-
 export default function Estacoes() {
+  const { estacoes, loading, error } = useGetEstacoes();
+  
   const [showModal, setShowModal] = useState(false);
-  const { estacoes, loading, error, refetch } = useGetEstacoes();
+  const [selectedEstacao, setSelectedEstacao] = useState(null);
+  const [contagemAtivas, setContagemAtivas] = useState(0);
+  const [contagemInativas, setContagemInativas] = useState(0);
 
+  useEffect(() => {
+    if (estacoes.length) {
+      const ativas = estacoes.filter((estacao) => estacao.ativo).length;
+      const inativas = estacoes.length - ativas;
 
-  const dados = estacoes.map((estacao) => ({
-    nome: estacao.nome,
-    topico: estacao.topico,
-    date: new Date(estacao.criado).toLocaleDateString(),
-    status: 'Ativado', 
-    endereco_id: estacao.endereco_id
-  }));
+      setContagemAtivas(ativas);
+      setContagemInativas(inativas);
+    }
+  }, [estacoes]);
 
-  const handleSubmit = () => {
-    refetch();
+  const openModal = (estacao) => {
+    setSelectedEstacao(estacao);
+    setShowModal(true);
+  };
+
+  const closeModal = () => {
+    setSelectedEstacao(null);
+    setShowModal(false);
+  };
+
+  const toggleAtivo = (id, currentStatus) => {
+    // Lógica para ativar/desativar a estação
+    console.log(`Toggling status of station with ID ${id} to ${!currentStatus}`);
+  };
+
+  const dataPie = {
+    labels: ['Ativas', 'Inativas'],
+    datasets: [
+      {
+        data: [contagemAtivas, contagemInativas],
+        backgroundColor: ['#4CAF50', '#F44336'],
+        borderColor: ['#4CAF50', '#F44336'],
+        borderWidth: 1,
+      },
+    ],
   };
 
   return (
     <div className="flex">
-      {/* Menu lateral */}
       <div className="w-fit pr-4 min-h-screen">
         <MenuLateral menuData={menuData} />
       </div>
 
-      <div className="w-full flex pr-4 flex-col gap-4">
-        {/* NavTop */}
+      <div className="flex flex-col min-h-screen w-full bg-gray-100">
         <NavTop nome="Usuário" path="Estações" />
 
         <div className="flex gap-4">
 
-          {loading && <p>Loading...</p>}
-          {error && <p>Error: {error}</p>}
-          {estacoes.length === 0 && !loading && !error ? (
-            <>
-              <div className="w-full">
-                <p className="text-center">Nenhuma estação cadastrada</p>
-                <Formulario onSubmit={handleSubmit} dados={{}} initialStatus={true} />
-              </div>
-              
-            </>
-          ) : (
-            <>
-            <div className="w-1/2">
-                <Tabela colunas={colunas} dados={dados} />
+          <div className="flex flex-col gap-10 mt-6">
+            {/* Tabela de estações */}
+            <div className="w-full">
+              {estacoes.length === 0 && !loading && !error ? (
+                <>
+                  <div className="flex justify-center p-5">
+                    <p className="text-xl">Nenhuma estação cadastrada</p>
+                  </div>
+                  <div className="flex-col">
+                    <Link href="/cadastro-estacoes" className="flex-col">
+                      <Botao
+                        type="button"
+                        corTexto="text-black"
+                        corFundo="bg-gray-300"
+                        label="Cadastrar Estação"
+                      />
+                    </Link>
+                  </div>
+                </>
+              ) : (
+                <table className="min-w-full border-collapse border border-gray-300">
+                  <thead className="bg-green-500 text-white">
+                    <tr>
+                      <th className="py-3 px-4 border-b text-left">Id</th>
+                      <th className="py-3 px-4 border-b text-left">Nome</th>
+                      <th className="py-3 px-4 border-b text-left">Tópico</th>
+                      <th className="py-3 px-4 border-b text-left">
+                        Data de criação
+                      </th>
+                      <th className="py-3 px-4 border-b text-left">
+                        Data de atualização
+                      </th>
+                      <th className="py-3 px-4 border-b text-left">Ativo</th>
+                      <th className="py-3 px-4 border-b text-left"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {estacoes
+                      .sort((a, b) => a.id - b.id)
+                      .map((estacao) => (
+                        <tr
+                          key={estacao.id}
+                          className="hover:bg-gray-100"
+                          onClick={() => openModal(estacao)}
+                        >
+                          <td className="py-3 px-4 border-b font-bold">
+                            {estacao.id}
+                          </td>
+                          <td className="py-3 px-4 border-b">{estacao.nome}</td>
+                          <td className="py-3 px-4 border-b">{estacao.topico}</td>
+                          <td className="py-3 px-4 border-b">
+                            {new Date(estacao.criado).toLocaleDateString('pt-BR')}
+                          </td>
+                          <td className="py-3 px-4 border-b">
+                            {new Date(estacao.modificado).toLocaleDateString('pt-BR')}
+                          </td>
+                          <td className="py-3 px-4 border-b">
+                            {estacao.ativo ? 'Sim' : 'Não'}
+                          </td>
+                          <td>
+                            {estacao.ativo ? (
+                              <button
+                                className="bg-red-500 text-white px-3 py-1 rounded"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  toggleAtivo(estacao.id, true);
+                                }}
+                              >
+                                Desativar
+                              </button>
+                            ) : (
+                              <button
+                                className="bg-green-500 text-white px-3 py-1 rounded"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  toggleAtivo(estacao.id, false);
+                                }}
+                              >
+                                Ativar
+                              </button>
+                            )}
+                          </td>
+                        </tr>
+                      ))}
+                  </tbody>
+                </table>
+              )}
             </div>
 
-            <div className="flex-1">
-                <Formulario onSubmit={handleSubmit} dados={{}} initialStatus={true} />
-              </div>
-            
-      
-            </>)}
-
-          {/* Modal */}
-          {/* {showModal && (
-            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-              <div className="bg-white p-5 rounded-lg shadow-lg w-96">
-                <h2 className="text-xl mb-4">Editar Estação</h2>
-                <div>
-                  <label className="block mb-2">Nome</label>
-                  <input
-                    type="text"
-                    value={selectedEstacao?.nome}
-                    onChange={(e) =>
-                      setSelectedEstacao({
-                        ...selectedEstacao,
-                        nome: e.target.value,
-                      })
-                    }
-                    className="border p-2 w-full mb-4"
-                  />
-                </div>
-                <div>
-                  <label className="block mb-2">Tópico</label>
-                  <input
-                    type="text"
-                    value={selectedEstacao?.topico}
-                    onChange={(e) =>
-                      setSelectedEstacao({
-                        ...selectedEstacao,
-                        topico: e.target.value,
-                      })
-                    }
-                    className="border p-2 w-full mb-4"
-                  />
-                </div>
-                <div className="flex justify-between">
-                  <button
-                    onClick={closeModal}
-                    className="bg-gray-500 text-white px-3 py-1 rounded"
-                  >
-                    Cancelar
-                  </button>
-                  <button
-                    onClick={updateEstacao}
-                    className="bg-blue-500 text-white px-3 py-1 rounded"
-                  >
-                    Salvar
-                  </button>
-                </div>
-              </div>
+            <div className="flex justify-center">
+              <Link href="/cadastro-estacoes">
+                <Botao
+                  type="button"
+                  corTexto="text-white"
+                  corFundo="bg-green-500"
+                  label="Cadastrar Estação"
+                />
+              </Link>
             </div>
-          )} */}
-        </div>
+
+
+
+            {/* Gráfico de Pizza */}
+            <div className="w-1/4 mx-auto">
+              <h2 className="text-center text-xl mb-4">Distribuição das Estações</h2>
+              <Pie data={dataPie} />
+            </div>
+          </div>
+        </section>
       </div>
     </div>
   );
