@@ -22,26 +22,48 @@ const colunas = [
   { label: 'Status', acessor: 'status' },
 ];
 
-
 export default function Estacoes() {
   const { estacoes, loading, error, refetch } = useGetEstacoes();
+  
+  // Estado para gerenciar o modal e a estação selecionada
+  const [showModal, setShowModal] = useState(false);
+  const [selectedEstacao, setSelectedEstacao] = useState(null);
 
+  const openModal = (estacao) => {
+    setSelectedEstacao(estacao);
+    setShowModal(true);
+  };
+
+  const closeModal = () => {
+    setSelectedEstacao(null);
+    setShowModal(false);
+  };
+
+  const updateEstacao = () => {
+    // Adicione a lógica de atualização da estação aqui
+    // Por exemplo, uma chamada API para atualizar a estação no backend
+    console.log("Estação atualizada:", selectedEstacao);
+    closeModal();
+  };
+
+  const toggleAtivo = (id, status) => {
+    // Adicione a lógica de ativar/desativar estação aqui
+    console.log(`Toggling ativo para estação com ID ${id}, status: ${status}`);
+  };
 
   const dados = estacoes.map((estacao) => ({
     nome: estacao.nome,
     date: new Date(estacao.criado).toLocaleDateString(),
-    status: 'Ativado', 
+    status: 'Ativado',
   }));
 
   return (
     <div className="flex">
-      {/* Menu lateral */}
       <div className="w-fit pr-4 min-h-screen">
         <MenuLateral menuData={menuData} />
       </div>
 
       <div className="flex flex-col min-h-screen w-full bg-gray-100">
-        {/* NavTop */}
         <NavTop nome="Usuário" path="Estações" />
 
         <section className="mx-auto w-full p-10 bg-white shadow-lg rounded-lg">

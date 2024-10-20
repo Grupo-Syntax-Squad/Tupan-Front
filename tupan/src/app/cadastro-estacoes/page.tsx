@@ -2,6 +2,11 @@
 
 import { Fragment, useState, useEffect } from 'react';
 
+// Função para obter o token armazenado
+const obterToken = (): string | null => {
+  return localStorage.getItem('token');
+};
+
 export default function CadastroEstacoes() {
   const [nome, setNome] = useState('');
   const [cep, setCep] = useState('');
@@ -16,15 +21,15 @@ export default function CadastroEstacoes() {
   const [parametrosSelecionados, setParametrosSelecionados] = useState([]);
   const [parametrosDisponiveis, setParametrosDisponiveis] = useState([]);
 
-  const token = '1112a98d58500b7a165191fc56b2a9c1513413e8';
-
   useEffect(() => {
     const fetchParametros = async () => {
       try {
+        const token = obterToken(); // Obtendo o token armazenado
+
         const response = await fetch('http://localhost:8000/parametros', {
           method: 'GET',
           headers: {
-            Authorization: `Token 1112a98d58500b7a165191fc56b2a9c1513413e8`,
+            Authorization: `Token ${token}`, // Usando o token dinamicamente
             'Content-Type': 'application/json',
           },
         });
@@ -36,73 +41,76 @@ export default function CadastroEstacoes() {
         }
 
         const data = await response.json();
-        setParametrosDisponiveis(data); 
+        setParametrosDisponiveis(data);
       } catch (error) {
         console.error('Erro ao buscar parâmetros:', error);
       }
     };
 
     fetchParametros();
-  }, [token]);
+  }, []);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-  
+
     const novoEndereco = {
-        logradouro,
-        bairro,
-        cidade,
-        estado,
-        numero,
-        complemento,
-        cep,
-        latitude,
-        longitude,
+      logradouro,
+      bairro,
+      cidade,
+      estado,
+      numero,
+      complemento,
+      cep,
+      latitude,
+      longitude,
     };
-  
+
     try {
+      const token = obterToken(); // Obtendo o token armazenado
+
       const enderecoResponse = await fetch('http://localhost:8000/enderecos', {
         method: 'POST',
         headers: {
-          Authorization: `Token 1112a98d58500b7a165191fc56b2a9c1513413e8`,
+          Authorization: `Token ${token}`, // Usando o token dinamicamente
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(novoEndereco),
       });
-  
+
       if (!enderecoResponse.ok) {
         const errorData = await enderecoResponse.json();
         console.error('Erro ao cadastrar o endereço:', errorData);
         throw new Error('Erro ao cadastrar o endereço');
       }
-  
+
       const enderecoData = await enderecoResponse.json();
-  
+
       const novaEstacao = {
-          nome,
-          topico: "Tópico do broker MQTT",
-          endereco: enderecoData.id,
-          parametros: parametrosSelecionados,
+        nome,
+        topico: 'Tópico do broker MQTT',
+        endereco: enderecoData.id,
+        parametros: parametrosSelecionados,
       };
-  
+
       const estacaoResponse = await fetch('http://localhost:8000/estacoes', {
-          method: 'POST',
-          headers: {
-            Authorization: `Token 1112a98d58500b7a165191fc56b2a9c1513413e8`,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(novaEstacao),
+        method: 'POST',
+        headers: {
+          Authorization: `Token ${token}`, // Usando o token dinamicamente
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(novaEstacao),
       });
-  
+
       if (!estacaoResponse.ok) {
         const errorData = await estacaoResponse.json();
         console.error('Erro ao cadastrar a estação:', errorData);
         throw new Error('Erro ao cadastrar a estação');
       }
-  
+
       const data = await estacaoResponse.json();
       alert('Estação cadastrada com sucesso!');
-  
+
+      // Resetando os campos do formulário
       setNome('');
       setCep('');
       setNumero('');
@@ -118,7 +126,6 @@ export default function CadastroEstacoes() {
       console.error(err);
     }
   };
-  
 
   const handleParametroChange = (parametro) => {
     if (parametrosSelecionados.includes(parametro)) {
@@ -238,12 +245,10 @@ export default function CadastroEstacoes() {
                       checked={parametrosSelecionados.includes(parametro.id)}
                       className='mt-3 ml-3 checkbox-bolinha'
                     />
-        
                   </div>
                 ))}
               </div>
               <div className="flex gap-5">
-                
                 <button
                   type="submit"
                   className="bg-transparent hover:bg-lime-600 text-lime-600 font-semibold hover:text-white py-2 px-4 border border-lime-600 hover:border-transparent rounded m-auto"
