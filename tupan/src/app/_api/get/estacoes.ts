@@ -1,22 +1,21 @@
 import { api_route } from "..";
 
-interface Parametro {
+interface Estacao {
   id: number;
   nome: string;
-  fator: string;
-  offset: string;
-  unidade: string;
-  nome_json: string;
+  topico: string;
+  ativo: boolean;
   criado: string;
   modificado: string;
+  endereco_id: number;
 }
 
-// Função para obter o token armazenado
+// Função para obter o token armazenado no localStorage
 const obterToken = (): string | null => {
   return localStorage.getItem("token");
 };
 
-export const obterParametros = async (): Promise<Parametro[]> => {
+export const obterEstacoes = async (): Promise<Estacao[]> => {
   const token = obterToken(); // Obtendo o token armazenado
 
   if (!token) {
@@ -24,7 +23,7 @@ export const obterParametros = async (): Promise<Parametro[]> => {
   }
 
   try {
-    const response = await fetch(`${api_route}parametros`, {
+    const response = await fetch(`${api_route}estacoes`, {
       method: "GET",
       headers: {
         "Authorization": `Token ${token}`, // Usando o token dinamicamente
@@ -33,18 +32,18 @@ export const obterParametros = async (): Promise<Parametro[]> => {
     });
 
     if (!response.ok) {
-      throw new Error(`Erro ao obter parâmetros: ${response.statusText}`);
+      throw new Error(`Erro ao obter estações: ${response.statusText}`);
     }
 
     const data = await response.json();
-    return data as Parametro[];
+    return data as Estacao[];
   } catch (error) {
     console.error("Erro na requisição:", error);
     throw error;
   }
 };
 
-export const obterParametroPorId = async (id: number): Promise<Parametro> => {
+export const obterEstacaoPorId = async (id: number): Promise<Estacao> => {
   const token = obterToken(); // Obtendo o token armazenado
 
   if (!token) {
@@ -52,7 +51,7 @@ export const obterParametroPorId = async (id: number): Promise<Parametro> => {
   }
 
   try {
-    const response = await fetch(`${api_route}parametros/${id}`, {
+    const response = await fetch(`${api_route}estacoes/${id}`, {
       method: "GET",
       headers: {
         "Authorization": `Token ${token}`, // Usando o token dinamicamente
@@ -61,11 +60,11 @@ export const obterParametroPorId = async (id: number): Promise<Parametro> => {
     });
     
     if (!response.ok) {
-      throw new Error(`Erro ao obter parâmetro: ${response.statusText}`);
+      throw new Error(`Erro ao obter estação: ${response.statusText}`);
     }
 
     const data = await response.json();
-    return data as Parametro;
+    return data as Estacao;
   } catch (error) {
     console.error("Erro na requisição:", error);
     throw error;
