@@ -21,6 +21,10 @@ jobs:
         run: |
           echo "${{ env.AWS_PRIVATE_KEY }}" > key.pem
           chmod 600 key.pem
+
+      - name: Create target directory on AWS instance
+        run: |
+          ssh ${{ env.SSH_OPTIONS }} 'mkdir -p /home/ubuntu/tupan/'
       
       - name: Transfer code to AWS instance
         run: |
