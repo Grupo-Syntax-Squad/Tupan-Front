@@ -1,10 +1,18 @@
 "use client";
 
+<<<<<<< HEAD
 import { MenuLateral } from "@/components/menu/lateral";
 import { NavTop } from "@/components/nav-top";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Botao } from "@/components/botao/botao";
+=======
+import { MenuLateral } from "@/components/menu-lateral";
+import { Botao } from "@/components/botao";
+import { NavTop } from "@/components/nav-top";
+import React, { useState, useEffect } from "react";
+import Link from 'next/link';
+import axios from 'axios';
+>>>>>>> 713b2a1 (refa: trocando os botões da tela pelo componente botão)
 
 const Usuarios: React.FC = () => {
   const [usuarios, setUsuarios] = useState<any[]>([]);
@@ -98,6 +106,25 @@ const Usuarios: React.FC = () => {
                             onClick={() => deleteUsuario(usuario.id)}
                           />
                         </div>
+                        <div className="flex items-end space-x-5 justify-items-end">
+                          <Link href={`/usuarios/${usuario.id}`} className="flex-col">
+                            <Botao
+                              type="button"
+                              corTexto="text-white"
+                              corFundo="bg-blue-500"
+                              label={`ver Detalhes`}
+                            />
+                          </Link>
+    
+                      
+                          <Botao
+                            type="button"
+                            corTexto="text-white"
+                            corFundo="bg-red-600"
+                            label="Deletar Usuario"
+                            onClick={() => deleteUsuario(usuario.id)}
+                          />
+                        </div>
                       </td>
                     </tr>
                   ))}
@@ -107,6 +134,15 @@ const Usuarios: React.FC = () => {
               <p>Nenhum usuário encontrado.</p>
             )}
           </div>
+          <div className="space-x-20"> 
+                <Link href="/cadastro-usuario" className="flex-col m-5">
+                  <Botao
+                    type="button"
+                    corTexto="text-black"
+                    corFundo="bg-green-300"
+                    label="Cadastrar Usuario"
+                  />
+                </Link>
           <div className="space-x-20"> 
                 <Link href="/cadastro-usuario" className="flex-col m-5">
                   <Botao
