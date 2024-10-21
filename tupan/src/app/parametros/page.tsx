@@ -1,12 +1,14 @@
 'use client';
+
 import { useEffect, useState } from 'react';
-import { MenuLateral } from '@/components/menu-lateral';
-import { Tabela } from '@/components/tabela';
-import { Formulario } from '@/components/formulario-parametros';
-import { NavTop } from '@/components/nav-top';
-import { useGetParametros } from '@/hooks/receberParametro';
 import { Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
+import { MenuLateral } from '@/components/menu/lateral';
+import { Tabela } from '@/components/tabela/tabela-parametros';
+import { Formulario } from '@/components/formularios/parametros/formulario-parametros';
+import { NavTop } from '@/components/nav-top';
+import { useGetParametros } from '@/hooks/parametros/receberParametro';
+
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 

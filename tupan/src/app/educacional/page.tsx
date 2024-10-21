@@ -1,6 +1,6 @@
 'use client';
 
-import { MenuLateral } from '@/components/menu-lateral';
+import { MenuLateral } from '@/components/menu/lateral';
 import { NavTop } from '@/components/nav-top';
 import Playground from '@/components/playground';
 import Link from 'next/link';

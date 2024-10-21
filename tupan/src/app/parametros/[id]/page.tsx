@@ -1,10 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { MenuLateral } from "@/components/menu-lateral";
-import { FormularioAtualizacaoParametros } from "@/components/formulario-atualizacao-parametros";
-import { Botao } from "@/components/botao";
-import { PopConfirmacao } from "@/components/pop-confirmacao";
+import { MenuLateral } from "@/components/menu/lateral";
+import { FormularioAtualizacaoParametros } from "@/components/formularios/parametros/formulario-atualizacao-parametros";
+import { Botao } from "@/components/botao/botao";
+import { PopConfirmacao } from "@/components/alertas/confirmacao";
 import { usePopConfirmacao } from "@/hooks/visivel";
 import { useFormularioParametros } from "@/hooks/formulario";
 import { NavTop } from "@/components/nav-top";

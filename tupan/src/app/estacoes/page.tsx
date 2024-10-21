@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { MenuLateral } from '@/components/menu-lateral';
+import { MenuLateral } from '@/components/menu/lateral';
 import { NavTop } from '@/components/nav-top';
 import { Tabela } from '@/components/tabela-estacoes';
 import { Formulario } from '@/components/formulario-estacoes';
@@ -21,6 +21,8 @@ const menuData = [
   { nome: 'Educacional', path: '/educacional', icone: 'bx bx-book' },
   { nome: 'Logout', path: '/', icone: 'bx bx-log-out' },
 ];
+
+import dynamic from 'next/dynamic';
 
 export default function Estacoes() {
   const { estacoes, loading, error } = useGetEstacoes();
@@ -55,6 +57,7 @@ export default function Estacoes() {
     console.log(`Toggling status of station with ID ${id} to ${!currentStatus}`);
   };
 
+
   const dataPie = {
     labels: ['Ativas', 'Inativas'],
     datasets: [
@@ -65,6 +68,44 @@ export default function Estacoes() {
         borderWidth: 1,
       },
     ],
+
+  const Mapa = dynamic(() => import('../../components/mapa/index'), {
+    ssr: false,
+  });
+
+  const updateEstacao = async () => {
+    if (!selectedEstacao) return;
+
+    try {
+      const response = await fetch(`http://127.0.0.1:8000/estacoes/${selectedEstacao.id}`, {
+        method: 'PUT',
+        headers: {
+          Authorization: `Token 1112a98d58500b7a165191fc56b2a9c1513413e8`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(selectedEstacao),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(
+          `Erro ao atualizar a estação: ${errorData.detail || response.statusText}`
+        );
+      }
+
+      setEstacoes((prevEstacoes) =>
+        prevEstacoes.map((estacao) =>
+          estacao.id === selectedEstacao.id ? selectedEstacao : estacao
+        )
+      );
+
+      alert('Estação atualizada com sucesso!');
+      closeModal();
+    } catch (error) {
+      console.error('Erro ao atualizar a estação:', error);
+      alert('Falha ao atualizar a estação.');
+    }
+
   };
 
   return (
@@ -112,6 +153,96 @@ export default function Estacoes() {
                       </th>
                       <th className="py-3 px-4 border-b text-left">Ativo</th>
                       <th className="py-3 px-4 border-b text-left"></th>
+        <section className="mx-auto w-full p-10 bg-white shadow-lg rounded-lg">
+
+          <h1 className="flex justify-start text-2xl">
+            <span>Estações</span>
+          </h1>
+
+          <Mapa lat={51.505} lng={-0.09} zoom={13} />
+
+
+          {estacoes.length === 0 ? (
+            <>
+              <div className="flex justify-center p-5">
+                <p className="text-xl">Nenhuma estação cadastrada</p>
+              </div>
+              <div className="flex-col">
+                <Link href="/cadastro-estacoes" className="flex-col">
+                  <Botao
+                    type="button"
+                    corTexto="text-black"
+                    corFundo="bg-gray-300"
+                    label="Cadastrar Estação"
+                  />
+                </Link>
+              </div>
+            </>
+          ) : (
+            <table className="min-w-full border-collapse border border-gray-300">
+              <thead className="bg-green-500 text-white">
+                <tr>
+                  <th className="py-3 px-4 border-b text-left">Id</th>
+                  <th className="py-3 px-4 border-b text-left">Nome</th>
+                  <th className="py-3 px-4 border-b text-left">Tópico</th>
+                  <th className="py-3 px-4 border-b text-left">
+                    Data de criação
+                  </th>
+                  <th className="py-3 px-4 border-b text-left">
+                    Data de atualização
+                  </th>
+                  <th className="py-3 px-4 border-b text-left">Ativo</th>
+                  <th className="py-3 px-4 border-b text-left"></th>
+                </tr>
+              </thead>
+              <tbody>
+                {estacoes
+                  .sort((a, b) => a.id - b.id)
+                  .map((estacao) => (
+                    <tr
+                      key={estacao.id}
+                      className="hover:bg-gray-100"
+                      onClick={() => openModal(estacao)}
+                    >
+                      <td className="py-3 px-4 border-b font-bold">
+                        {estacao.id}
+                      </td>
+                      <td className="py-3 px-4 border-b">{estacao.nome}</td>
+                      <td className="py-3 px-4 border-b">{estacao.topico}</td>
+                      <td className="py-3 px-4 border-b">
+                        {new Date(estacao.criado).toLocaleDateString('pt-BR')}
+                      </td>
+                      <td className="py-3 px-4 border-b">
+                        {new Date(estacao.modificado).toLocaleDateString(
+                          'pt-BR'
+                        )}
+                      </td>
+                      <td className="py-3 px-4 border-b">
+                        {estacao.ativo ? 'Sim' : 'Não'}
+                      </td>
+                      <td>
+                        {estacao.ativo ? (
+                          <button
+                            className="bg-red-500 text-white px-3 py-1 rounded"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              toggleAtivo(estacao.id, true);
+                            }}
+                          >
+                            Desativar
+                          </button>
+                        ) : (
+                          <button
+                            className="bg-green-500 text-white px-3 py-1 rounded"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              toggleAtivo(estacao.id, false);
+                            }}
+                          >
+                            Ativar
+                          </button>
+                        )}
+                      </td>
                     </tr>
                   </thead>
                   <tbody>
