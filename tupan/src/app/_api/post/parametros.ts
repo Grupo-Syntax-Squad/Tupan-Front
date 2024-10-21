@@ -12,11 +12,10 @@ interface Parametro {
   export const criarParametro = async (parametro: Parametro): Promise<any> => {
     const token = useToken()
     try {
-
     if (!token) {
       throw new Error('Token não encontrado. Por favor, faça login.');
     }
-    
+
       const response = await fetch(`${api_route}parametros`, {
         method: "POST",
         headers: {

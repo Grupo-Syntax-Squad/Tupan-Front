@@ -13,7 +13,8 @@ interface Estacao {
 
 
 export const obterEstacoes = async (): Promise<Estacao[]> => {
-  const token = useToken(); 
+  const token = useToken();
+
   if (!token) {
     throw new Error("Token não encontrado. Por favor, faça login.");
   }
@@ -40,7 +41,7 @@ export const obterEstacoes = async (): Promise<Estacao[]> => {
 };
 
 export const obterEstacaoPorId = async (id: number): Promise<Estacao> => {
-  const token = useToken(); 
+  const token = useToken();
 
   if (!token) {
     throw new Error("Token não encontrado. Por favor, faça login.");
@@ -50,7 +51,7 @@ export const obterEstacaoPorId = async (id: number): Promise<Estacao> => {
     const response = await fetch(`${api_route}estacoes/${id}`, {
       method: "GET",
       headers: {
-        "Authorization": `Token ${token}`, 
+        "Authorization": `Token ${token}`, // Usando o token dinamicamente
         "Content-Type": "application/json",
       },
     });

@@ -1,11 +1,13 @@
 import { api_route } from '..';
+import { useToken } from '@/hooks/token';
 
 export const deletarEstacao = async (id: number): Promise<void> => {
+  const token = useToken();
   try {
     const response = await fetch(`${api_route}/estacoes/${id}`, {
       method: 'DELETE',
       headers: {
-        'Authorization': `Token 2948c11eaf985f44737d8fa84db99846e8197fae`,
+        'Authorization': `Token ${token}`,
         'Content-Type': 'application/json',
       },
     });

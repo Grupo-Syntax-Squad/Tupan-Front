@@ -1,4 +1,5 @@
 import { api_route } from '..';
+import { useToken } from '@/hooks/token';
 
 interface Estacao {
   id: number;
@@ -9,14 +10,13 @@ interface Estacao {
   modificado: string;
 }
 
-export const atualizarEstacao = async (
-  estacao: Estacao
-): Promise<any> => {
+export const atualizarEstacao = async (estacao: Estacao): Promise<any> => {
+  const token = useToken();
   try {
     const response = await fetch(`${api_route}estacoes/${estacao.id}`, {
       method: 'PUT',
       headers: {
-        'Authorization': `Token 2948c11eaf985f44737d8fa84db99846e8197fae`,
+        'Authorization': `Token ${token}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(estacao),

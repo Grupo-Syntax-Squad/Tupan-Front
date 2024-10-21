@@ -1,4 +1,5 @@
 import { api_route } from "..";
+import { useToken } from "@/hooks/token";
 
 interface Endereco {
   logradouro: string;
@@ -13,11 +14,15 @@ interface Endereco {
 }
 
 export const criarEndereco = async (endereco: Endereco): Promise<Endereco> => {
+  const token = useToken()
+  if (!token) {
+    throw new Error('Token não encontrado. Por favor, faça login.');
+  }
   try {
     const response = await fetch(`${api_route}enderecos`, {
       method: "POST",
       headers: {
-        "Authorization": `Token 2948c11eaf985f44737d8fa84db99846e8197fae`,
+        "Authorization": `Token ${token}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify(endereco),
