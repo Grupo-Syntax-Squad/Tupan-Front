@@ -1,4 +1,4 @@
-name: Build on DockerHub and Deploy to AWS
+name: Build and Deploy to AWS
 on:
   push:
     branches:
@@ -7,51 +7,38 @@ on:
     branches:
       - main
 env:
-  DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-  DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
   AWS_PRIVATE_KEY: ${{ secrets.KEYAWS }}
+  SSH_OPTIONS: '-o StrictHostKeyChecking=no -i key.pem ubuntu@98.80.44.121'
+
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-24.04
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
-      - name: Login to DockerHub
-        uses: docker/login-action@v1
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v2
-        with:
-          context: ./tupan/
-          push: true
-          dockerfile: ./Dockerfile
-          tags: iagocpv/tupan-front:latest
-  deploy:
-    needs: build
-    runs-on: ubuntu-24.04
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-    - name: Login to Docker Hub
-      uses: docker/login-action@v1
-      with:
-        username: ${{ env.DOCKERHUB_USERNAME }}
-        password: ${{ env.DOCKERHUB_TOKEN }}
-    - name: Set permissions for private key
-      run: |
-        echo "${{ env.AWS_PRIVATE_KEY }}" > key.pem
-        chmod 600 key.pem
-    - name: Pull Docker image
-      run: |
-        ssh -o StrictHostKeyChecking=no -i key.pem ubuntu@98.80.44.121 -vvv 'sudo docker pull iagocpv/tupan-front:latest'
-    - name: Stop running container
-      run: |
-        ssh -o StrictHostKeyChecking=no -i key.pem ubuntu@98.80.44.121 -vvv 'sudo docker stop tupan-front || true'
-        ssh -o StrictHostKeyChecking=no -i key.pem ubuntu@98.80.44.121 -vvv 'sudo docker rm tupan-front || true'
-    - name: Run new container
-      run: |
-        ssh -o StrictHostKeyChecking=no -i key.pem ubuntu@98.80.44.121 -vvv 'sudo docker run -d --name tupan-front -p 80:3000 iagocpv/tupan-front:latest'
+      
+      - name: Set permissions for private key
+        run: |
+          echo "${{ env.AWS_PRIVATE_KEY }}" > key.pem
+          chmod 600 key.pem
+      
+      - name: Transfer code to AWS instance
+        run: |
+          scp ${{ env.SSH_OPTIONS }} -r ./tupan/ ubuntu@98.80.44.121:/home/ubuntu/tupan/
+      
+      - name: SSH into AWS and build Docker image
+        run: |
+          ssh ${{ env.SSH_OPTIONS }} 'cd /home/ubuntu/tupan && sudo docker build -t iagocpv/tupan-front:latest .'
+      
+      - name: Stop running container
+        run: |
+          ssh ${{ env.SSH_OPTIONS }} 'sudo docker stop tupan-front || true'
+          ssh ${{ env.SSH_OPTIONS }} 'sudo docker rm tupan-front || true'
+      
+      - name: Run new container
+        run: |
+          ssh ${{ env.SSH_OPTIONS }} 'sudo docker run -d --name tupan-front -p 80:3000 iagocpv/tupan-front:latest'
+      
+      - name: Cleanup SSH key
+        run: |
+          rm -f key.pem
