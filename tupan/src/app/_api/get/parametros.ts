@@ -1,4 +1,6 @@
+import { useToken } from "@/hooks/token";
 import { api_route } from "..";
+
 
 interface Parametro {
   id: number;
@@ -11,12 +13,12 @@ interface Parametro {
   modificado: string;
 }
 
-export const obterParametros = async (): Promise<Parametro[]> => {
+export const obterParametros = async (token: string): Promise<Parametro[]> => {
   try {
     const response = await fetch(`${api_route}parametros`, {
       method: "GET",
       headers: {
-        "Authorization": `Token 1112a98d58500b7a165191fc56b2a9c1513413e8`,
+        "Authorization": `Token ${token}`,
         "Content-Type": "application/json",
       },
     });
@@ -35,10 +37,11 @@ export const obterParametros = async (): Promise<Parametro[]> => {
 
 export const obterParametroPorId = async (id: number): Promise<Parametro> => {
   try {
+    const token =  useToken()
     const response = await fetch(`${api_route}parametros/${id}`, {
       method: "GET",
       headers: {
-        "Authorization": `Token 1112a98d58500b7a165191fc56b2a9c1513413e8`,
+        "Authorization": `Token ${token}`,
         "Content-Type": "application/json",
       }, 
     });

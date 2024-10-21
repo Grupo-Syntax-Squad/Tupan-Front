@@ -1,4 +1,5 @@
 import { api_route } from "..";
+import { useToken } from "@/hooks/token";
 
 interface Parametro {
     nome: string;
@@ -9,11 +10,12 @@ interface Parametro {
   }
   
   export const criarParametro = async (parametro: Parametro): Promise<any> => {
+    const token = useToken()
     try {
       const response = await fetch(`${api_route}parametros`, {
         method: "POST",
         headers: {
-          "Authorization": `Token 1112a98d58500b7a165191fc56b2a9c1513413e8`,
+          "Authorization": `Token ${token}`,
           "Content-Type": "application/json",
         },
         body: JSON.stringify(parametro),
