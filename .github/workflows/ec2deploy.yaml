@@ -12,7 +12,7 @@ env:
   AWS_PRIVATE_KEY: ${{ secrets.KEYAWS }}
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -32,7 +32,7 @@ jobs:
           tags: iagocpv/tupan-front:latest
   deploy:
     needs: build
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
@@ -54,4 +54,4 @@ jobs:
         ssh -o StrictHostKeyChecking=no -i key.pem ubuntu@98.80.44.121 -vvv 'sudo docker rm tupan-front || true'
     - name: Run new container
       run: |
-        ssh -o StrictHostKeyChecking=no -i key.pem ubuntu@98.80.44.121 'sudo docker run -d --name tupan-front -p 80:3000 iagocpv/tupan-front:latest'
+        ssh -o StrictHostKeyChecking=no -i key.pem ubuntu@98.80.44.121 -vvv 'sudo docker run -d --name tupan-front -p 80:3000 iagocpv/tupan-front:latest'
