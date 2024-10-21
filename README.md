@@ -91,5 +91,6 @@ A aplicação inciará localmente na porta 3000. Use o navegador para acessar o 
 | TAG       |  Descrição                                                                                                    | Sprint |
 | --------- | ------------------------------------------------------------------------------------------------------------- | ------ |
 | 1.0.0     | Criação das páginas e integração dos CRUD's de todos os elementos (parâmetros, usuários, estaçõoes e alertas) | 1      |
+| 2.0.0     | Recepção de dados e criação de dashboards baseados nos dados recebidos                                        | 2      |
 
 </div>
