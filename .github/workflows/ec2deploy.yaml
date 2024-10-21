@@ -32,7 +32,7 @@ jobs:
       
       - name: SSH into AWS and build Docker image
         run: |
-          ssh ${{ env.SSH_OPTIONS }} 'cd /home/ubuntu/tupan && sudo docker build -t tupan-front .'
+          ssh ${{ env.SSH_OPTIONS }} 'cd /home/ubuntu/tupan/tupan && sudo docker build -t tupan-front .'
       
       - name: Stop running container
         run: |
