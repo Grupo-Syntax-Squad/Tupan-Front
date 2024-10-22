@@ -8,12 +8,12 @@ import { FormularioProps } from '@/types/interfaces';
 import { Toggle } from './toggle';
 import { Botao } from './botao';
 import { useEditable } from '@/hooks/editar';
-import { useUpdateEstacao } from '@/hooks/atualizarEstacao';
-import { useUpdateEndereco } from '@/hooks/atualizarEndereco';
-import { useGetEstacaoById } from '@/hooks/receberEstacao';
-import { useGetEnderecoById } from '@/hooks/receberEndereco';
+import { useUpdateEstacao } from '@/hooks/estacoes/atualizarEstacao';
+import { useUpdateEndereco } from '@/hooks/enderecos/atualizarEndereco';
+import { useGetEstacaoById } from '@/hooks/estacoes/receberEstacao';
+import { useGetEnderecoById } from '@/hooks/enderecos/receberEndereco';
 import { useFormularioEstacoes } from '@/hooks/formulario';
-import { useDeleteEstacao } from '@/hooks/deletarEstacao';
+import { useDeleteEstacao } from '@/hooks/estacoes/deletarEstacao';
 
 export const FormularioAtualizacaoEstacoes = ({
   onSubmit,  initialStatus, nomeFormulario, showPopConfirmacao }:

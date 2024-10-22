@@ -9,7 +9,7 @@ export const useCreateEstacao = () => {
 
   const submitEstacaoComEndereco = async (
     estacao: { nome: string; topico: string; ativo: boolean; criado: string; modificado: string; },
-    endereco: { logradouro: string; bairro: string; cidade: string; estado: string; numero: number; complemento: string; cep: string; latitude: number; longitude: number }
+    endereco: { id: number, logradouro: string; bairro: string; cidade: string; estado: string; numero: number; complemento: string; cep: string; latitude: number; longitude: number }
   ) => {
     setLoading(true);
     setError(null);
@@ -18,9 +18,7 @@ export const useCreateEstacao = () => {
     try {
       const enderecoCriado = await criarEndereco(endereco);
       const enderecoId = enderecoCriado.id;
-      console.log("Endereço ID: ", enderecoId);
   
-      // Agora, cria a estação com o ID do endereço vinculado
       const result = await criarEstacao(estacao, enderecoId);
   
       setSuccess("Estação criada com sucesso!");

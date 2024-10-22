@@ -7,7 +7,7 @@ import { Tabela } from '@/components/tabela-estacoes';
 import { Formulario } from '@/components/formulario-estacoes';
 import Link from 'next/link';
 import { Botao } from '@/components/botao/botao';
-import { useGetEstacoes } from '@/hooks/receberEstacao';
+import { useGetEstacoes } from '@/hooks/estacoes/receberEstacao';
 import { Pie } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 
