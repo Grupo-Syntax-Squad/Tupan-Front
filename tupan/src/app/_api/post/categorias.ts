@@ -3,7 +3,7 @@ import { useToken } from "@/hooks/token";
 
 interface Categoria {
     unidade: string;
-    nome: number;
+    nome: string;
     ativo: boolean; 
   }
   

@@ -1,19 +1,19 @@
 import { useState } from "react";
-import { criarAlerta } from "@/app/_api/post/alertas";
+import { criarCategoria } from "@/app/_api/post/categorias";
 
-export const useCreateAlerta = () => {
+export const useCreateCategoria = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
 
-  const submitAlerta = async (alerta: { nome: string; condicao: string; ativo: boolean; }) => {
+  const submitCategoria = async (categoria: { unidade: string; nome: string; ativo: boolean; }) => {
     setLoading(true);
     setError(null);
     setSuccess(null);
 
     try {
-      const result = await criarAlerta(alerta);
-      setSuccess("Alerta criado com sucesso!");
+      const result = await criarCategoria(categoria);
+      setSuccess("Categoria criado com sucesso!");
       return result;
     } catch (error) {
       if (error instanceof Error) {
@@ -26,5 +26,5 @@ export const useCreateAlerta = () => {
     }
   };
 
-  return { submitAlerta, loading, error, success };
+  return { submitCategoria, loading, error, success };
 };

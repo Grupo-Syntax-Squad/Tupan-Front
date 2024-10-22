@@ -7,11 +7,11 @@ interface Endereco {
   bairro: string;
   cidade: string;
   estado: string;
-  numero: number;
+  numero: string;
   complemento: string;
   cep: string;
-  latitude: number;
-  longitude: number;
+  latitude: string;
+  longitude: string;
 }
 
 export const criarEndereco = async (endereco: Endereco): Promise<Endereco> => {

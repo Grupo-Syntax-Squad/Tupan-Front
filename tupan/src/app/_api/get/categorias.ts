@@ -4,7 +4,7 @@ import { api_route } from "..";
 interface Categoria {
     id: number;
     unidade: string;
-    nome: number;
+    nome: string;
     ativo: boolean;
     criado: string;
     modificado: string; 

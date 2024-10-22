@@ -6,7 +6,7 @@ interface Usuario {
     password: string;
   }
   
-  export const criarParametro = async (usuario: Usuario): Promise<any> => {
+  export const criarUsuario = async (usuario: Usuario): Promise<any> => {
     const token = useToken()
     try {
     if (!token) {

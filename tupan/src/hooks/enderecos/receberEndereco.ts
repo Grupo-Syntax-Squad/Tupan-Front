@@ -1,8 +1,5 @@
 import { useState, useEffect } from 'react';
-import {
-  obterEnderecoPorId,
-  obterEnderecos,
-} from '@/app/_api/get/enderecos';
+import { obterEnderecoPorId, obterEnderecos} from '@/app/_api/get/enderecos';
 
 interface Endereco {
   id: any;

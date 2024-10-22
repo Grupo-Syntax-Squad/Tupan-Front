@@ -9,7 +9,7 @@ export const useCreateEstacao = () => {
 
   const submitEstacaoComEndereco = async (
     estacao: { nome: string; topico: string; ativo: boolean; criado: string; modificado: string; },
-    endereco: { id: number, logradouro: string; bairro: string; cidade: string; estado: string; numero: number; complemento: string; cep: string; latitude: number; longitude: number }
+    endereco: { id: number; logradouro: string; bairro: string; cidade: string; estado: string; numero: string; complemento: string; cep: string; latitude: string; longitude: string }
   ) => {
     setLoading(true);
     setError(null);
