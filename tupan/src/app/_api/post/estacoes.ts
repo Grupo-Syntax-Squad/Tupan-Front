@@ -25,6 +25,12 @@ interface Endereco {
 export const criarEstacao = async (estacao: Estacao, enderecoId: number): Promise<any> => {
   console.log('Função criarEstacao foi chamada');
   try {
+    const token = localStorage.getItem('token');
+
+    // Verifica se o token está disponível
+    if (!token) {
+      throw new Error('Token não encontrado. Por favor, faça login.');
+    }
     // Criando o payload da estação com o endereco (ID) correto
     const estacaoComEndereco = { ...estacao, endereco: enderecoId }; // Usar "endereco" diretamente
 
@@ -33,7 +39,7 @@ export const criarEstacao = async (estacao: Estacao, enderecoId: number): Promis
     const response = await fetch(`${api_route}estacoes`, {
       method: "POST",
       headers: {
-        "Authorization": `Token 2948c11eaf985f44737d8fa84db99846e8197fae`,
+        "Authorization": `Token ${token} `,
         "Content-Type": "application/json",
       },
       body: JSON.stringify(estacaoComEndereco),

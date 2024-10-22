@@ -14,10 +14,17 @@ interface Endereco {
 
 export const criarEndereco = async (endereco: Endereco): Promise<Endereco> => {
   try {
+    const token = localStorage.getItem('token');
+
+    // Verifica se o token está disponível
+    if (!token) {
+      throw new Error('Token não encontrado. Por favor, faça login.');
+    }
+
     const response = await fetch(`${api_route}enderecos`, {
       method: "POST",
       headers: {
-        "Authorization": `Token 2948c11eaf985f44737d8fa84db99846e8197fae`,
+        "Authorization": `Token ${token}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify(endereco),
