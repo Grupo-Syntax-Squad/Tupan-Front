@@ -3,6 +3,7 @@
 import { MenuLateral } from '@/components/menu/lateral';
 import { NavTop } from '@/components/nav-top';
 import { LineChart, BarChart, ColumnChart } from '@/components/graficos/export';
+import { useSetToken, useToken } from '@/hooks/token';
 
 const menuData = [
   { nome: 'Estações', path: '/estacoes', icone: 'bx bx-home' },
@@ -14,6 +15,7 @@ const menuData = [
 ];
 
 export default function Inicial() {
+useSetToken();
   return (
     <div className="w-screen flex bg-gray-100 overflow-x-hidden">
       <div className="w-fit pr-4 min-h-screen">
@@ -28,18 +30,19 @@ export default function Inicial() {
             titulo="Exemplo gráfico temperatura"
             id="line"
             legenda="Fatec Prof. Jessen Vidal"
+            estacao_id={1}
           />
         </section>
 
         <section className="grid grid-cols-2 p-3 m-4 rounded">
           <BarChart
-            titulo="Exemplo gráfico temperatura"
+            titulo="Exemplo gráfico pressão"
             id="bar"
             legenda="Fatec Prof. Jessen Vidal"
           />
 
           <ColumnChart
-            titulo="Exemplo gráfico temperatura"
+            titulo="Exemplo gráfico umidade"
             id="col"
             legenda="Fatec Prof. Jessen Vidal"
           />

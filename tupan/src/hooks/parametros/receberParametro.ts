@@ -3,6 +3,7 @@ import {
   obterParametroPorId,
   obterParametros,
 } from '@/app/_api/get/parametros';
+import { useToken } from '../token';
 
 interface Parametro {
   id: number;
@@ -21,6 +22,7 @@ export const useGetParametros = () => {
   const [parametros, setParametros] = useState<Parametro[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const token = useToken();
 
   const fetchParametros = async () => {
     console.log('Iniciando busca de parâmetros');
@@ -28,9 +30,13 @@ export const useGetParametros = () => {
     setError(null);
 
     try {
-      const result = await obterParametros();
-      console.log('Parâmetros obtidos com sucesso:', result);
-      setParametros(result);
+      if (token) {
+        const result = await obterParametros(token);
+        console.log('Parâmetros obtidos com sucesso:', result);
+        setParametros(result);
+      } else {
+        throw new Error('Token não disponível');
+      }
     } catch (error) {
       if (error instanceof Error) {
         console.error('Erro ao obter parâmetros:', error.message);
@@ -47,7 +53,7 @@ export const useGetParametros = () => {
   useEffect(() => {
     console.log('useEffect: Chamando fetchParametros');
     fetchParametros();
-  }, []);
+  }, [token]);
 
   return { parametros, loading, error, refetch: fetchParametros };
 };
@@ -56,15 +62,20 @@ export const useGetParametroById = (id: number) => {
   const [parametro, setParametro] = useState<Parametro | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const token = useToken();
 
   const fetchParametro = async () => {
     setLoading(true);
     setError(null);
 
     try {
-      const result = await obterParametroPorId(id);
-      console.log('Parâmetro obtido com sucesso:', result);
-      setParametro(result);
+      if (token) {
+        const result = await obterParametroPorId(id);
+        console.log('Parâmetro obtido com sucesso:', result);
+        setParametro(result);
+      } else {
+        setError('token não encontrado!');
+      }
     } catch (error) {
       if (error instanceof Error) {
         console.error('Erro ao obter parâmetro:', error.message);
@@ -84,7 +95,7 @@ export const useGetParametroById = (id: number) => {
     } else {
       console.error('ID não disponível, abortando fetch do parâmetro');
     }
-  }, [id]);
+  }, [id, token]);
 
   return { parametro, loading, error, refetch: fetchParametro };
 };

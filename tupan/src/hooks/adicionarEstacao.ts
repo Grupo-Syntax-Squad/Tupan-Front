@@ -14,15 +14,18 @@ export const useCreateEstacao = () => {
     setLoading(true);
     setError(null);
     setSuccess(null);
-  
+
     try {
+      console.log("Chegou aqui")
       const enderecoCriado = await criarEndereco(endereco);
+      console.log("Chegou aqui2")
+
       const enderecoId = enderecoCriado.id;
       console.log("Endereço ID: ", enderecoId);
-  
+
       // Agora, cria a estação com o ID do endereço vinculado
       const result = await criarEstacao(estacao, enderecoId);
-  
+
       setSuccess("Estação criada com sucesso!");
       return result;
     } catch (error) {
@@ -35,7 +38,7 @@ export const useCreateEstacao = () => {
       setLoading(false);
     }
   };
-  
+
 
   return { submitEstacaoComEndereco, loading, error, success };
 };

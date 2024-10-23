@@ -1,3 +1,4 @@
+import { useToken } from "@/hooks/token";
 import { api_route } from "..";
 
 interface Endereco {
@@ -13,17 +14,20 @@ interface Endereco {
 }
 
 export const criarEndereco = async (endereco: Endereco): Promise<Endereco> => {
+  const token = useToken();
+  console.log("Token:", token)
   try {
     const response = await fetch(`${api_route}enderecos`, {
       method: "POST",
       headers: {
-        "Authorization": `Token 2948c11eaf985f44737d8fa84db99846e8197fae`,
+        "Authorization": `Token ${token}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify(endereco),
     });
 
     const responseData = await response.json();
+    console.log("Response:", responseData);
 
     if (!response.ok) {
       throw new Error(`Erro ao criar o endereço: ${response.statusText}`);

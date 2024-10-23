@@ -8,6 +8,7 @@ import { Tabela } from '@/components/tabela/tabela-parametros';
 import { Formulario } from '@/components/formularios/parametros/formulario-parametros';
 import { NavTop } from '@/components/nav-top';
 import { useGetParametros } from '@/hooks/parametros/receberParametro';
+import { useToken } from '@/hooks/token';
 
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
@@ -28,6 +29,7 @@ const colunas = [
 ];
 
 export default function Parametros() {
+  const token = useToken() || '';
   const { parametros, loading, error, refetch } = useGetParametros();
   const [dadosGrafico, setDadosGrafico] = useState({ labels: [], datasets: [] });
 

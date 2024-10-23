@@ -1,4 +1,6 @@
+import { useToken } from "@/hooks/token";
 import { api_route } from "..";
+
 
 interface Parametro {
   id: number;
@@ -11,23 +13,12 @@ interface Parametro {
   modificado: string;
 }
 
-// Função para obter o token armazenado
-const obterToken = (): string | null => {
-  return localStorage.getItem("token");
-};
-
-export const obterParametros = async (): Promise<Parametro[]> => {
-  const token = obterToken(); // Obtendo o token armazenado
-
-  if (!token) {
-    throw new Error("Token não encontrado. Por favor, faça login.");
-  }
-
+export const obterParametros = async (token: string): Promise<Parametro[]> => {
   try {
     const response = await fetch(`${api_route}parametros`, {
       method: "GET",
       headers: {
-        "Authorization": `Token ${token}`, // Usando o token dinamicamente
+        "Authorization": `Token ${token}`,
         "Content-Type": "application/json",
       },
     });
@@ -52,10 +43,11 @@ export const obterParametroPorId = async (id: number): Promise<Parametro> => {
   }
 
   try {
+    const token =  useToken()
     const response = await fetch(`${api_route}parametros/${id}`, {
       method: "GET",
       headers: {
-        "Authorization": `Token ${token}`, // Usando o token dinamicamente
+        "Authorization": `Token ${token}`,
         "Content-Type": "application/json",
       },
     });

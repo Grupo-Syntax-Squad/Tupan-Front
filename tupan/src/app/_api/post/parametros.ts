@@ -1,4 +1,5 @@
 import { api_route } from "..";
+import { useToken } from "@/hooks/token";
 
 interface Parametro {
     nome: string;
@@ -9,6 +10,7 @@ interface Parametro {
   }
   
   export const criarParametro = async (parametro: Parametro): Promise<any> => {
+    const token = useToken()
     try {
 
         // Recupera o token do localStorage
@@ -21,7 +23,11 @@ interface Parametro {
       const response = await fetch(`${api_route}parametros`, {
         method: "POST",
         headers: {
+<<<<<<< HEAD
           "Authorization": `Token ${token} `,
+=======
+          "Authorization": `Token ${token}`,
+>>>>>>> 6104c64 (refa: mudando a maneira como lida com o token)
           "Content-Type": "application/json",
         },
         body: JSON.stringify(parametro),

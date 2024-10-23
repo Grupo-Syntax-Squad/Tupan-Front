@@ -1,14 +1,14 @@
 'use client';
 
+import { useCreateEstacao } from '@/hooks/adicionarEstacao';
+import { useGetParametros } from '@/hooks/parametros/receberParametro';
 import { Fragment, useState, useEffect } from 'react';
-import Popup from '@/components/pop-up/popup';
 
-// Função para obter o token armazenado
-const obterToken = (): string | null => {
-  return localStorage.getItem('token');
-};
 
 export default function CadastroEstacoes() {
+  const { submitEstacaoComEndereco, loading, error, success } = useCreateEstacao();
+  const { parametros, loading: loadingParametros, error: errorParametros, refetch } = useGetParametros();
+
   const [nome, setNome] = useState('');
   const [cep, setCep] = useState('');
   const [numero, setNumero] = useState('');
@@ -19,116 +19,58 @@ export default function CadastroEstacoes() {
   const [latitude, setLatitude] = useState('');
   const [longitude, setLongitude] = useState('');
   const [complemento, setComplemento] = useState('');
+  const [mac_address, setMac_address] = useState('');
+  const [ativo, setAtivo] = useState(true);
   const [parametrosSelecionados, setParametrosSelecionados] = useState([]);
-  const [parametrosDisponiveis, setParametrosDisponiveis] = useState([]);
-  const [isPopupOpen, setIsPopupOpen] = useState(false); // Estado para controlar a visibilidade do pop-up
-
-  useEffect(() => {
-    const fetchParametros = async () => {
-      try {
-        const token = obterToken(); // Obtendo o token armazenado
-
-        const response = await fetch('http://localhost:8000/parametros', {
-          method: 'GET',
-          headers: {
-            Authorization: `Token ${token}`,
-            'Content-Type': 'application/json',
-          },
-        });
-
-        if (!response.ok) {
-          const errorData = await response.json();
-          console.error('Erro ao buscar parâmetros:', errorData);
-          return;
-        }
-
-        const data = await response.json();
-        setParametrosDisponiveis(data);
-      } catch (error) {
-        console.error('Erro ao buscar parâmetros:', error);
-      }
-    };
-
-    fetchParametros();
-  }, []);
+  
+  const dados = parametros.map((parametro) => ({
+    nome: parametro.nome,
+    date: new Date(parametro.criado).toLocaleDateString(),
+    status: 'Ativado',
+  }));
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+
+    const estacao = {
+      nome,
+      topico: mac_address,
+      ativo,
+      criado: new Date().toLocaleDateString(),
+      modificado: new Date().toLocaleDateString()
+    }
 
     const novoEndereco = {
       logradouro,
       bairro,
       cidade,
       estado,
-      numero,
+      numero: Number(numero),
       complemento,
       cep,
-      latitude,
-      longitude,
+      latitude: Number(latitude),
+      longitude: Number(longitude),
     };
 
-    try {
-      const token = obterToken(); // Obtendo o token armazenado
+    submitEstacaoComEndereco(estacao, novoEndereco);
 
-      const enderecoResponse = await fetch('http://localhost:8000/enderecos', {
-        method: 'POST',
-        headers: {
-          Authorization: `Token ${token}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(novoEndereco),
-      });
+    alert('Estação cadastrada com sucesso!');
 
-      if (!enderecoResponse.ok) {
-        const errorData = await enderecoResponse.json();
-        console.error('Erro ao cadastrar o endereço:', errorData);
-        throw new Error('Erro ao cadastrar o endereço');
-      }
+    // setNome('');
+    // setCep('');
+    // setNumero('');
+    // setLogradouro('');
+    // setCidade('');
+    // setBairro('');
+    // setEstado('');
+    // setComplemento('');
+    // setLatitude('');
+    // setLongitude('');
+    // setMac_address('');
+    // setParametrosSelecionados([]);
+  }
 
-      const enderecoData = await enderecoResponse.json();
 
-      const novaEstacao = {
-        nome,
-        topico: 'Tópico do broker MQTT',
-        endereco: enderecoData.id,
-        parametros: parametrosSelecionados,
-      };
-
-      const estacaoResponse = await fetch('http://localhost:8000/estacoes', {
-          method: 'POST',
-          headers: {
-            Authorization: `Token ${token}`,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(novaEstacao),
-      });
-
-      if (!estacaoResponse.ok) {
-        const errorData = await estacaoResponse.json();
-        console.error('Erro ao cadastrar a estação:', errorData);
-        throw new Error('Erro ao cadastrar a estação');
-      }
-
-      const data = await estacaoResponse.json();
-      alert('Estação cadastrada com sucesso!');
-
-      // Resetando os campos do formulário
-      setNome('');
-      setCep('');
-      setNumero('');
-      setLogradouro('');
-      setCidade('');
-      setBairro('');
-      setEstado('');
-      setComplemento('');
-      setLatitude('');
-      setLongitude('');
-      setParametrosSelecionados([]);
-      setIsPopupOpen(false); // Fechar o pop-up após o cadastro
-    } catch (err) {
-      console.error(err);
-    }
-  };
 
   const handleParametroChange = (parametro) => {
     if (parametrosSelecionados.includes(parametro)) {
@@ -142,42 +84,73 @@ export default function CadastroEstacoes() {
 
   return (
     <Fragment>
-      <button
-        className="bg-blue-500 text-white px-4 py-2 rounded"
-        onClick={() => setIsPopupOpen(true)}
-      >
-        Cadastrar Nova Estação
-      </button>
-
-      <Popup isOpen={isPopupOpen} onClose={() => setIsPopupOpen(false)}>
-        <section className="border border-black p-20 rounded-3xl">
-          <h1 className="flex justify-center text-2xl">
-            <span>Cadastro de nova estação</span>
-          </h1>
-          <form onSubmit={handleSubmit}>
-            <label htmlFor="nome">Nome</label>
-            <input
-              type="text"
-              value={nome}
-              onChange={(e) => setNome(e.target.value)}
-              required
-            />
-            <div className="flex gap-5 input-container">
+      <div className='flex justify-center m-auto'>
+        <div className="flex justify-center cadastro-estacoes">
+          <section className="border border-black p-20 rounded-3xl">
+            <h1 className="flex justify-center text-2xl">
+              <span>Cadastro de nova estação</span>
+            </h1>
+            <form onSubmit={handleSubmit}>
+              <label htmlFor="nome">Nome</label>
+              <input
+                type="text"
+                value={nome}
+                onChange={(e) => setNome(e.target.value)}
+                required
+              />
+              <div className="flex gap-5 input-container">
+                <div className="flex flex-col">
+                  <label htmlFor="cep">CEP</label>
+                  <input
+                    type="number"
+                    value={cep}
+                    onChange={(e) => setCep(e.target.value)}
+                    required
+                  />
+                </div>
+                <div className="flex flex-col">
+                  <label htmlFor="numero">Número</label>
+                  <input
+                    type="number"
+                    value={numero}
+                    onChange={(e) => setNumero(e.target.value)}
+                    required
+                  />
+                </div>
+              </div>
               <div className="flex flex-col">
-                <label htmlFor="cep">CEP</label>
+                <label htmlFor="logradouro">Logradouro</label>
                 <input
-                  type="number"
-                  value={cep}
-                  onChange={(e) => setCep(e.target.value)}
+                  type="text"
+                  value={logradouro}
+                  onChange={(e) => setLogradouro(e.target.value)}
                   required
                 />
               </div>
               <div className="flex flex-col">
-                <label htmlFor="numero">Número</label>
+                <label htmlFor="cidade">Cidade</label>
                 <input
-                  type="number"
-                  value={numero}
-                  onChange={(e) => setNumero(e.target.value)}
+                  type="text"
+                  value={cidade}
+                  onChange={(e) => setCidade(e.target.value)}
+                  required
+                />
+              </div>
+              <div className="flex flex-col">
+                <label htmlFor="bairro">Bairro</label>
+                <input
+                  type="text"
+                  value={bairro}
+                  onChange={(e) => setBairro(e.target.value)}
+                  required
+                />
+              </div>
+              <div className="flex flex-col">
+                <label htmlFor="estado">Estado</label>
+                <input
+                  type="text"
+                  value={estado}
+                  onChange={(e) => setEstado(e.target.value)}
                   required
                 />
               </div>
@@ -206,8 +179,16 @@ export default function CadastroEstacoes() {
                 />
               </div>
               <div className="flex flex-col">
+                <label htmlFor="mac">Mac Address</label>
+                <input
+                  type="text"
+                  value={mac_address}
+                  onChange={(e) => setMac_address(e.target.value)}
+                />
+              </div>
+              <div className="flex flex-col">
                 <p>Selecione os Parâmetros:</p>
-                {parametrosDisponiveis.map((parametro, index) => (
+                {parametros.map((parametro, index) => (
                   <div key={index} className='flex'>
                     <label>{parametro.nome}</label>{' '}
                     <input
@@ -217,10 +198,12 @@ export default function CadastroEstacoes() {
                       checked={parametrosSelecionados.includes(parametro.id)}
                       className='mt-3 ml-3 checkbox-bolinha'
                     />
+
                   </div>
                 ))}
               </div>
               <div className="flex gap-5">
+
                 <button
                   type="submit"
                   className="bg-transparent hover:bg-lime-600 text-lime-600 font-semibold hover:text-white py-2 px-4 border border-lime-600 hover:border-transparent rounded m-auto"
@@ -232,93 +215,6 @@ export default function CadastroEstacoes() {
           </section>
         </div>
       </div>
-            </div>
-            <div className="flex flex-col">
-              <label htmlFor="logradouro">Logradouro</label>
-              <input
-                type="text"
-                value={logradouro}
-                onChange={(e) => setLogradouro(e.target.value)}
-                required
-              />
-            </div>
-            <div className="flex flex-col">
-              <label htmlFor="cidade">Cidade</label>
-              <input
-                type="text"
-                value={cidade}
-                onChange={(e) => setCidade(e.target.value)}
-                required
-              />
-            </div>
-            <div className="flex flex-col">
-              <label htmlFor="bairro">Bairro</label>
-              <input
-                type="text"
-                value={bairro}
-                onChange={(e) => setBairro(e.target.value)}
-                required
-              />
-            </div>
-            <div className="flex flex-col">
-              <label htmlFor="estado">Estado</label>
-              <input
-                type="text"
-                value={estado}
-                onChange={(e) => setEstado(e.target.value)}
-                required
-              />
-            </div>
-            <div className="flex flex-col">
-              <label htmlFor="complemento">Complemento</label>
-              <input
-                type="text"
-                value={complemento}
-                onChange={(e) => setComplemento(e.target.value)}
-              />
-            </div>
-            <div className="flex flex-col">
-              <label htmlFor="latitude">Latitude</label>
-              <input
-                type="text"
-                value={latitude}
-                onChange={(e) => setLatitude(e.target.value)}
-              />
-            </div>
-            <div className="flex flex-col">
-              <label htmlFor="longitude">Longitude</label>
-              <input
-                type="text"
-                value={longitude}
-                onChange={(e) => setLongitude(e.target.value)}
-              />
-            </div>
-            <div className="flex flex-col">
-              <p>Selecione os Parâmetros:</p>
-              {parametrosDisponiveis.map((parametro, index) => (
-                <div key={index} className='flex'>
-                  <label>{parametro.nome}</label>{' '}
-                  <input
-                    type="checkbox"
-                    value={parametro.id}
-                    onChange={() => handleParametroChange(parametro.id)}
-                    checked={parametrosSelecionados.includes(parametro.id)}
-                    className='mt-3 ml-3 checkbox-bolinha'
-                  />
-                </div>
-              ))}
-            </div>
-            <div className="flex gap-5">
-              <button
-                type="submit"
-                className="bg-transparent hover:bg-lime-600 text-lime-600 font-semibold hover:text-white py-2 px-4 border border-lime-600 hover:border-transparent rounded m-auto"
-              >
-                Cadastrar
-              </button>
-            </div>
-          </form>
-        </section>
-      </Popup>
     </Fragment>
   );
 }
