@@ -1,16 +1,9 @@
 'use client';
-
-import { useEffect, useState } from 'react';
-import { Bar } from 'react-chartjs-2';
-import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
 import { MenuLateral } from '@/components/menu/lateral';
 import { Tabela } from '@/components/tabela/tabela-parametros';
 import { Formulario } from '@/components/formularios/parametros/formulario-parametros';
 import { NavTop } from '@/components/nav-top';
 import { useGetParametros } from '@/hooks/parametros/receberParametro';
-
-
-ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 const menuData = [
   { nome: 'Estações', path: '/estacoes', icone: 'bx bx-home' },
@@ -29,8 +22,6 @@ const colunas = [
 
 export default function Parametros() {
   const { parametros, loading, error, refetch } = useGetParametros();
-  const [dadosGrafico, setDadosGrafico] = useState({ labels: [], datasets: [] });
-
   const dados = parametros.map((parametro) => ({
     nome: parametro.nome,
     date: new Date(parametro.criado).toLocaleDateString(),
@@ -39,40 +30,7 @@ export default function Parametros() {
 
   const handleSubmit = () => {
     refetch();
-  };
-
-  useEffect(() => {
-    console.log("Parâmetros:", parametros); // Verificar se os parâmetros estão corretos
-    const labels = [...new Set(parametros.map((parametro) => parametro.unidade))]; // Usando unidade
-    const counts = labels.map(
-      (label) => parametros.filter((parametro) => parametro.unidade === label).length // Usando unidade
-    );
-  
-    setDadosGrafico({
-      labels,
-      datasets: [
-        {
-          label: 'Quantidade de Parâmetros por Unidade',
-          data: counts,
-          backgroundColor: 'rgba(75, 192, 192, 0.5)',
-          borderColor: 'rgba(75, 192, 192, 1)',
-          borderWidth: 1,
-        },
-      ],
-    });
-  
-    console.log("Dados do Gráfico:", {
-      labels,
-      datasets: [
-        {
-          label: 'Quantidade de Parâmetros por Unidade',
-          data: counts,
-        },
-      ],
-    });
-  }, [parametros]);
-  
-  
+  };  
 
   return (
     <div className="w-screen flex bg-gray-100">
@@ -94,13 +52,7 @@ export default function Parametros() {
           ) : (
             <>
               <div className="w-1/2">
-                <Tabela colunas={colunas} dados={dados} />
-
-                {/* Gráfico de Parâmetros */}
-                <div className="mt-8 h-1/3">
-                  <h2 className="text-center text-xl mb-4">Distribuição dos Parâmetros por Medida</h2>
-                  <Bar data={dadosGrafico} options={{ responsive: true, maintainAspectRatio: false }} />
-                </div>
+                <Tabela colunas={colunas} dados={dados} />                
               </div>
 
               <div className="flex-1">

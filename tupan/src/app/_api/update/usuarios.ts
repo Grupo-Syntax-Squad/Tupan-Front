@@ -1,39 +1,34 @@
 import { api_route } from '..';
 import { useToken } from '@/hooks/token';
 
-interface Parametro {
+interface Usuario {
   id: number;
-  nome: string;
-  fator: string;
-  offset: string;
-  unidade: string;
-  nome_json: string;
-  criado: string;
-  modificado: string;
+  email: string;
+  password: string;
 }
 
-export const atualizarParametro = async (parametro: Parametro): Promise<any> => {
+export const atualizarUsuario = async (usuario: Usuario): Promise<any> => {
   try {
     const token = useToken(); 
     if (!token) {
       throw new Error('Token não encontrado. Por favor, faça login.');
     }
 
-    const response = await fetch(`${api_route}/parametros/${parametro.id}`, {
+    const response = await fetch(`${api_route}/usuarios/${usuario.id}`, {
       method: 'PUT',
       headers: {
         'Authorization': `Token ${token}`, 
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(parametro),
+      body: JSON.stringify(usuario),
     });
 
     if (!response.ok) {
-      throw new Error(`Erro ao atualizar o parâmetro: ${response.statusText}`);
+      throw new Error(`Erro ao atualizar o usuario: ${response.statusText}`);
     }
 
     const data = await response.json();
-    return data as Parametro[];
+    return data as Usuario[];
   } catch (error) {
     console.error('Erro na requisição:', error);
     throw error;

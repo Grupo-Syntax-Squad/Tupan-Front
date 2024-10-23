@@ -1,4 +1,5 @@
 import { api_route } from "..";
+import { useToken } from "@/hooks/token";
 
 interface Estacao {
   id: number;
@@ -10,13 +11,9 @@ interface Estacao {
   endereco_id: number;
 }
 
-// Função para obter o token armazenado no localStorage
-const obterToken = (): string | null => {
-  return localStorage.getItem("token");
-};
 
 export const obterEstacoes = async (): Promise<Estacao[]> => {
-  const token = obterToken(); // Obtendo o token armazenado
+  const token = useToken();
 
   if (!token) {
     throw new Error("Token não encontrado. Por favor, faça login.");
@@ -26,7 +23,7 @@ export const obterEstacoes = async (): Promise<Estacao[]> => {
     const response = await fetch(`${api_route}estacoes`, {
       method: "GET",
       headers: {
-        "Authorization": `Token ${token}`, // Usando o token dinamicamente
+        "Authorization": `Token ${token}`, 
         "Content-Type": "application/json",
       },
     });
@@ -44,7 +41,7 @@ export const obterEstacoes = async (): Promise<Estacao[]> => {
 };
 
 export const obterEstacaoPorId = async (id: number): Promise<Estacao> => {
-  const token = obterToken(); // Obtendo o token armazenado
+  const token = useToken();
 
   if (!token) {
     throw new Error("Token não encontrado. Por favor, faça login.");

@@ -1,4 +1,5 @@
 import { api_route } from '..';
+import { useToken } from '@/hooks/token';
 
 interface Endereco {
   id: number,
@@ -13,14 +14,13 @@ interface Endereco {
   longitude: number;
 }
 
-export const atualizarEndereco = async (
-  endereco: Endereco
-): Promise<any> => {
+export const atualizarEndereco = async (endereco: Endereco): Promise<any> => {
+  const token = useToken();
   try {
     const response = await fetch(`${api_route}enderecos/${endereco.id}`, {
       method: 'PUT',
       headers: {
-        'Authorization': `Token 2948c11eaf985f44737d8fa84db99846e8197fae`,
+        'Authorization': `Token ${token}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(endereco),

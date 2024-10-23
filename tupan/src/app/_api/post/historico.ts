@@ -1,32 +1,30 @@
 import { api_route } from "..";
 import { useToken } from "@/hooks/token";
 
-interface Parametro {
-    nome: string;
-    fator: number;
-    offset: number; 
-    unidade: string;
-    nome_json: string;
+interface Historico {
+    timestamp: number;
+    timestamp_convertido: string;
+    alerta: number; 
   }
   
-  export const criarParametro = async (parametro: Parametro): Promise<any> => {
+  export const criarHistorico = async (historico: Historico): Promise<any> => {
     const token = useToken()
     try {
     if (!token) {
       throw new Error('Token não encontrado. Por favor, faça login.');
     }
 
-      const response = await fetch(`${api_route}parametros`, {
+      const response = await fetch(`${api_route}historicos`, {
         method: "POST",
         headers: {
           "Authorization": `Token ${token}`,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(parametro),
+        body: JSON.stringify(historico),
       });
   
       if (!response.ok) {
-        throw new Error(`Erro ao criar o parâmetro: ${response.statusText}`);
+        throw new Error(`Erro ao publicar o histórico: ${response.statusText}`);
       }
   
       return await response.json();

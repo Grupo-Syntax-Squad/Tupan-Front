@@ -1,7 +1,7 @@
 import { api_route } from '..';
 import { useToken } from '@/hooks/token';
 
-export const deletarParametro = async (id: number): Promise<void> => {
+export const deletarEndereco = async (id: number): Promise<void> => {
   const token = useToken(); 
 
   if (!token) {
@@ -9,7 +9,7 @@ export const deletarParametro = async (id: number): Promise<void> => {
   }
 
   try {
-    const response = await fetch(`${api_route}/parametros/${id}`, {
+    const response = await fetch(`${api_route}/enderecos/${id}`, {
       method: 'DELETE',
       headers: {
         'Authorization': `Token ${token}`, 
@@ -18,10 +18,10 @@ export const deletarParametro = async (id: number): Promise<void> => {
     });
 
     if (!response.ok) {
-      throw new Error(`Erro ao deletar o parâmetro: ${response.statusText}`);
+      throw new Error(`Erro ao deletar o endreço: ${response.statusText}`);
     }
 
-    console.log('Parâmetro deletado com sucesso');
+    console.log('Endereço deletado com sucesso');
   } catch (error) {
     console.error('Erro na requisição:', error);
     throw error;

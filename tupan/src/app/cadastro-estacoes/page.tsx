@@ -31,7 +31,7 @@ export default function CadastroEstacoes() {
         const response = await fetch('http://localhost:8000/parametros', {
           method: 'GET',
           headers: {
-            Authorization: `Token ${token}`,
+            Authorization: `Token ${token}`, // Usando o token dinamicamente
             'Content-Type': 'application/json',
           },
         });
@@ -73,7 +73,7 @@ export default function CadastroEstacoes() {
       const enderecoResponse = await fetch('http://localhost:8000/enderecos', {
         method: 'POST',
         headers: {
-          Authorization: `Token ${token}`,
+          Authorization: `Token ${token}`, // Usando o token dinamicamente
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(novoEndereco),
@@ -95,12 +95,12 @@ export default function CadastroEstacoes() {
       };
 
       const estacaoResponse = await fetch('http://localhost:8000/estacoes', {
-          method: 'POST',
-          headers: {
-            Authorization: `Token ${token}`,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(novaEstacao),
+        method: 'POST',
+        headers: {
+          Authorization: `Token ${token}`, // Usando o token dinamicamente
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(novaEstacao),
       });
 
       if (!estacaoResponse.ok) {
@@ -306,19 +306,103 @@ export default function CadastroEstacoes() {
                     className='mt-3 ml-3 checkbox-bolinha'
                   />
                 </div>
-              ))}
-            </div>
-            <div className="flex gap-5">
-              <button
-                type="submit"
-                className="bg-transparent hover:bg-lime-600 text-lime-600 font-semibold hover:text-white py-2 px-4 border border-lime-600 hover:border-transparent rounded m-auto"
-              >
-                Cadastrar
-              </button>
-            </div>
-          </form>
-        </section>
-      </Popup>
+                <div className="flex flex-col">
+                  <label htmlFor="numero">Número</label>
+                  <input
+                    type="number"
+                    value={numero}
+                    onChange={(e) => setNumero(e.target.value)}
+                    required
+                  />
+                </div>
+              </div>
+              <div className="flex flex-col">
+                <label htmlFor="logradouro">Logradouro</label>
+                <input
+                  type="text"
+                  value={logradouro}
+                  onChange={(e) => setLogradouro(e.target.value)}
+                  required
+                />
+              </div>
+              <div className="flex flex-col">
+                <label htmlFor="cidade">Cidade</label>
+                <input
+                  type="text"
+                  value={cidade}
+                  onChange={(e) => setCidade(e.target.value)}
+                  required
+                />
+              </div>
+              <div className="flex flex-col">
+                <label htmlFor="bairro">Bairro</label>
+                <input
+                  type="text"
+                  value={bairro}
+                  onChange={(e) => setBairro(e.target.value)}
+                  required
+                />
+              </div>
+              <div className="flex flex-col">
+                <label htmlFor="estado">Estado</label>
+                <input
+                  type="text"
+                  value={estado}
+                  onChange={(e) => setEstado(e.target.value)}
+                  required
+                />
+              </div>
+              <div className="flex flex-col">
+                <label htmlFor="complemento">Complemento</label>
+                <input
+                  type="text"
+                  value={complemento}
+                  onChange={(e) => setComplemento(e.target.value)}
+                />
+              </div>
+              <div className="flex flex-col">
+                <label htmlFor="latitude">Latitude</label>
+                <input
+                  type="text"
+                  value={latitude}
+                  onChange={(e) => setLatitude(e.target.value)}
+                />
+              </div>
+              <div className="flex flex-col">
+                <label htmlFor="longitude">Longitude</label>
+                <input
+                  type="text"
+                  value={longitude}
+                  onChange={(e) => setLongitude(e.target.value)}
+                />
+              </div>
+              <div className="flex flex-col">
+                <p>Selecione os Parâmetros:</p>
+                {parametrosDisponiveis.map((parametro, index) => (
+                  <div key={index} className='flex'>
+                    <label>{parametro.nome}</label>{' '}
+                    <input
+                      type="checkbox"
+                      value={parametro.id}
+                      onChange={() => handleParametroChange(parametro.id)}
+                      checked={parametrosSelecionados.includes(parametro.id)}
+                      className='mt-3 ml-3 checkbox-bolinha'
+                    />
+                  </div>
+                ))}
+              </div>
+              <div className="flex gap-5">
+                <button
+                  type="submit"
+                  className="bg-transparent hover:bg-lime-600 text-lime-600 font-semibold hover:text-white py-2 px-4 border border-lime-600 hover:border-transparent rounded m-auto"
+                >
+                  Cadastrar
+                </button>
+              </div>
+            </form>
+          </section>
+        </div>
+      </div>
     </Fragment>
   );
 }

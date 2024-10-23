@@ -1,5 +1,6 @@
 import { api_route } from "..";
 import { criarEndereco } from "@/app/_api/post/enderecos";
+import { useToken } from "@/hooks/token";
 
 interface Estacao {
   nome: string;
@@ -23,17 +24,21 @@ interface Endereco {
 
 // Remova o segundo parâmetro 'endereco' porque ele já foi tratado antes
 export const criarEstacao = async (estacao: Estacao, enderecoId: number): Promise<any> => {
+  const token = useToken()
+
+  if (!token) {
+    throw new Error('Token não encontrado. Por favor, faça login.');
+  }
   console.log('Função criarEstacao foi chamada');
   try {
-    // Criando o payload da estação com o endereco (ID) correto
-    const estacaoComEndereco = { ...estacao, endereco: enderecoId }; // Usar "endereco" diretamente
+    const estacaoComEndereco = { ...estacao, endereco: enderecoId }; 
 
     console.log('Payload enviado:', estacaoComEndereco);
 
     const response = await fetch(`${api_route}estacoes`, {
       method: "POST",
       headers: {
-        "Authorization": `Token 2948c11eaf985f44737d8fa84db99846e8197fae`,
+        "Authorization": `Token ${token}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify(estacaoComEndereco),

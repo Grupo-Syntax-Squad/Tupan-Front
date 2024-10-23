@@ -1,20 +1,17 @@
 import { useToken } from "@/hooks/token";
 import { api_route } from "..";
 
-interface Parametro {
+interface Usuario {
   id: number;
-  nome: string;
-  fator: string;
-  offset: string;
-  unidade: string;
-  nome_json: string;
+  email: string;
+  password: string;
   criado: string;
-  modificado: string;
+  alterado: string;
 }
 
-export const obterParametros = async (token: string): Promise<Parametro[]> => {
+export const obterUsuarios = async (token: string): Promise<Usuario[]> => {
   try {
-    const response = await fetch(`${api_route}parametros`, {
+    const response = await fetch(`${api_route}usuarios`, {
       method: "GET",
       headers: {
         "Authorization": `Token ${token}`,
@@ -23,18 +20,18 @@ export const obterParametros = async (token: string): Promise<Parametro[]> => {
     });
 
     if (!response.ok) {
-      throw new Error(`Erro ao obter parâmetros: ${response.statusText}`);
+      throw new Error(`Erro ao obter usuarios: ${response.statusText}`);
     }
 
     const data = await response.json();
-    return data as Parametro[];
+    return data as Usuario[];
   } catch (error) {
     console.error("Erro na requisição:", error);
     throw error;
   }
 };
 
-export const obterParametroPorId = async (id: number): Promise<Parametro> => {
+export const obterUsuarioPorId = async (id: number): Promise<Usuario> => {
   const token = useToken(); 
 
   if (!token) {
@@ -43,7 +40,7 @@ export const obterParametroPorId = async (id: number): Promise<Parametro> => {
 
   try {
     const token =  useToken()
-    const response = await fetch(`${api_route}parametros/${id}`, {
+    const response = await fetch(`${api_route}usuarios/${id}`, {
       method: "GET",
       headers: {
         "Authorization": `Token ${token}`,
@@ -52,11 +49,11 @@ export const obterParametroPorId = async (id: number): Promise<Parametro> => {
     });
     
     if (!response.ok) {
-      throw new Error(`Erro ao obter parâmetro: ${response.statusText}`);
+      throw new Error(`Erro ao obter usuario: ${response.statusText}`);
     }
 
     const data = await response.json();
-    return data as Parametro;
+    return data as Usuario;
   } catch (error) {
     console.error("Erro na requisição:", error);
     throw error;

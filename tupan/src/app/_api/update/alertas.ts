@@ -1,33 +1,31 @@
 import { api_route } from '..';
 import { useToken } from '@/hooks/token';
 
-interface Estacao {
-  id: number;
+interface Alerta {
+  id: number,
   nome: string;
-  topico:string,
-  ativo:boolean,
-  criado: string;
-  modificado: string;
+  condicao: string;
+  ativo: boolean;
 }
 
-export const atualizarEstacao = async (estacao: Estacao): Promise<any> => {
+export const atualizarAlerta = async (alerta: Alerta): Promise<any> => {
   const token = useToken();
   try {
-    const response = await fetch(`${api_route}estacoes/${estacao.id}`, {
+    const response = await fetch(`${api_route}alertas/${alerta.id}`, {
       method: 'PUT',
       headers: {
         'Authorization': `Token ${token}`,
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(estacao),
+      body: JSON.stringify(alerta),
     });
 
     if (!response.ok) {
-      throw new Error(`Erro ao atualizar a estação: ${response.statusText}`);
+      throw new Error(`Erro ao atualizar o Alerta: ${response.statusText}`);
     }
 
     const data = await response.json();
-    return data as Estacao[];
+    return data as Alerta[];
   } catch (error) {
     console.error('Erro na requisição:', error);
     throw error;
