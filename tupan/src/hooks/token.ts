@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import jsCookie from 'js-cookie';
-import { Login } from '@/app/_api/post/token';
+import { Login } from '@/app/_api/post/login';
 
 export const useSetToken = () => {
   useEffect(() => {
