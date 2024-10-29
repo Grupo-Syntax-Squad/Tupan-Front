@@ -3,9 +3,6 @@ on:
   push:
     branches:
       - main
-  pull_request:
-    branches:
-      - main
 env:
   AWS_PRIVATE_KEY: ${{ secrets.KEYAWS }}
   SSH_OPTIONS: '-o StrictHostKeyChecking=no -i key.pem ubuntu@98.80.44.121'
