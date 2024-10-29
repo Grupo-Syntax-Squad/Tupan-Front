@@ -41,7 +41,7 @@ jobs:
       
       - name: Run new container
         run: |
-          ssh ${{ env.SSH_OPTIONS }} 'sudo docker run -d --name tupan-front -p 80:3000 tupan-front'
+          ssh ${{ env.SSH_OPTIONS }} 'sudo docker run -d --restart always --name tupan-front -p 80:3000 tupan-front'
       
       - name: Cleanup SSH key
         run: |
