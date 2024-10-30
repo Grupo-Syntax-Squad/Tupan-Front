@@ -5,7 +5,8 @@ on:
       - main
 env:
   AWS_PRIVATE_KEY: ${{ secrets.KEYAWS }}
-  SSH_OPTIONS: '-o StrictHostKeyChecking=no -i key.pem ubuntu@98.80.44.121'
+  EC2_IP: ${{ secrets.EC2_IP }}
+  SSH_OPTIONS: '-o StrictHostKeyChecking=no -i key.pem ubuntu@${{ secrets.EC2_IP }}'
 
 jobs:
   deploy:
@@ -25,7 +26,7 @@ jobs:
       
       - name: Transfer code to AWS instance
         run: |
-          scp -o StrictHostKeyChecking=no -i key.pem -r ./tupan/ ubuntu@98.80.44.121:/home/ubuntu/tupan
+          scp -o StrictHostKeyChecking=no -i key.pem -r ./tupan/ ubuntu@${{ EC2_IP }}:/home/ubuntu/tupan
       
       - name: SSH into AWS and build Docker image
         run: |
