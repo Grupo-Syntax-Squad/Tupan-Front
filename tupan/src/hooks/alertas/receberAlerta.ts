@@ -12,7 +12,7 @@ interface Alerta {
     ativo: boolean; 
 }
 
-export const useGetParametros = () => {
+export const useGetAlertas = () => {
   const [alertas, setAlertas] = useState<Alerta[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);

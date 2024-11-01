@@ -1,58 +1,76 @@
 'use client';
 
-import { Input } from '@/components/input';
+//componentes
+import { Input } from '@/components/input/input';
+import Popup from '@/components/pop-up/popup';
+import { Botao } from '@/components/botao/botao';
+import { Select } from '@/components/select/select';
+
+//hooks
 import { useFormularioEstacoes } from '@/hooks/formulario';
-import { FormularioProps } from '@/types/interfaces';
-import { PopConfirmacao } from '@/components/pop-confirmacao';
-import { Select } from './select';
-import { useCreateEstacao } from '@/hooks/adicionarEstacao';
-import { Botao } from './botao';
+import { useCreateEstacao } from '@/hooks/estacoes/adicionarEstacao';
+import { useGetParametros } from '@/hooks/parametros/receberParametro';
 import { usePopConfirmacao } from '@/hooks/visivel';
-import { useGetParametros } from '@/hooks/receberParametro'; 
+
+//tipos
+import { FormularioProps } from '@/types/interfaces';
+import { fetchEndereco } from '@/app/_api/get/cep';
+import { PopConfirmacao } from '@/components/alertas/confirmacao';
+
 
 export const Formulario = ({ onSubmit, dados }: FormularioProps) => {
-  const { formValues, handleChange } = useFormularioEstacoes(dados);
-  const { submitEstacaoComEndereco } = useCreateEstacao();
+  const { formValues, handleChange, setFormValues } = useFormularioEstacoes(dados);
+  const { submitEstacao, loading, error, success } = useCreateEstacao();
   const { isVisible, mensagem, showPopConfirmacao, hidePopConfirmacao } = usePopConfirmacao();
+  const { parametros, loading: loadingParametros, error: errorParametros } = useGetParametros();
 
+  const handleCepChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const cep = e.target.value;
 
-  const { parametros, loading, error } = useGetParametros();
-  console.log(parametros); 
+    handleChange(e);
+
+    if (cep.length === 8) {
+      const address = await fetchEndereco(cep);
+
+      if (address) {
+        setFormValues((prevValues) => ({
+          ...prevValues,
+          logradouro: address.logradouro,
+          bairro: address.bairro,
+          cidade: address.localidade,
+          estado: address.uf,
+        }));
+      } else {
+        alert('CEP não encontrado');
+      }
+    }
+  };
+
+  const handleParametrosChange = (e) => {
+    const selectedOptions = Array.from(e.target.selectedOptions);
+    const parametros = selectedOptions.map((option) => option.value);
+    setFormValues({ ...formValues, parametros });
+  }
 
   const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const { nome, topico, parametros, logradouro, bairro, cidade, estado, numero, complemento, cep, latitude, longitude } = formValues;
+    const estacao = { nome, topico, ativo: true, parametros };
+    const endereco = { logradouro, bairro, cidade, estado, numero, complemento, cep, latitude, longitude };
 
-    if (!formValues.nome || !formValues.cep || !formValues.numero) {
-      return alert("Por favor, preencha todos os campos obrigatórios.");
+    if (!nome || !cep || !topico || !parametros) {
+      return alert('Por favor, preencha todos os campos obrigatórios.');
     }
 
-    const estacao = {
-      nome: formValues.nome,
-      topico: formValues.topico,
-      ativo: formValues.ativo === "true",
-    };
-
-    
-
-    const endereco = {
-      logradouro: formValues.logradouro,
-      bairro: formValues.bairro,
-      cidade: formValues.cidade,
-      estado: formValues.estado,
-      numero: Number(formValues.numero),
-      complemento: formValues.complemento,
-      cep: formValues.cep,
-      latitude: Number(formValues.latitude),
-      longitude: Number(formValues.longitude)
-    };
-
     try {
-      await submitEstacaoComEndereco(estacao, endereco);
-      showPopConfirmacao(`Estação: ${formValues.nome}, adicionada com sucesso!`);
+      console.log('Enviando dados da estação:', estacao);
+      console.log('Enviando dados do endereço:', endereco);
+      await submitEstacao(estacao, endereco);
+      showPopConfirmacao(`Estação: ${nome}, adicionada com sucesso!`);
       onSubmit(e);
     } catch (error) {
       console.error('Erro ao criar a estação:', error);
-      alert("Houve um erro ao cadastrar a estação. Tente novamente.");
+      alert('Houve um erro ao cadastrar a estação. Tente novamente.');
     }
   };
 
@@ -63,7 +81,7 @@ export const Formulario = ({ onSubmit, dados }: FormularioProps) => {
           Crie uma nova estação
         </h2>
         <form action="#" onSubmit={handleFormSubmit}>
-        <div className="w-full mb-4">
+          <div className="w-full mb-4">
             <Input
               id="nome"
               label="Nome da Estação"
@@ -89,30 +107,30 @@ export const Formulario = ({ onSubmit, dados }: FormularioProps) => {
           </div>
           <div className="grid gap-4 sm:grid-cols-2 sm:gap-6">
             <div>
-            <Input
-                    id="cep"
-                    label="CEP"
-                    span="*"
-                    placeholder="CEP"
-                    type="number"
-                    value={formValues.cep}
-                    onChange={handleChange}
-                    required
-                  />
+              <Input
+                id="cep"
+                label="CEP"
+                span="*"
+                placeholder="CEP"
+                type="number"
+                value={formValues.cep}
+                onChange={handleCepChange}
+                required
+              />
             </div>
             <div>
-            <Input
-                    id="numero"
-                    label="Número"
-                    span="*"
-                    placeholder="Número"
-                    type="number"
-                    value={formValues.numero}
-                    onChange={handleChange}
-                    required
-                  />
+              <Input
+                id="numero"
+                label="Número"
+                span="*"
+                placeholder="Número"
+                type="text"
+                value={formValues.numero}
+                onChange={handleChange}
+                required
+              />
             </div>
-            <div>
+            <div className="mb-2">
               <Input
                 id="logradouro"
                 label="Logradouro"
@@ -123,7 +141,7 @@ export const Formulario = ({ onSubmit, dados }: FormularioProps) => {
                 onChange={handleChange}
               />
             </div>
-            <div>
+            <div className="mb-2">
               <Input
                 id="cidade"
                 label="Cidade"
@@ -135,7 +153,8 @@ export const Formulario = ({ onSubmit, dados }: FormularioProps) => {
               />
             </div>
           </div>
-            <div>
+          <div className="grid gap-4 sm:grid-cols-2 sm:gap-6">
+          <div className="mb-2">
               <Input
                 id="bairro"
                 label="Bairro"
@@ -146,7 +165,7 @@ export const Formulario = ({ onSubmit, dados }: FormularioProps) => {
                 onChange={handleChange}
               />
             </div>
-            <div>
+            <div className="mb-2">
               <Input
                 id="estado"
                 label="Estado"
@@ -157,7 +176,7 @@ export const Formulario = ({ onSubmit, dados }: FormularioProps) => {
                 onChange={handleChange}
               />
             </div>
-            <div>
+            <div className="mb-2">
               <Input
                 id="complemento"
                 label="Complemento"
@@ -168,7 +187,7 @@ export const Formulario = ({ onSubmit, dados }: FormularioProps) => {
                 onChange={handleChange}
               />
             </div>
-            <div>
+            <div className="mb-2">
               <Input
                 id="latitude"
                 label="Latitude"
@@ -179,7 +198,9 @@ export const Formulario = ({ onSubmit, dados }: FormularioProps) => {
                 onChange={handleChange}
               />
             </div>
-            <div>
+          </div>
+          <div className="grid gap-4 sm:grid-cols-2 sm:gap-6">
+          <div className="mb-2">
               <Input
                 id="longitude"
                 label="Longitude"
@@ -190,18 +211,17 @@ export const Formulario = ({ onSubmit, dados }: FormularioProps) => {
                 onChange={handleChange}
               />
             </div>
-
             <div className="mb-4">
-            <Select
-            id="parametro"
-            label="Selecione um Parâmetro"
-            options={parametros.map((parametro) => ({
-              value: parametro.id,
-              label: parametro.nome,
-            }))}
-            onChange={handleChange}
-          />
-
+              <Select
+                id="parametro"
+                label="Selecione um Parâmetro"
+                options={parametros.map((parametro) => ({
+                  value: parametro.id,
+                  label: parametro.nome,
+                }))}
+                onChange={handleParametrosChange}
+              />
+            </div>
           </div>
 
           <div className="mt-4">

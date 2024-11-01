@@ -2,11 +2,11 @@
 
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { Input } from '@/components/input';
-import { Select } from '@/components/select';
+import { Input } from '@/components/input/input';
+import { Select } from '@/components/select/select';
 import { FormularioProps } from '@/types/interfaces';
-import { Toggle } from './toggle';
-import { Botao } from './botao';
+import { Toggle } from '@/components/input/toggle';
+import { Botao } from '@/components/botao/botao';
 import { useEditable } from '@/hooks/editar';
 import { useUpdateEstacao } from '@/hooks/estacoes/atualizarEstacao';
 import { useUpdateEndereco } from '@/hooks/enderecos/atualizarEndereco';
