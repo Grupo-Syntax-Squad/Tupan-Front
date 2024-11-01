@@ -29,8 +29,6 @@ export default function Estacoes() {
       : 'Endereço não disponível',
   }));
 
-  console.log('Estações recebidas:', estacoes);
-  console.log('Dados mapeados:', dados);
 
   const handleSubmit = () => {
     refetch();

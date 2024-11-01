@@ -49,10 +49,44 @@ export const useFormularioEstacoes = (dados?: Record<string, unknown>) => {
     bairro: '',
     cidade: '',
     estado: '',
-    complemento: '',
+    complemento: 'sem complemento',
     latitude: '',
     longitude: '',
     parametros: [],
+  });
+
+  useEffect(() => {
+    if (dados) {
+      setFormValues((prevValues) => ({
+        ...prevValues,
+        ...dados,
+      }));
+    }
+  }, [dados]);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { id, value } = e.target;
+    setFormValues((prevValues) => ({
+      ...prevValues,
+      [id]: value,
+    }));
+  };
+
+  return {
+    formValues,
+    handleChange,
+    setFormValues,
+  };
+};
+
+
+export const useFormularioAlertas = (dados?: Record<string, unknown>) => {
+  const [formValues, setFormValues] = useState({
+    nome: '',
+    condicao: '',
+    estacao: '',
+    parametro: '',
+    valor: ''
   });
 
   useEffect(() => {

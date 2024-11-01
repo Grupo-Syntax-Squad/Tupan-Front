@@ -47,10 +47,9 @@ export const Formulario = ({ onSubmit, dados }: FormularioProps) => {
   };
 
   const handleParametrosChange = (e) => {
-    const selectedOptions = Array.from(e.target.selectedOptions);
-    const parametros = selectedOptions.map((option) => option.value);
-    setFormValues({ ...formValues, parametros });
-  }
+    const { value } = e.target;
+    setFormValues({ ...formValues, parametros: value });
+  };
 
   const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
