@@ -112,3 +112,34 @@ export const useFormularioAlertas = (dados?: Record<string, unknown>) => {
     setFormValues,
   };
 };
+
+
+export const useFormularioUsuarios = (dados?: Record<string, unknown>) => {
+  const [formValues, setFormValues] = useState({
+    email: '',
+    password: '',
+  });
+
+  useEffect(() => {
+    if (dados) {
+      setFormValues((prevValues) => ({
+        ...prevValues,
+        ...dados,
+      }));
+    }
+  }, [dados]);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { id, value } = e.target;
+    setFormValues((prevValues) => ({
+      ...prevValues,
+      [id]: value,
+    }));
+  };
+
+  return {
+    formValues,
+    handleChange,
+    setFormValues,
+  };
+};
