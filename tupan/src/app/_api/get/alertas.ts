@@ -33,15 +33,13 @@ export const obterAlertas = async (token: string): Promise<Alerta[]> => {
   }
 };
 
-export const obterAlertaPorId = async (id: number): Promise<Alerta> => {
-  const token = useToken(); 
+export const obterAlertaPorId = async (id: number, token: string): Promise<Alerta> => {
 
   if (!token) {
     throw new Error("Token não encontrado. Por favor, faça login.");
   }
 
   try {
-    const token =  useToken()
     const response = await fetch(`${api_route}alertas/${id}`, {
       method: "GET",
       headers: {
@@ -51,7 +49,7 @@ export const obterAlertaPorId = async (id: number): Promise<Alerta> => {
     });
     
     if (!response.ok) {
-      throw new Error(`Erro ao obter categoria: ${response.statusText}`);
+      throw new Error(`Erro ao obter alerta: ${response.statusText}`);
     }
 
     const data = await response.json();
