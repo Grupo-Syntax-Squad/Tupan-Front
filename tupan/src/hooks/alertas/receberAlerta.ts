@@ -52,19 +52,20 @@ export const useGetAlertas = () => {
   return { alertas, loading, error, refetch: fetchAlertas };
 };
 
-export const useGetAlertaById = (id: number) => {
+export const useGetAlertaById = (id: number, token: string | null) => {
   const [alerta, setAlerta] = useState<Alerta | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const token = useToken();
 
   const fetchAlerta = async () => {
+    console.log(`Iniciando busca de alerta com ID: ${id}`);
     setLoading(true);
     setError(null);
+    console.log('token', token);
 
     try {
       if (token) {
-        const result = await obterAlertaPorId(id);
+        const result = await obterAlertaPorId(id, token);
         console.log('Alerta obtido com sucesso:', result);
         setAlerta(result);
       } else {
