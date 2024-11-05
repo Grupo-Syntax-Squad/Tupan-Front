@@ -135,7 +135,7 @@ const Conteúdo = [
     id: 5,
   },
   {
-    titulo: 'Playgroung',
+    titulo: 'Playground',
     texto: '',
     id: 6,
   },
