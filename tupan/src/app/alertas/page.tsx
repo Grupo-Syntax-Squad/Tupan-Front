@@ -48,7 +48,7 @@ export default function Alertas() {
       </div>
 
       <div className="w-full flex pr-4 flex-col gap-4">
-        <NavTop path="Estações" nome="" />
+        <NavTop path="Alertas" nome="" />
 
         <div className="flex gap-4">
           {loading && <p>Loading...</p>}

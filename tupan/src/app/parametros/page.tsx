@@ -39,7 +39,7 @@ export default function Parametros() {
       </div>
 
       <div className="w-full flex pr-4 flex-col gap-4">
-        <NavTop nome="Usuário" path="Parâmetros" />
+        <NavTop nome="" path="Parâmetros" />
 
         <div className="flex gap-4">
           {loading && <p>Loading...</p>}

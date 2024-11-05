@@ -101,23 +101,23 @@ export const FormularioAtualizacaoEstacoes = ({
       await updateEstacao(updatedParams);
       onSubmit(updatedParams as any);
       showPopConfirmacao(
-        `Estacao: "${nomeFormulario}" atualizado com sucesso!`
+        `Estacao: "${nomeFormulario}" atualizada com sucesso!`
       );
     } catch (error) {
-      console.error('Erro ao atualizar o parâmetro:'), error;
+      console.error('Erro ao atualizar a estação:'), error;
     }
   };
 
   const handleDelete = async () => {
     if (id) {
       const confirmDelete = confirm(
-        'Tem certeza que deseja deletar este parâmetro?'
+        'Tem certeza que deseja deletar esta estação?'
       );
       if (confirmDelete) {
         try {
           await useDeleteEstacao(id);
         } catch (error) {
-          console.error('Erro ao deletar o parâmetro:', error);
+          console.error('Erro ao deletar a estação:', error);
         }
       }
     }

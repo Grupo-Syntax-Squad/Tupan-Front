@@ -50,7 +50,7 @@ export default function Usuario() {
       </div>
 
       <div className="w-full flex pr-4 flex-col gap-4">
-        <NavTop path="Estações" nome="" />
+        <NavTop path="Usuários" nome="" />
 
         <div className="flex gap-4">
           {loading && <p>Loading...</p>}

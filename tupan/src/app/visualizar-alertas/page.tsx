@@ -61,7 +61,7 @@ const DetalheAlerta: React.FC = () => {
       </div>
 
       <div className="flex flex-col min-h-screen w-full bg-gray-100">
-        <NavTop nome="Usuário" path={`Alertas / ${alerta.nome}`} />
+        <NavTop nome="" path={`Alertas / ${alerta.nome}`} />
 
         <div className="flex flex-col items-center mt-10">
           <div className="w-3/4 bg-white shadow-lg rounded-lg p-6">
