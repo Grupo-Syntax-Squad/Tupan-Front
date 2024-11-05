@@ -17,20 +17,19 @@ import { useGetEnderecoById } from '@/hooks/enderecos/receberEndereco';
 import { useToken } from '@/hooks/token';
 
 //utils
-import { useEffect, useState } from 'react';
+import { use, useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { FormularioProps } from '@/types/interfaces';
 
 export const FormularioAtualizacaoEstacoes = ({ 
   onSubmit, initialStatus, nomeFormulario, showPopConfirmacao}: FormularioProps & {
-  initialStatus: boolean; showPopConfirmacao: (message: string) => void;
-  nomeFormulario: string;}) => {
+    initialStatus: boolean; showPopConfirmacao: (message: string) => void;
+    nomeFormulario: string;}) => {
+  const token = useToken();  
   const searchParams = useSearchParams();
   const idParam = searchParams.get('id');
-  const id = idParam ? Number(idParam) : 0;
-  const token = '36e2f9704f658dbb282b1a2205898cbbf3b7a914'
-  console.log(token);
-  
+  const id = idParam ? Number(idParam) : 0;  
+
   const { estacao: formValues, loading, error } = useGetEstacaoById(id, token) as unknown as { estacao: { nome: string; topico: string; endereco: { cep: string; logradouro: string; numero: string; bairro: string; cidade: string; estado: string; complemento: string; latitude: string; longitude: string; }; }; loading: boolean; error: any };
   const { isEditable, toggleEdit } = useEditable();
   const { formValues: formularioValues,setFormValues, handleChange,} = useFormularioEstacoes((formValues as unknown as Record<string, unknown>) || {});

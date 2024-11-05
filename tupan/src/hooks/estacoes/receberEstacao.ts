@@ -31,7 +31,7 @@ export const useGetEstacoes = () => {
         console.log('Estações obtidas com sucesso:', result);
         setEstacoes(result);
       } else {
-        console.log(token)
+        console.log(token);
         setError('Token não disponível');
       }
     } catch (error) {
@@ -53,31 +53,34 @@ export const useGetEstacoes = () => {
       console.log('useEffect: Chamando fetchEstacoes');
       fetchEstacoes();
     } else {
-      console.warn('Token não disponível no useEffect, não chamando fetchEstacoes');
+      console.warn(
+        'Token não disponível no useEffect, não chamando fetchEstacoes'
+      );
     }
   }, [token]);
 
   return { estacoes, loading, error, refetch: fetchEstacoes };
 };
 
-export const useGetEstacaoById = (id: number, token: any) => {
+export const useGetEstacaoById = (id: number, token: string | null) => {
   const [estacao, setEstacao] = useState<Estacao | null>(null);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null); 
-  console.log('token', token);
-  
+  const [error, setError] = useState<string | null>(null);
 
   const fetchEstacao = async () => {
     console.log(`Iniciando busca de estação com ID: ${id}`);
     setLoading(true);
     setError(null);
     console.log('token', token);
-    
+
     try {
-      if(token){
+      if (token) {
         const result = await obterEstacaoPorId(id, token);
         console.log('Estação obtida com sucesso:', result);
         setEstacao(result);
+      } else {
+        console.warn('Token não disponível na função fetchEstacao');
+        setError('Token não disponível');
       }
     } catch (error) {
       if (error instanceof Error) {
@@ -93,12 +96,12 @@ export const useGetEstacaoById = (id: number, token: any) => {
   };
 
   useEffect(() => {
-    if (id) {
+    if (id && token) {
       fetchEstacao();
-    } else {
-      console.error('ID não disponível, abortando fetch da estação');
+    } else if (!token || !token) {
+      console.error('ID ou token não disponível, abortando fetch da estação');
     }
-  }, [id]);
+  }, [id, token]);
 
   return { estacao, loading, error, refetch: fetchEstacao };
 };
