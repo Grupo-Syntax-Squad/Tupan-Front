@@ -60,23 +60,24 @@ export const useGetEstacoes = () => {
   return { estacoes, loading, error, refetch: fetchEstacoes };
 };
 
-export const useGetEstacaoById = (id: number) => {
+export const useGetEstacaoById = (id: number, token: any) => {
   const [estacao, setEstacao] = useState<Estacao | null>(null);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const token = useToken();
+  const [error, setError] = useState<string | null>(null); 
+  console.log('token', token);
+  
 
   const fetchEstacao = async () => {
+    console.log(`Iniciando busca de estação com ID: ${id}`);
     setLoading(true);
     setError(null);
-
+    console.log('token', token);
+    
     try {
-      if (token) {
+      if(token){
         const result = await obterEstacaoPorId(id, token);
         console.log('Estação obtida com sucesso:', result);
         setEstacao(result);
-      } else {
-        setError('token não encontrado!');
       }
     } catch (error) {
       if (error instanceof Error) {

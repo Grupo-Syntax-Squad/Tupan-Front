@@ -15,10 +15,26 @@ export const useSetToken = () => {
 
 export const useToken = () => {
   const [token, setToken] = useState<string | null>(null);
+
+  const fetchToken = async () => {
+    try {
+      const response = await Login({ email: 'syntax@gmail.com', password: '123' });
+      jsCookie.set('token', response.token);
+      setToken(response.token);
+      console.log('Token obtido com sucesso:', response.token);
+    } catch (error) {
+      console.error('Erro ao obter token:', error);
+    }
+  };
   
   useEffect(() => {
-    const token = jsCookie.get('token') ?? null;
-    setToken(token);
+    console.log('useToken called');
+    const storedToken = jsCookie.get('token');
+    if (storedToken) {
+      setToken(storedToken);
+    } else {
+      fetchToken();
+    }
   }, []);
 
   return token;

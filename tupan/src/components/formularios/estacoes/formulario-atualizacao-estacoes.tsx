@@ -1,115 +1,127 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { useSearchParams } from 'next/navigation';
+//components
 import { Input } from '@/components/input/input';
-import { Select } from '@/components/select/select';
-import { FormularioProps } from '@/types/interfaces';
-import { Toggle } from '@/components/input/toggle';
 import { Botao } from '@/components/botao/botao';
+import { Toggle } from '@/components/input/toggle';
+import { Select } from '@/components/select/select';
+
+//hooks
+import { useFormularioEstacoes } from '@/hooks/formulario';
 import { useEditable } from '@/hooks/editar';
+import { useDeleteEstacao } from '@/hooks/estacoes/deletarEstacao';
+import { useGetEstacaoById } from '@/hooks/estacoes/receberEstacao';
 import { useUpdateEstacao } from '@/hooks/estacoes/atualizarEstacao';
 import { useUpdateEndereco } from '@/hooks/enderecos/atualizarEndereco';
-import { useGetEstacaoById } from '@/hooks/estacoes/receberEstacao';
 import { useGetEnderecoById } from '@/hooks/enderecos/receberEndereco';
-import { useFormularioEstacoes } from '@/hooks/formulario';
-import { useDeleteEstacao } from '@/hooks/estacoes/deletarEstacao';
+import { useToken } from '@/hooks/token';
 
-export const FormularioAtualizacaoEstacoes = ({
-  onSubmit,  initialStatus, nomeFormulario, showPopConfirmacao }:
-  FormularioProps & { initialStatus: boolean, showPopConfirmacao: (message: string) => void, nomeFormulario: string }) => {
+//utils
+import { useEffect, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
+import { FormularioProps } from '@/types/interfaces';
+
+export const FormularioAtualizacaoEstacoes = ({ 
+  onSubmit, initialStatus, nomeFormulario, showPopConfirmacao}: FormularioProps & {
+  initialStatus: boolean; showPopConfirmacao: (message: string) => void;
+  nomeFormulario: string;}) => {
   const searchParams = useSearchParams();
   const idParam = searchParams.get('id');
-  const id = idParam ? Number(idParam) : null;
-  const { estacao: formValues, loading, error } = useGetEstacaoById(id);
-  const { endereco: Values, loading: loadingEndereco, error: errorEndereco } = useGetEnderecoById(id);
+  const id = idParam ? Number(idParam) : 0;
+  const token = '36e2f9704f658dbb282b1a2205898cbbf3b7a914'
+  console.log(token);
+  
+  const { estacao: formValues, loading, error } = useGetEstacaoById(id, token) as unknown as { estacao: { nome: string; topico: string; endereco: { cep: string; logradouro: string; numero: string; bairro: string; cidade: string; estado: string; complemento: string; latitude: string; longitude: string; }; }; loading: boolean; error: any };
   const { isEditable, toggleEdit } = useEditable();
-  const { formValues: formularioValues, setFormValues, handleChange } = useFormularioEstacoes(
-    (formValues as unknown as Record<string, unknown>) || {}
-  );
-  const { updateEstacao, loading: loadingUpdate,  error: errorUpdate } = useUpdateEstacao();
-  const { updateEndereco, loading: loadingUpdate2,  error: errorUpdate2 } = useUpdateEndereco();
-  const [isInitialized, setIsInitialized] = useState(false);
+  const { formValues: formularioValues,setFormValues, handleChange,} = useFormularioEstacoes((formValues as unknown as Record<string, unknown>) || {});
+  const { updateEstacao, loading: loadingUpdate,  error: errorUpdate} = useUpdateEstacao();
+  const [ isInitialized, setIsInitialized] = useState(false);
 
   useEffect(() => {
+    console.log('useEffect called');
+
     if (formValues && !isInitialized && Object.keys(formValues).length > 0) {
-      setFormValues((prevState) => ({
-        ...prevState,
+      const newFormValues = {
         nome: formValues.nome || '',
         topico: formValues.topico || '',
-      }));
+        ativo: initialStatus,
+        cep: formValues.endereco?.cep || '',
+        logradouro: formValues.endereco?.logradouro || '',
+        numero: formValues.endereco?.numero || '',
+        bairro: formValues.endereco?.bairro || '',
+        cidade: formValues.endereco?.cidade || '',
+        estado: formValues.endereco?.estado || '',
+        complemento: formValues.endereco?.complemento || '',
+        latitude: formValues.endereco?.latitude || '',
+        longitude: formValues.endereco?.longitude || '',
+        parametros: [],
+      };
+      console.log('newFormValues:', newFormValues);
+
+      if (JSON.stringify(formularioValues) !== JSON.stringify(newFormValues)) {
+        setFormValues(newFormValues);
+        console.log('setFormValues called with:', newFormValues);
+      }
+
+      // Marcar como inicializado apenas se `formValues` foi atualizado com sucesso
+      setIsInitialized(true);
     }
-  
-    if (Values && Object.keys(Values).length > 0) {
-      setFormValues((prevState) => ({
-        ...prevState,
-        cep: Values.cep || '',
-        numero: Values.numero ? Values.numero.toString() : '',
-        logradouro: Values.logradouro || '',
-        cidade: Values.cidade || '',
-        bairro: Values.bairro || '',
-        complemento: Values.complemento || '',
-        latitude: Values.latitude ? Values.latitude.toString() : '',
-        longitude: Values.longitude ? Values.longitude.toString() : '',
-        estado: Values.estado || '',
-      }));
-    }
-  
-    setIsInitialized(true);
-  }, [formValues, Values, isInitialized, setFormValues]);
-  
+    console.log('formValues:', formValues);
+  }, [isInitialized, setFormValues, initialStatus, loading]);
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
 
-    const updatedEstacao = {
+    const updatedParams = {
       id: id || 0,
       nome: formularioValues.nome,
       topico: formularioValues.topico,
+      endereco: {
+        cep: formularioValues.cep,
+        logradouro: formularioValues.logradouro,
+        numero: formularioValues.numero,
+        bairro: formularioValues.bairro,
+        cidade: formularioValues.cidade,
+        estado: formularioValues.estado,
+        complemento: formularioValues.complemento,
+        latitude: formularioValues.latitude,
+        longitude: formularioValues.longitude,
+      },
+      parametros: [formularioValues.parametros],
+      criado: '',
       modificado: new Date().toISOString(),
       ativo: initialStatus,
-      endereco: Values ? Values.id : null, 
     };
 
-    const updatedEndereco = {
-      id: id || 0,
-      cep: formularioValues.cep,
-      numero: Number(formularioValues.numero), // Convertendo para número
-      logradouro: formularioValues.logradouro,
-      cidade: formularioValues.cidade,
-      bairro: formularioValues.bairro,
-      complemento: formularioValues.complemento,
-      latitude: Number(formularioValues.latitude), // Convertendo para número
-      longitude: Number(formularioValues.longitude), // Convertendo para número
-      estado: formularioValues.estado
-    };
-    
-
-    if (isNaN(updatedEstacao.id)) {
-      console.error('ID inválido:', updatedEstacao.id);
+    if (isNaN(updatedParams.id)) {
+      console.error('ID inválido:', updatedParams.id);
       return; // Não envia se o ID for inválido
     }
 
     try {
-      await updateEstacao(updatedEstacao);
-      await updateEndereco(updatedEndereco);
-      onSubmit(updatedEstacao as any);
-      showPopConfirmacao(`Estação: "${nomeFormulario}" atualizada com sucesso!`);
+      await updateEstacao(updatedParams);
+      onSubmit(updatedParams as any);
+      showPopConfirmacao(
+        `Estacao: "${nomeFormulario}" atualizado com sucesso!`
+      );
     } catch (error) {
-      console.error('Erro ao atualizar a estação:'), error;
+      console.error('Erro ao atualizar o parâmetro:'), error;
     }
   };
 
   const handleDelete = async () => {
     if (id) {
-      const confirmDelete = confirm('Tem certeza que deseja deletar esta estação?');
+      const confirmDelete = confirm(
+        'Tem certeza que deseja deletar este parâmetro?'
+      );
       if (confirmDelete) {
         try {
           await useDeleteEstacao(id);
         } catch (error) {
-          console.error('Erro ao deletar a estação:', error);
+          console.error('Erro ao deletar o parâmetro:', error);
         }
-      }}
+      }
+    }
   };
 
   return (

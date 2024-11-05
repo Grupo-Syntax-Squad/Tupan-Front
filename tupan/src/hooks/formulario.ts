@@ -55,14 +55,14 @@ export const useFormularioEstacoes = (dados?: Record<string, unknown>) => {
     parametros: [],
   });
 
-  useEffect(() => {
-    if (dados) {
-      setFormValues((prevValues) => ({
-        ...prevValues,
-        ...dados,
-      }));
-    }
-  }, [dados]);
+  // useEffect(() => {
+  //   if (dados) {
+  //     setFormValues((prevValues) => ({
+  //       ...prevValues,
+  //       ...dados,
+  //     }));
+  //   }
+  // }, [dados]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { id, value } = e.target;
