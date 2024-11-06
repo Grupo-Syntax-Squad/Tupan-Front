@@ -15,8 +15,7 @@ import { FormularioProps } from '@/types/interfaces';
 export const Formulario = ({ onSubmit, dados }: FormularioProps) => {
   const { formValues, handleChange } = useFormularioUsuarios(dados);
   const { submitUsuario, loading, error, success } = useCreateUsuario();
-  const { isVisible, mensagem, showPopConfirmacao, hidePopConfirmacao } =
-    usePopConfirmacao();
+  const { isVisible, mensagem, showPopConfirmacao, hidePopConfirmacao } =  usePopConfirmacao();
 
   const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

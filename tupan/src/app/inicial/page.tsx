@@ -11,10 +11,11 @@ const menuData = [
   { nome: 'Alertas', path: '/alertas', icone: 'bx bx-alarm-exclamation' },
   { nome: 'Usuários', path: '/usuarios', icone: 'bx bx-user' },
   { nome: 'Educacional', path: '/educacional', icone: 'bx bx-book' },
-  { nome: 'Logout', path: '/logout', icone: 'bx bx-log-out' },
+  { nome: 'Logout', path: '/login', icone: 'bx bx-log-out' },
 ];
 
 export default function Inicial() {
+  console.log('começou')
 useSetToken();
   return (
     <div className="w-screen flex bg-gray-100 overflow-x-hidden">

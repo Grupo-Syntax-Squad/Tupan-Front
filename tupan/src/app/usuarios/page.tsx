@@ -24,10 +24,7 @@ export default function Usuario() {
   const dados = usuarios.map((usuario) => {
     const data = new Date(usuario.criacao);
     const dataFormatada = `${data.getDate().toString().padStart(2, '0')}/${(data.getMonth() + 1).toString().padStart(2, '0')}/${data.getFullYear()}`;
-    return {
-      email: usuario.email,
-      criacao: dataFormatada
-    };
+    return { email: usuario.email, criacao: dataFormatada };
   });
 
   const handleSubmit = () => {
@@ -40,7 +37,7 @@ export default function Usuario() {
     { nome: "Alertas", path: "/alertas", icone: "bx bx-alarm-exclamation" },
     { nome: "Usuários", path: "/usuarios", icone: "bx bx-user" },
     { nome: "Educacional", path: "/educacional", icone: "bx bx-book" },
-    { nome: "Logout", path: "/logout", icone: "bx bx-log-out" },
+    { nome: "Logout", path: "/login", icone: "bx bx-log-out" },
   ];
 
   return (

@@ -40,7 +40,7 @@ export default function Estacoes() {
     { nome: 'Alertas', path: '/alertas', icone: 'bx bx-alarm-exclamation' },
     { nome: 'Usuários', path: '/usuarios', icone: 'bx bx-user' },
     { nome: 'Educacional', path: '/educacional', icone: 'bx bx-book' },
-    { nome: 'Logout', path: '/', icone: 'bx bx-log-out' },
+    { nome: 'Logout', path: '/login', icone: 'bx bx-log-out' },
   ];
 
   if (loading) {
