@@ -24,7 +24,7 @@ jobs:
           node-version: '20'
 
       - name: Install dependencies
-        run: npm install --prefix tupan
+        run: npm install --prefix tupan --legacy-peer-deps
 
       - name: Run Jest tests
         run: npm test --prefix tupan
