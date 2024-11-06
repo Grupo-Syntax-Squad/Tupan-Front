@@ -13,7 +13,7 @@ const config: Config = {
   preset: 'ts-jest',
   setupFilesAfterEnv: ['tupan/src/setupTests.ts'],
   moduleFileExtensions: ['ts', 'tsx', 'js'],
-  testMatch: ['tupan/src/**/*.{test,spec}.{ts,tsx}'],
+  testMatch: ['<rootDir>/src/**/*.{test,spec}.{ts,tsx}'],
   transform: {
     '^.+\\.(ts|tsx)$': 'ts-jest',
   },
