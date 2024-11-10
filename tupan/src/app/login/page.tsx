@@ -36,7 +36,7 @@ const LoginPage: React.FC = () => {
       <div className="flex items-center gap-10">
         <div className="max-w-md">
           <h1 className="text-2xl font-bold mb-6">Bem vindo(a) de volta!</h1>
-          {error && <p className="text-red-500 mb-4">{error}</p>}
+          {error && <p className="text-red-500 mb-4">Usuário ou senha incorretos. Por favor, tente novamente.</p>}
           <form className="flex flex-col gap-4"
             onSubmit={handleSubmit}>
             <div>
@@ -44,6 +44,7 @@ const LoginPage: React.FC = () => {
                 id="email"
                 label="E-mail"
                 span=" "
+                type="email"
                 placeholder="Digite o seu e-mail"
                 required
                 value={email}
@@ -58,6 +59,7 @@ const LoginPage: React.FC = () => {
                 span=" "
                 placeholder="Digite a sua senha"
                 required
+                type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 estilo="mt-1 w-full px-3 py-2 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
@@ -75,8 +77,8 @@ const LoginPage: React.FC = () => {
           <Image
             src="/assets/image 126.png"
             alt="Image-126"
-            width={250}
-            height={250}
+            width={400}
+            height={400}
           />
         </div>
       </div>
