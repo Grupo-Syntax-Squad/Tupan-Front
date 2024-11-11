@@ -1,8 +1,13 @@
 'use client';
+
+//components
 import { MenuLateral } from '@/components/menu/lateral';
 import { Tabela } from '@/components/tabela/tabela-parametros';
 import { Formulario } from '@/components/formularios/parametros/formulario-parametros';
 import { NavTop } from '@/components/nav-top';
+
+//hooks
+import { useControleAcesso } from '@/hooks/secao/controleAcesso';
 import { useGetParametros } from '@/hooks/parametros/receberParametro';
 
 const menuData = [
@@ -21,6 +26,7 @@ const colunas = [
 ];
 
 export default function Parametros() {
+  const controleAcesso = useControleAcesso();
   const { parametros, loading, error, refetch } = useGetParametros();
   const dados = parametros.map((parametro) => ({
     nome: parametro.nome,
@@ -31,6 +37,11 @@ export default function Parametros() {
   const handleSubmit = () => {
     refetch();
   };  
+
+  if (controleAcesso === true) {
+    window.location.href = '/';
+    return null;
+  }
 
   return (
     <div className="w-screen flex bg-gray-100">

@@ -20,6 +20,7 @@ import { useToken } from '@/hooks/token';
 import { use, useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { FormularioProps } from '@/types/interfaces';
+import Parametros from '@/app/parametros/page';
 
 export const FormularioAtualizacaoEstacoes = ({ 
   onSubmit, initialStatus, nomeFormulario, showPopConfirmacao}: FormularioProps & {
@@ -30,7 +31,7 @@ export const FormularioAtualizacaoEstacoes = ({
   const idParam = searchParams.get('id');
   const id = idParam ? Number(idParam) : 0;  
 
-  const { estacao: formValues, loading, error } = useGetEstacaoById(id, token) as unknown as { estacao: { nome: string; topico: string; endereco: { cep: string; logradouro: string; numero: string; bairro: string; cidade: string; estado: string; complemento: string; latitude: string; longitude: string; }; }; loading: boolean; error: any };
+  const { estacao: formValues, loading, error } = useGetEstacaoById(id, token) as unknown as { estacao: { nome: string; topico: string; parametros: []; endereco: { cep: string; logradouro: string; numero: string; bairro: string; cidade: string; estado: string; complemento: string; latitude: string; longitude: string; }; }; loading: boolean; error: any };
   const { isEditable, toggleEdit } = useEditable();
   const { formValues: formularioValues,setFormValues, handleChange,} = useFormularioEstacoes((formValues as unknown as Record<string, unknown>) || {});
   const { updateEstacao, loading: loadingUpdate,  error: errorUpdate} = useUpdateEstacao();
@@ -182,7 +183,7 @@ export const FormularioAtualizacaoEstacoes = ({
                   value={formularioValues.numero || ''}
                   onChange={handleChange}
                   disabled={!isEditable}
-                  type=''
+                  type='text'
                 />
               </div>
               <div className="w-full flex flex-col">
@@ -205,6 +206,38 @@ export const FormularioAtualizacaoEstacoes = ({
                   disabled={!isEditable}
                 />
               </div>
+              <div className="w-full flex flex-col">
+                <Input
+                  id="estado" label="Estado"
+                  span="*"  placeholder="Digite o estado"
+                  required  estilo="min-w-full"
+                  value={formularioValues.estado || ''}
+                  onChange={handleChange}
+                  disabled={!isEditable}
+                />
+              </div>
+              <div className="w-full flex flex-col">
+                <Input
+                  id="complemento" label="Complemento"
+                  span=" "  placeholder="Digite o complemento"
+                  required  estilo="min-w-full"
+                  value={formularioValues.complemento || ''}
+                  onChange={handleChange}
+                  disabled={!isEditable}
+                />
+              </div>
+                  <div className="w-full flex flex-col">
+                    <Select
+                      id="parametros" label="Parametros"
+                      span="*" estilo="min-w-full"
+                      required value={formularioValues.parametros || 'selecione uma opção'}
+                      onChange={handleChange} disabled={!isEditable}
+                      options={formValues?.parametros?.map((parametro: number) => ({
+                        label: parametro.toString(),
+                        value: parametro,
+                      })) || []}
+                    />
+                  </div>
               
              
               <div className="flex justify-start mt-8 gap-6">

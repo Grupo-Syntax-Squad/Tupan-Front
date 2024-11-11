@@ -4,16 +4,16 @@ import { MenuLateral } from "@/components/menu/lateral";
 import { NavTop } from "@/components/nav-top";
 import { Formulario } from '@/components/formularios/alertas/formulario-alertas';
 import { Tabela } from "@/components/tabela/tabela-alertas";
-import { Botao } from "@/components/botao/botao";
 
 //hooks
+import { useControleAcesso } from '@/hooks/secao/controleAcesso';
 import { useGetAlertas } from "@/hooks/alertas/receberAlerta";
 
 //utils
 import Link from 'next/link';
 
 export default function Alertas() {
-
+  const controleAcesso = useControleAcesso();
   const { alertas, loading, error, refetch } = useGetAlertas();
 
   const colunas = [
@@ -40,6 +40,11 @@ export default function Alertas() {
     { nome: "Educacional", path: "/educacional", icone: "bx bx-book" },
     { nome: "Logout", path: "/login", icone: "bx bx-log-out" },
   ];
+
+  if (controleAcesso === true) {
+    window.location.href = '/';
+    return null;
+  }
 
   return (
     <div className="w-screen flex bg-gray-100">

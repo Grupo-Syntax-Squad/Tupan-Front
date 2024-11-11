@@ -9,6 +9,7 @@ interface Estacao {
   ativo: boolean;
   nome: string;
   endereco: {};
+  parametros: [];
   topico: string;
   criado: string;
   modificado: string;
