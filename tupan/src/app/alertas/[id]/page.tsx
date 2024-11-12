@@ -2,10 +2,11 @@
 
 import { useEffect, useState } from "react";
 import { MenuLateral } from "@/components/menu/lateral";
-import { FormularioAtualizacaoEstacoes } from "@/components/formularios/estacoes/formulario-atualizacao-estacoes";
+import { FormularioAtualizacaoAlertas } from "@/components/formularios/alertas/formulario-atualizacao-alertas";
+import { Botao } from "@/components/botao//botao";
 import { PopConfirmacao } from "@/components/alertas/confirmacao";
 import { usePopConfirmacao } from "@/hooks/visivel";
-import { useFormularioEstacoes } from "@/hooks/formulario";
+import { useFormularioAlertas } from "@/hooks/formulario";
 import { NavTop } from "@/components/nav-top";
 import { useDynamicContext } from "@/app/context";
 import { useToggle } from "@/hooks/check";
@@ -20,9 +21,8 @@ const menuData = [
 ];
 
 export default function EstacoesID() {
-  const { isVisible, mensagem, showPopConfirmacao, hidePopConfirmacao } =
-    usePopConfirmacao();
-  const { formValues, handleChange, setFormValues } = useFormularioEstacoes();
+  const { isVisible, mensagem, showPopConfirmacao, hidePopConfirmacao } = usePopConfirmacao();
+  const { formValues, handleChange, setFormValues } = useFormularioAlertas();
   const { state } = useDynamicContext();
 
   const [nomeFormulario, setNomeFormulario] = useState<string | undefined>(
@@ -36,7 +36,7 @@ export default function EstacoesID() {
     const id = searchParams.get("id");
     const status = searchParams.get("status");
 
-    setNomeFormulario(nome || "Formulário de Estações");
+    setNomeFormulario(nome || "Formulário de Alertas");
     setInitialStatus(status === "Ativado");
 
     if (id) {
@@ -65,7 +65,7 @@ export default function EstacoesID() {
 
         <div className="flex gap-4">
           <div className="flex flex-col gap-4 bg-white p-4 rounded-lg flex-1">
-            <FormularioAtualizacaoEstacoes
+            <FormularioAtualizacaoAlertas
               onSubmit={() => console.log("Formulário enviado")}
               dados={formValues}
               showPopConfirmacao={showPopConfirmacao}

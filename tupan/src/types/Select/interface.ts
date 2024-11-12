@@ -7,11 +7,12 @@ export interface Option {
     id: string;
     label: string;
     span: string;
+    multiple?: boolean;
     options: Array<Option>;
     children?: React.ReactNode;
     required?: boolean;
     disabled?: boolean;
     estilo?: string;
-    value: string;
+    value: string | string[];
     onChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
   }

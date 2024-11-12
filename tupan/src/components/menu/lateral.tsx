@@ -1,11 +1,25 @@
-"use client"
+'use client';
 
-import { MenuLateralProps } from "@/types/interfaces";
-import Link from "next/link";
-import Image from "next/image";
-import { LogoTupan } from "../../../public/export";
+import { MenuLateralProps } from '@/types/interfaces';
+import Link from 'next/link';
+import Image from 'next/image';
+import { LogoTupan } from '../../../public/export';
+import { useControleAcesso } from '@/hooks/secao/controleAcesso';
 
 export const MenuLateral = ({ menuData }: MenuLateralProps) => {
+  const controleAcesso = useControleAcesso();
+  const filteredMenuData = menuData
+    .filter(item => !controleAcesso || !['Parâmetros', 'Alertas', 'Usuários'].includes(item.nome))
+    .map(item => {
+      if (controleAcesso && item.nome === 'Logout') {
+        return { ...item, nome: 'Login', path: '/login' };
+      }
+      if (item.nome === 'Estações') {
+        return { ...item, nome: 'Dashboard', path: '/dashboard' };
+      }
+      return item;
+    });
+
   return (
     <>
       <link
@@ -20,7 +34,13 @@ export const MenuLateral = ({ menuData }: MenuLateralProps) => {
             <div className="flex items-center justify-center h-20">
               {/* Envolvendo o logo com Link para redirecionar à página inicial */}
               <Link href="/" passHref>
-                <Image src={LogoTupan} alt="Logo" priority width={200} height={100} />
+                <Image
+                  src={LogoTupan}
+                  alt="Logo"
+                  priority
+                  width={200}
+                  height={100}
+                />
               </Link>
             </div>
           </div>
@@ -28,7 +48,7 @@ export const MenuLateral = ({ menuData }: MenuLateralProps) => {
             {/* Menu */}
             <ul className="flex flex-col py-4">
               {/* Mapeia cada item do menu */}
-              {menuData.map((item, index) => (
+              {filteredMenuData.map((item, index) => (
                 <li key={index}>
                   <Link
                     href={item.path}

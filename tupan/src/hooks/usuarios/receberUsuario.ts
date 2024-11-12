@@ -6,7 +6,7 @@ interface Usuario {
   id: number;
   email: string;
   password: string;
-  criado: string;
+  criacao: string;
   modificado?: string;
 }
 

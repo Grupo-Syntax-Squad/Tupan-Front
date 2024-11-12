@@ -1,5 +1,4 @@
 import { api_route } from "..";
-import { useToken } from "@/hooks/token";
 
 interface Alerta {
     nome: string;
@@ -7,8 +6,7 @@ interface Alerta {
     ativo: boolean; 
   }
   
-  export const criarAlerta = async (alerta: Alerta): Promise<any> => {
-    const token = useToken()
+  export const criarAlerta = async (alerta: Alerta, token: any): Promise<any> => {
     try {
     if (!token) {
       throw new Error('Token não encontrado. Por favor, faça login.');

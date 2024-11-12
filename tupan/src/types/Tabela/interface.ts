@@ -4,6 +4,6 @@ export interface TabelaColuna{
 }
 
 export interface TableProps {
-    colunas: TabelaColuna[]; // Array de colunas da tabela
+    colunas: TabelaColuna[]; 
     dados: Record<string, unknown>[];
 }

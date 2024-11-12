@@ -1,12 +1,14 @@
 "use client";
 import { useTableSort } from "@/hooks/filtragem";
+import React from 'react';
 import { TableProps } from "@/types/interfaces";
 import Link from "next/link";
 import { ReactNode } from "react";
 import { useDynamicContext } from "@/app/context";
 
+export const Tabela: React.FC<TableProps> = ({ colunas, dados }) => {
+  console.log(dados); // Adicione um log para verificar os dados recebidos
 
-export const Tabela = ({ colunas, dados }: TableProps) => {
   const { sortState, toggleSort } = useTableSort();
   const {state, setValue} = useDynamicContext();
 
@@ -29,6 +31,9 @@ export const Tabela = ({ colunas, dados }: TableProps) => {
     }
     return 0;
   });
+
+  console.log(sortedData);
+  
 
   return (
     <>
@@ -61,29 +66,31 @@ export const Tabela = ({ colunas, dados }: TableProps) => {
           <tbody>
             {sortedData.map((row, rowIndex) => {
               return (
-                <tr
-                  key={rowIndex}
-                  className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
-                >
-                  {colunas.map((coluna, colIndex) => (
-                    <td key={colIndex} className="px-6 py-4">
-                      {row[coluna.acessor] as ReactNode}
-                    </td>
-                  ))}
-                  <td className="px-6 py-4 text-right">
-                    <Link
-                      title="Editar"
-                      className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-                      href={{ pathname: `estacoes/${rowIndex + 1}`, query: { id: rowIndex + 1, nome: `${row.nome}`, status: `${row.status}`} }}
-                      onClick={() => {
-                        setValue("nome", `${row.nome}`);
-                        setValue("status", `${row.status}`);
-                      }}
-                    >
-                      Editar
-                    </Link>
+              <tr
+                key={rowIndex}
+                className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
+              >
+                {colunas.map((coluna, colIndex) => {
+                return (
+                  <td key={colIndex} className="px-6 py-4">
+                  {row[coluna.acessor] as ReactNode}
                   </td>
-                </tr>
+                );
+                })}
+                <td className="px-6 py-4 text-right">
+                <Link
+                  title="Editar"
+                  className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                  href={{ pathname: `estacoes/${rowIndex + 1}`, query: { id: rowIndex + 1, nome: `${row.nome}`, status: `${row.status}`} }}
+                  onClick={() => {
+                  setValue("nome", `${row.nome}`);
+                  setValue("status", `${row.status}`);
+                  }}
+                >
+                  Editar
+                </Link>
+                </td>
+              </tr>
               );
             })}
           </tbody>

@@ -2,8 +2,8 @@ import { SelectProps } from "@/types/interfaces";
 import { Children } from "react";
 
 export const Select = ({
-  id, label, span, options, estilo,
-  required, value, onChange, disabled =true, children: Children
+  id, label, span, options = [], estilo,
+  required, value, onChange, disabled = true, children: Children
 }: SelectProps & { disabled?: boolean }) => {
   return (
     <div>
@@ -20,7 +20,8 @@ export const Select = ({
         required={required}
         disabled={!disabled}
         className={`${estilo} bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500`}
-      > {Children}
+      >
+        {Children}
         <option value="">Selecione uma opção</option>
         {options.map((option) => (
           <option key={option.value} value={option.value}>
