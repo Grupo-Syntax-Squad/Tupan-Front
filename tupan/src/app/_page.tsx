@@ -1,9 +1,13 @@
-// pages/_app.tsx
-import "leaflet/dist/leaflet.css";
-import { AppProps } from "next/app";
+
+import { AppProps } from 'next/app';
+import AuthGuard from '@/app/authGuard';
 
 function MyApp({ Component, pageProps }: AppProps) {
-  return <Component {...pageProps} />;
+  return (
+    <AuthGuard>
+      <Component {...pageProps} />
+    </AuthGuard>
+  );
 }
 
 export default MyApp;

@@ -1,13 +1,11 @@
 import { api_route } from "..";
-import { useToken } from "@/hooks/token";
 
 interface Usuario {
     email: string;
     password: string;
   }
   
-  export const criarUsuario = async (usuario: Usuario): Promise<any> => {
-    const token = useToken()
+  export const criarUsuario = async (usuario: Usuario, token: any): Promise<any> => {
     try {
     if (!token) {
       throw new Error('Token não encontrado. Por favor, faça login.');

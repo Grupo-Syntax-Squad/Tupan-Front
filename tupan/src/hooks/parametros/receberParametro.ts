@@ -1,8 +1,5 @@
 import { useState, useEffect } from 'react';
-import {
-  obterParametroPorId,
-  obterParametros,
-} from '@/app/_api/get/parametros';
+import { obterParametroPorId, obterParametros } from '@/app/_api/get/parametros';
 import { useToken } from '../token';
 
 interface Parametro {
@@ -30,7 +27,9 @@ export const useGetParametros = () => {
     setError(null);
 
     try {
+      // Verificando se o token está disponível
       if (token) {
+        console.log('Token disponível:', token);
         const result = await obterParametros(token);
         console.log('Parâmetros obtidos com sucesso:', result);
         setParametros(result);
@@ -51,8 +50,13 @@ export const useGetParametros = () => {
   };
 
   useEffect(() => {
-    console.log('useEffect: Chamando fetchParametros');
-    fetchParametros();
+    // Chamando fetchParametros apenas se o token estiver disponível
+    if (token) {
+      console.log('useEffect: Chamando fetchParametros');
+      fetchParametros();
+    } else {
+      console.warn('Token não disponível no useEffect, não chamando fetchParametros');
+    }
   }, [token]);
 
   return { parametros, loading, error, refetch: fetchParametros };
@@ -65,16 +69,17 @@ export const useGetParametroById = (id: number) => {
   const token = useToken();
 
   const fetchParametro = async () => {
+    console.log(`Iniciando busca de parâmetro com ID: ${id}`);
     setLoading(true);
     setError(null);
 
     try {
       if (token) {
-        const result = await obterParametroPorId(id);
+        const result = await obterParametroPorId(id, token);
         console.log('Parâmetro obtido com sucesso:', result);
         setParametro(result);
       } else {
-        setError('token não encontrado!');
+        setError('Token não encontrado!');
       }
     } catch (error) {
       if (error instanceof Error) {
@@ -90,6 +95,7 @@ export const useGetParametroById = (id: number) => {
   };
 
   useEffect(() => {
+    // Verificando se o ID está disponível antes de chamar a função
     if (id) {
       fetchParametro();
     } else {

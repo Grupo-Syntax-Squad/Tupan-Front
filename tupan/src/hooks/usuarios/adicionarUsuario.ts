@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { criarUsuario } from "@/app/_api/post/usuarios";
+import { useToken } from "../token";
 
 export const useCreateUsuario = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
+  const token = useToken();
 
   const submitUsuario = async (usuario: { email: string; password: string; }) => {
     setLoading(true);
@@ -12,7 +14,7 @@ export const useCreateUsuario = () => {
     setSuccess(null);
 
     try {
-      const result = await criarUsuario(usuario);
+      const result = await criarUsuario(usuario, token);
       setSuccess("Usuario registrado com sucesso!");
       return result;
     } catch (error) {

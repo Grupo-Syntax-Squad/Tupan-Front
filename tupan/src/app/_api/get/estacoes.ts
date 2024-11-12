@@ -1,9 +1,9 @@
 import { api_route } from "..";
-import { useToken } from "@/hooks/token";
 
 interface Estacao {
   id: number;
   nome: string;
+  endereco: {};
   topico: string;
   ativo: boolean;
   criado: string;
@@ -12,8 +12,7 @@ interface Estacao {
 }
 
 
-export const obterEstacoes = async (): Promise<Estacao[]> => {
-  const token = useToken();
+export const obterEstacoes = async (token: string): Promise<Estacao[]> => {
 
   if (!token) {
     throw new Error("Token não encontrado. Por favor, faça login.");
@@ -40,8 +39,7 @@ export const obterEstacoes = async (): Promise<Estacao[]> => {
   }
 };
 
-export const obterEstacaoPorId = async (id: number): Promise<Estacao> => {
-  const token = useToken();
+export const obterEstacaoPorId = async (id: number, token: string): Promise<Estacao> => {
 
   if (!token) {
     throw new Error("Token não encontrado. Por favor, faça login.");
