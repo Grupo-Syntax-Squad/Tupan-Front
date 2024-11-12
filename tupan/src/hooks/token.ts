@@ -4,21 +4,20 @@ import { Login } from '@/app/_api/post/login';
 
 export const useSetToken = () => {
   useEffect(() => {
-    const email = 'syntax@gmail.com';
-    const password = '123';
-    Login({ email, password })
-      .then((response) => {
+    const setToken = async () => {
+      try {
+        const response = await Login({ email: 'syntax@gmail.com', password: '123' });
         jsCookie.set('token', response.token);
-        if (email === 'syntax@gmail.com' && password === '123') {
-          jsCookie.set('user', 'user_guest');
-        }
+        jsCookie.set('user', 'user_guest');
         console.log('Login successful:', response);
-      })
-      .catch((error) => {
+      }
+      catch(error) {
         console.error('Login failed:', error);
-      });
+      };
+  };
+    setToken();
   }, []);
-};
+}
 export const useClearToken = () => {
   useEffect(() => {
     jsCookie.remove('token');

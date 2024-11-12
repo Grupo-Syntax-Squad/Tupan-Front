@@ -1,22 +1,29 @@
 'use client';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { hasToken } from '@/hooks/token';
+import Loading from './loading';
 
 const AuthGuard = ({ children }: { children: React.ReactNode }) => {
+  const [isTokenChecked, setIsTokenChecked] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
 
   useEffect(() => {
     const timeoutId = setTimeout(() => {
-      console.log('Verificando após 5 segundos');
       if (!hasToken()) {
         router.push('/login');
+      } else {
+        setIsTokenChecked(true);
       }
-    }, 5000); // Aguardar 5 segundos antes de verificar
+    }, 5000); 
 
-    return () => clearTimeout(timeoutId); // Limpa o timeout caso o componente seja desmontado ou a rota mude antes dos 5 segundos
+    return () => clearTimeout(timeoutId); 
   }, [pathname, router]);
+
+  if (!isTokenChecked) {
+    return <Loading />;
+  }
 
   return <>{children}</>;
 };
