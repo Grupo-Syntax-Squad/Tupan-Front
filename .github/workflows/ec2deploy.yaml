@@ -8,6 +8,7 @@ on:
 env:
   AWS_PRIVATE_KEY: ${{ secrets.KEYAWS }}
   EC2_IP: ${{ secrets.EC2_IP }}
+  BACKEND_PORT: ${{ secrets.BACKEND_PORT }}
   SSH_OPTIONS: '-o StrictHostKeyChecking=no -i key.pem ubuntu@${{ secrets.EC2_IP }}'
 
 jobs:
@@ -50,6 +51,10 @@ jobs:
       - name: Transfer code to AWS instance
         run: |
           scp -o StrictHostKeyChecking=no -i key.pem -r ./tupan/ ubuntu@${{ env.EC2_IP }}:/home/ubuntu/tupan
+
+      - name: Create .env file
+        run: |
+          echo "BACKEND_URL=${{ env.EC2_IP }}:${{ env.BACKEND_PORT }}/" >> tupan/.env
 
       - name: SSH into AWS and build Docker image
         run: |
