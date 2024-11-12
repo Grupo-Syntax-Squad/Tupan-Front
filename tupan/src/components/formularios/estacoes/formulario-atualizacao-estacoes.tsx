@@ -226,6 +226,8 @@ export const FormularioAtualizacaoEstacoes = ({
                   disabled={!isEditable}
                 />
               </div>
+              {formValues.parametros.length > 1 && (
+                
                   <div className="w-full flex flex-col">
                     <Select
                       id="parametros" label="Parametros"
@@ -234,11 +236,11 @@ export const FormularioAtualizacaoEstacoes = ({
                       onChange={handleChange} disabled={!isEditable}
                       options={formValues?.parametros?.map((parametro: number) => ({
                         label: parametro.toString(),
-                        value: parametro,
+                        value: parametro.toString(),
                       })) || []}
                     />
                   </div>
-              
+              )}
              
               <div className="flex justify-start mt-8 gap-6">
                 <Botao

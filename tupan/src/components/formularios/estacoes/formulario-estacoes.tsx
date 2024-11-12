@@ -16,6 +16,7 @@ import { usePopConfirmacao } from '@/hooks/visivel';
 import { FormularioProps } from '@/types/interfaces';
 import { fetchEndereco } from '@/app/_api/get/cep';
 import { PopConfirmacao } from '@/components/alertas/confirmacao';
+import { ReactEventHandler } from 'react';
 
 
 export const Formulario = ({ onSubmit, dados }: FormularioProps) => {
@@ -215,11 +216,10 @@ export const Formulario = ({ onSubmit, dados }: FormularioProps) => {
                 id="parametro"
                 label="Selecione um Parâmetro"
                 options={parametros.map((parametro) => ({
-                  value: parametro.id,
+                  value: parametro.id.toString(),
                   label: parametro.nome,
                 }))}
-                onChange={handleParametrosChange}
-              />
+                onChange={handleParametrosChange} span={''} value={''}              />
             </div>
           </div>
 

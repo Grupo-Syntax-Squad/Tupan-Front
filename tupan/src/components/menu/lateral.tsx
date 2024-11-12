@@ -15,7 +15,7 @@ export const MenuLateral = ({ menuData }: MenuLateralProps) => {
         return { ...item, nome: 'Login', path: '/login' };
       }
       if (item.nome === 'Estações') {
-        return { ...item, nome: 'Dashboard' };
+        return { ...item, nome: 'Dashboard', path: '/dashboard' };
       }
       return item;
     });
