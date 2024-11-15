@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { criarEstacao } from "@/app/_api/post/estacoes";
-import { criarEndereco } from "@/app/_api/post/enderecos";
+import { criarEstacao } from "../../app/_api/post/estacoes";
+import { criarEndereco } from "../../app/_api/post/enderecos";
 import { useToken } from "../token";
 
 interface Estacao {
