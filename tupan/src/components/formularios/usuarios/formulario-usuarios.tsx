@@ -54,7 +54,7 @@ export const Formulario = ({ onSubmit, dados }: FormularioProps) => {
         <h2 className="mb-4 text-xl font-bold text-gray-900 dark:text-white">
           Cadastre um Usuário
         </h2>
-        <form action="#" onSubmit={handleFormSubmit}>
+        <form onSubmit={handleFormSubmit}>
           <div className="w-full mb-4">
             <Input
               id="email"

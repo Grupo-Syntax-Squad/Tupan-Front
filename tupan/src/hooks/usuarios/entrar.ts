@@ -14,12 +14,10 @@ export const useLogin = () => {
         setSuccess(null);
 
         try {
-            const result = await Login({ email, password });
-            if (result) {
-                setSuccess("Login realizado com sucesso!");
-                const token = await useSetTokenUser(email, password);
-                console.log('Token obtido com sucesso:', token);
-            }
+            const result = await useSetTokenUser(email, password);
+            console.log('Login realizado com sucesso:', result);
+            localStorage.setItem('credential', result);
+            setSuccess('Login realizado com sucesso');
             return result;
         } catch (error) {
             if (error instanceof Error) {

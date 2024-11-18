@@ -6,7 +6,7 @@ import { Botao } from '@/components/botao/botao';
 
 //hooks
 import { useLogin } from '@/hooks/usuarios/entrar';
-import { useSetTokenUser, ClearToken } from '@/hooks/token';
+import { useSetTokenUser, ClearToken, useClearToken } from '@/hooks/token';
 
 
 //utils
@@ -15,7 +15,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
 const LoginPage: React.FC = () => {
-  ClearToken()
+  useClearToken()
   const { LoginUser, loading, error, success } = useLogin();
   const router = useRouter();
 
@@ -71,6 +71,14 @@ const LoginPage: React.FC = () => {
               corFundo="bg-blue-500"
               type="submit"
             />
+            <p className="mt-3">Primeiro acesso?</p>
+            <Botao
+              label="Cadastre-se"
+              corTexto="text-white"
+              corFundo="bg-blue-500"
+              type="button"
+              onClick={() => router.push('/login/register')}
+              />
           </form>
         </div>
         <div>

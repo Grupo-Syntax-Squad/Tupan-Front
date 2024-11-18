@@ -1,9 +1,7 @@
-
 import type { Metadata } from 'next';
 import '../styles/globals.css';
+import AuthGuard from '@/app/authGuard';
 import ContextoDinamicoProvider from './context';
-import 'flowbite/dist/flowbite.min.css';
-import AuthGuard from '@/app/authGuard'
 import favicon from '../../public/assets/favicon.ico';
 
 export const metadata: Metadata = {
@@ -18,7 +16,8 @@ export default function RootLayout({
     <html lang="pt-br">
       <head>
         <link rel="icon" href={favicon.src} />
-      </head> <body>
+      </head>
+      <body>
         <ContextoDinamicoProvider>
           <AuthGuard>{children}</AuthGuard>
         </ContextoDinamicoProvider>
@@ -26,3 +25,4 @@ export default function RootLayout({
     </html>
   );
 }
+

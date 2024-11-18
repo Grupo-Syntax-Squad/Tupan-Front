@@ -1,4 +1,3 @@
-import { useSetTokenUser } from '@/hooks/token';
 import { api_route } from '..';
 
 interface Usuario {

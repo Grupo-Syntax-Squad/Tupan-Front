@@ -6,10 +6,20 @@ export const useSetToken = () => {
   useEffect(() => {
     const setToken = async () => {
       try {
-        const response = await Login({ email: 'syntax@gmail.com', password: '123' });
-        jsCookie.set('token', response.token);
-        jsCookie.set('user', 'user_guest');
-        console.log('Login successful:', response);
+        if (localStorage.getItem('credential')){
+          const credential = localStorage.getItem('credential');
+          if (credential) {
+            jsCookie.set('token', credential);
+          }
+          localStorage.removeItem('credential');
+        }
+        if (jsCookie.get('token')) {
+          return null;
+        } else{
+          const response = await Login({ email: 'guest@gmail.com', password: '123456' });
+          jsCookie.set('token', response.token);
+          jsCookie.set('user', 'user_guest');
+        }
       }
       catch(error) {
         console.error('Login failed:', error);
@@ -31,17 +41,31 @@ export const hasToken = () => {
   return !!token;
 };
 
-export const useSetTokenUser = (email: string, password: string) => {
-  useEffect(() => {
-    Login({ email: email, password: password })
-      .then((response) => {
-        jsCookie.set('token', response.token);
-        console.log('Login successful:', response);
-      })
-      .catch((error) => {
-        console.error('Login failed:', error);
-      });
-  }, []);
+export const useSetTokenUser = async (email: string, password: string) => {
+  const user = { email: email, password: password };
+  if (email == 'syntax@gmail.com' && password == '123') {
+    try {
+      const response = await Login(user);
+      jsCookie.set('token', response.token);
+      console.log('Login successful:', response);
+      return response.token;
+    } catch (error) {
+      console.error('Login failed:', error);
+      throw error;
+    }
+  }
+  else{
+    try{
+      const response = await Login(user);
+      jsCookie.set('token', response.token);
+      jsCookie.set('user', 'user_guest');
+      console.log('Login successful:', response);
+      return response.token;
+    } catch (error) {
+      console.error('Login failed:', error);
+      throw error;
+    }
+  }
 };
 
 export const ClearToken = () => {
