@@ -8,8 +8,7 @@ import { useControleAcesso } from '@/hooks/secao/controleAcesso';
 
 export const MenuLateral = ({ menuData }: MenuLateralProps) => {
   const controleAcesso = useControleAcesso();
-  const filteredMenuData = menuData
-    .filter(item => !controleAcesso || !['Parâmetros', 'Alertas', 'Usuários'].includes(item.nome))
+  const filteredMenuData = menuData.filter(item => !controleAcesso || !['Parâmetros', 'Alertas', 'Usuários'].includes(item.nome))
     .map(item => {
       if (controleAcesso && item.nome === 'Logout') {
         return { ...item, nome: 'Login', path: '/login' };

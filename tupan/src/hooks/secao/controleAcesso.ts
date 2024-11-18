@@ -1,7 +1,7 @@
 import jsCookie from 'js-cookie';
 export const useControleAcesso = () => {
-  const token = jsCookie.get('user');
-  if (token) {
+  const user = jsCookie.get('user');
+  if (user) {
     return true;
   }
   return false;
