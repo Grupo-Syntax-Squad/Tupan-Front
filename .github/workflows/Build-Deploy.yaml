@@ -1,0 +1,59 @@
+name: Build and Deploy
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install --prefix tupan --legacy-peer-deps
+
+      - name: Run build
+        run: npm run build --prefix tupan
+
+      - name: Set permissions for private key
+        run: |
+          echo "${{ secrets.KEYAWS }}" > key.pem
+          chmod 600 key.pem
+
+      - name: Create target directory on AWS instance
+        run: |
+          ssh -o StrictHostKeyChecking=no -i key.pem ubuntu@${{ secrets.EC2_IP }} 'mkdir -p /home/ubuntu/tupan/'
+
+      - name: Transfer code to AWS instance
+        run: |
+          scp -o StrictHostKeyChecking=no -i key.pem -r ./tupan/ ubuntu@${{ secrets.EC2_IP }}:/home/ubuntu/tupan
+
+      - name: Create .env file
+        run: |
+          echo "BACKEND_URL=${{ secrets.EC2_IP }}:${{ secrets.BACKEND_PORT }}/" >> tupan/.env
+
+      - name: SSH into AWS and build Docker image
+        run: |
+          ssh -o StrictHostKeyChecking=no -i key.pem ubuntu@${{ secrets.EC2_IP }} 'cd /home/ubuntu/tupan/tupan && sudo docker build -t tupan-front .'
+
+      - name: Stop running container
+        run: |
+          ssh -o StrictHostKeyChecking=no -i key.pem ubuntu@${{ secrets.EC2_IP }} 'sudo docker stop tupan-front || true'
+          ssh -o StrictHostKeyChecking=no -i key.pem ubuntu@${{ secrets.EC2_IP }} 'sudo docker rm tupan-front || true'
+
+      - name: Run new container
+        run: |
+          ssh -o StrictHostKeyChecking=no -i key.pem ubuntu@${{ secrets.EC2_IP }} 'sudo docker run -d --restart always --name tupan-front -p 80:3000 tupan-front'
+
+      - name: Cleanup SSH key
+        run: |
+          rm -f key.pem
