@@ -101,7 +101,7 @@ export default function Estacoes() {
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
           <div className="bg-white p-8 rounded shadow-lg text-center max-w-md">
             <h2 className="text-lg font-bold mb-4">Estações</h2>
-            <p>
+            <p className="text-justify">
               Aqui você pode cadastrar uma nova estação e visualizar as estações já existentes. Ao cadastrar, preencha os dados da estação e sua localização, não se esqueça dos campos obrigatórios. Para editá-las, basta clicar no botão Editar na tabela à esquerda.
             </p>
             <button
