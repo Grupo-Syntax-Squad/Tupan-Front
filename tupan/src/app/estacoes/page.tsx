@@ -12,23 +12,25 @@ import { useGetEstacoes } from '@/hooks/estacoes/receberEstacao';
 
 //utils
 import Link from 'next/link';
+import { useState } from 'react';
 
 export default function Estacoes() {
-
   const { estacoes, loading, error, refetch } = useGetEstacoes();
+  const [isModalVisible, setModalVisible] = useState(false);
+
   const colunas = [
     { acessor: 'nome', label: 'Nome' },
     { acessor: 'status', label: 'Status' },
     { acessor: 'endereco', label: 'Endereço' },
   ];
+
   const dados = estacoes.map((estacao) => ({
     nome: estacao.nome,
-    status: estacao.ativo ? 'Ativo': 'Inativo',
+    status: estacao.ativo ? 'Ativo' : 'Inativo',
     endereco: estacao.endereco
       ? `${estacao.endereco.logradouro}, ${estacao.endereco.numero}, ${estacao.endereco.bairro}, ${estacao.endereco.cidade} - ${estacao.endereco.estado}`
       : 'Endereço não disponível',
   }));
-
 
   const handleSubmit = () => {
     refetch();
@@ -73,12 +75,44 @@ export default function Estacoes() {
                 <Tabela colunas={colunas} dados={dados} />
               </div>
               <div className="flex-1">
-                <Formulario onSubmit={handleSubmit} dados={{}} initialStatus={true} />
+                <Formulario
+                  onSubmit={handleSubmit}
+                  dados={{}}
+                  initialStatus={true}
+                />
               </div>
             </>
           )}
         </div>
+        {/* Botão com interrogação */}
+        <div className="flex justify-end pr-4">
+          {/* Botão flutuante no canto da tela */}
+          <button
+            onClick={() => setModalVisible(true)}
+            className="fixed bottom-4 right-4 text-white bg-blue-500 hover:bg-blue-700 rounded-full w-12 h-12 flex items-center justify-center text-2xl shadow-lg"
+          >
+            ?
+          </button>
+        </div>
       </div>
+
+      {/* Modal */}
+      {isModalVisible && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white p-8 rounded shadow-lg text-center max-w-md">
+            <h2 className="text-lg font-bold mb-4">Estações</h2>
+            <p className="text-justify">
+              Aqui você pode cadastrar uma nova estação e visualizar as estações já existentes. Ao cadastrar, preencha os dados da estação e sua localização, não se esqueça dos campos obrigatórios. Para editá-las, basta clicar no botão Editar na tabela à esquerda.
+            </p>
+            <button
+              onClick={() => setModalVisible(false)}
+              className="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700"
+            >
+              Fechar
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

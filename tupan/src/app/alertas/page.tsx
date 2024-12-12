@@ -1,4 +1,7 @@
 "use client";
+
+import { useState } from 'react';
+
 //componentes
 import { MenuLateral } from "@/components/menu/lateral";
 import { NavTop } from "@/components/nav-top";
@@ -46,6 +49,9 @@ export default function Alertas() {
     return null;
   }
 
+  const [isModalVisible, setModalVisible] = useState(false);
+
+
   return (
     <div className="w-screen flex bg-gray-100">
       <div className="w-fit pr-4 min-h-screen">
@@ -77,6 +83,31 @@ export default function Alertas() {
             </>
           )}
         </div>
+        {/* Botão flutuante no canto da tela */}
+      <button
+        onClick={() => setModalVisible(true)}
+        className="fixed bottom-4 right-4 text-white bg-blue-500 hover:bg-blue-700 rounded-full w-12 h-12 flex items-center justify-center text-2xl shadow-lg"
+      >
+        ?
+      </button>
+
+      {/* Modal de ajuda */}
+      {isModalVisible && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <div className="bg-white p-8 rounded shadow-lg text-center max-w-md">
+            <h2 className="text-lg font-bold mb-4">Alertas</h2>
+            <p>
+            Esta é a página de <span className="font-bold text-blue-600">Alertas</span>. Aqui você pode gerenciar os alertas que serão acionados. Os alertas são muito importantes para que sejam tomadas ações preventivas em relação a condição da estação. Eles servem para avisar o usuário de que determinada estação está com uma condição espefícica de acordo com o <span className="font-bold text-blue-600">parâmetro</span> escolhido, como por exemplo, temperatura acima de 30ºC ou menor que 10ºC.
+            </p>
+            <button
+              onClick={() => setModalVisible(false)}
+              className="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700"
+            >
+              Fechar
+            </button>
+          </div>
+        </div>
+      )}
       </div>
     </div>
   );

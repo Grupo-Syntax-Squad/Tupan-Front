@@ -4,6 +4,7 @@ import { MenuLateral } from '@/components/menu/lateral';
 import { NavTop } from '@/components/nav-top';
 import Playground from '@/components/playground';
 import Link from 'next/link';
+import { useState } from 'react';
 
 const menuData = [
   { nome: 'Estações', path: '/estacoes', icone: 'bx bx-home' },
@@ -148,6 +149,8 @@ const Educacional = () => {
       element.scrollIntoView({ behavior: 'smooth' });
     }
   };
+const [isModalVisible, setModalVisible] = useState(false);
+
   return (
     <div className="w-screen flex bg-gray-100 flex">
     {/* Menu lateral ocupando a lateral esquerda */}
@@ -158,7 +161,7 @@ const Educacional = () => {
     {/* Conteúdo principal ocupando o resto da tela */}
     <div className="w-full h-screen overflow-auto flex pr-4 flex-col gap-4">
       {/* Barra superior ocupando a parte superior da tela */}
-      <NavTop nome="" path="Educacional" />
+      <NavTop nome="Educacional" path="" />
 
       {/* Barra de conteúdo */}
       <section className="">
@@ -190,6 +193,32 @@ const Educacional = () => {
           ) : null}
         </section>
       ))}
+
+      {/* Botão flutuante no canto da tela */}
+      <button
+        onClick={() => setModalVisible(true)}
+        className="fixed bottom-4 right-4 text-white bg-blue-500 hover:bg-blue-700 rounded-full w-12 h-12 flex items-center justify-center text-2xl shadow-lg"
+      >
+        ?
+      </button>
+
+      {/* Modal de ajuda */}
+      {isModalVisible && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <div className="bg-white p-8 rounded shadow-lg text-center max-w-md">
+            <h2 className="text-lg font-bold mb-4">Educacional</h2>
+            <p className="text-justify">
+             Essa é a página <span className="font-bold text-blue-600">Educacional</span> do projeto Tupã. Aqui você encontra informações sobre o funcionamento de uma estação meteorológica, a importância de monitorar o clima, os equipamentos e instrumentos de medição, como fazer as medições, e um <span className="font-bold text-blue-600">playground</span> para testar seus conhecimentos. <br/> Clique nos títulos para ser redirecionado ao tópico que deseja!
+            </p>
+            <button
+              onClick={() => setModalVisible(false)}
+              className="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700"
+            >
+              Fechar
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   </div>
 );
